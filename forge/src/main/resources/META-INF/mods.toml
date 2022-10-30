@@ -1,0 +1,28 @@
+modLoader = "javafml"
+loaderVersion = "[36,)"
+issueTrackerURL = "https://github.com/TheLukeGuy/weather2/issues"
+license = "All Rights Reserved"
+
+[[mods]]
+modId = "weather2"
+version = "${version}"
+displayName = "Localized Weather & Storms"
+authors = "Corosus"
+description = '''
+Localized rain and storms that evolve into deadly tornadoes and others, also some ambience effects
+'''
+logoFile = "assets/weather2/icon.png"
+
+[[dependencies.weather2]]
+modId = "forge"
+mandatory = true
+versionRange = "[36,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.weather2]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.16.5,)"
+ordering = "NONE"
+side = "BOTH"

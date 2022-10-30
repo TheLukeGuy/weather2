@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "weather2",
+  "version": "${version}",
+  "name": "Localized Weather & Storms",
+  "description": "Localized rain and storms that evolve into deadly tornadoes and others, also some ambience effects",
+  "authors": [
+    "Corosus"
+  ],
+  "contact": {
+    "homepage": "https://coros.us/mods/weather2",
+    "sources": "https://github.com/TheLukeGuy/weather2"
+  },
+  "license": "All Rights Reserved",
+  "icon": "assets/weather2/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.examplemod.fabric.ExampleModFabric"
+    ]
+  },
+  "mixins": [
+    "weather2.mixins.json",
+    "weather2-common.mixins.json"
+  ],
+  "depends": {
+    "fabric": "*",
+    "minecraft": ">=1.16.5"
+  }
+}
