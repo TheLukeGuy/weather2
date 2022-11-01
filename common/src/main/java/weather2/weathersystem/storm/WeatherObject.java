@@ -3,12 +3,10 @@ package weather2.weathersystem.storm;
 import CoroUtil.util.Vec3;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import weather2.util.CachedNBTTagCompound;
 import weather2.weathersystem.WeatherManager;
 
 public class WeatherObject {
-
     public static long lastUsedStormID = 0; //ID starts from 0 for each game start, no storm nbt disk reload for now
     public long ID; //loosely accurate ID for tracking, but we wanted to persist between world reloads..... need proper UUID??? I guess add in UUID later and dont persist, start from 0 per game run
     public boolean isDead = false;
@@ -30,7 +28,7 @@ public class WeatherObject {
     public int size = 50;
     public int maxSize = 0;
 
-    public EnumWeatherObjectType weatherObjectType = EnumWeatherObjectType.CLOUD;
+    public WeatherObjectType weatherObjectType = WeatherObjectType.CLOUD;
 
     private CachedNBTTagCompound nbtCache;
 
@@ -49,7 +47,6 @@ public class WeatherObject {
 
     }
 
-    @SideOnly(Side.CLIENT)
     public void tickRender(float partialTick) {
 
     }
@@ -75,7 +72,6 @@ public class WeatherObject {
         manager = null;
     }
 
-    @SideOnly(Side.CLIENT)
     public void cleanupClient() {
 
     }
@@ -102,7 +98,7 @@ public class WeatherObject {
         motion = new Vec3(parNBT.getDouble("vecX"), parNBT.getDouble("vecY"), parNBT.getDouble("vecZ"));
         size = parNBT.getInteger("size");
         maxSize = parNBT.getInteger("maxSize");
-        this.weatherObjectType = EnumWeatherObjectType.get(parNBT.getInteger("weatherObjectType"));
+        this.weatherObjectType = WeatherObjectType.get(parNBT.getInteger("weatherObjectType"));
     }
 
     public void nbtSyncForClient() {
@@ -111,9 +107,6 @@ public class WeatherObject {
         nbt.setDouble("posY", pos.yCoord);
         nbt.setDouble("posZ", pos.zCoord);
 
-		/*nbt.setDouble("motionX", motion.xCoord);
-		nbt.setDouble("motionY", motion.yCoord);
-		nbt.setDouble("motionZ", motion.zCoord);*/
         nbt.setDouble("vecX", motion.xCoord);
         nbt.setDouble("vecY", motion.yCoord);
         nbt.setDouble("vecZ", motion.zCoord);
@@ -134,5 +127,4 @@ public class WeatherObject {
     public void setNbtCache(CachedNBTTagCompound nbtCache) {
         this.nbtCache = nbtCache;
     }
-
 }

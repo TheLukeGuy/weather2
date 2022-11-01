@@ -21,10 +21,10 @@ import weather2.block.TileEntityWeatherForecast;
 import weather2.client.SceneEnhancer;
 import weather2.config.ConfigMisc;
 import weather2.util.WindReader;
-import weather2.weathersystem.WeatherManagerClient;
+import weather2.weathersystem.ClientWeatherManager;
 import weather2.weathersystem.storm.StormObject;
 import weather2.weathersystem.storm.WeatherObject;
-import weather2.weathersystem.storm.WeatherObjectSandstorm;
+import weather2.weathersystem.storm.SandstormObject;
 
 public class TileEntityWeatherForecastRenderer extends TileEntitySpecialRenderer {
     @Override
@@ -151,7 +151,7 @@ public class TileEntityWeatherForecastRenderer extends TileEntitySpecialRenderer
         if (ConfigMisc.radarCloudDebug) {
             EntityPlayer entP = Minecraft.getMinecraft().player;
             if (entP != null) {
-                WeatherManagerClient wm = ClientTickHandler.weatherManager;
+                ClientWeatherManager wm = ClientTickHandler.weatherManager;
                 float precipStr = Math.abs(SceneEnhancer.getRainStrengthAndControlVisuals(entP, true));
                 boolean clientWeather2Rain = precipStr > 0;
 
@@ -162,7 +162,7 @@ public class TileEntityWeatherForecastRenderer extends TileEntitySpecialRenderer
                                 (entP.world.isRaining() ? "raining, " : (clientWeather2Rain ? "light rain" : "")) + (entP.world.isThundering() ? "thundering" : "")
                         , x, y + 2.0F, z, 1, 10, 10, playerViewY);
                 renderLivingLabel("\u00A7" + " server weather: " +
-                                (wm.isVanillaRainActiveOnServer ? "raining, " : "") + (wm.isVanillaThunderActiveOnServer ? "thundering" : "")
+                                (wm.vanillaRainActiveOnServer ? "raining, " : "") + (wm.vanillaThunderActiveOnServer ? "thundering" : "")
                         , x, y + 2.1F, z, 1, 10, 10, playerViewY);
                 renderLivingLabel("\u00A7" + " precip str: " + SceneEnhancer.getRainStrengthAndControlVisuals(entP), x, y + 2.2F, z, 1, 10, 10, playerViewY);
                 renderLivingLabel("\u00A7" + " levelWater: " + levelWater, x, y + 2.3F, z, 1, 10, 10, playerViewY);
@@ -239,9 +239,9 @@ public class TileEntityWeatherForecastRenderer extends TileEntitySpecialRenderer
                         renderLivingLabel(TextFormatting.WHITE + "|", x, y + 1.2F, z, 1, 5, 5, playerViewY);
                     }
                 }
-            } else if (wo instanceof WeatherObjectSandstorm) {
+            } else if (wo instanceof SandstormObject) {
                 renderIconNew(x, y + 1.4F, z, 16, 16, playerViewY, ClientProxy.radarIconSandstorm);
-                if (((WeatherObjectSandstorm) wo).isFrontGrowing) {
+                if (((SandstormObject) wo).isFrontGrowing) {
                     renderLivingLabel("\u00A7" + '2' + "|", x, y + 1.2F, z, 1, 5, 5, playerViewY);
                 } else {
                     renderLivingLabel("\u00A7" + '4' + "|", x, y + 1.2F, z, 1, 5, 5, playerViewY);

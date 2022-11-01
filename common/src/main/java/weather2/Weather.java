@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import weather2.config.*;
 import weather2.player.PlayerData;
 import weather2.util.WeatherUtilConfig;
-import weather2.weathersystem.WeatherManagerServer;
+import weather2.weathersystem.ServerWeatherManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,7 +119,7 @@ public class Weather {
     public static void writeOutData(boolean unloadInstances) {
         //write out overworld only, because only dim with volcanos planned
         try {
-            WeatherManagerServer wm = ServerTickHandler.lookupDimToWeatherMan.get(0);
+            ServerWeatherManager wm = ServerTickHandler.lookupDimToWeatherMan.get(0);
             if (wm != null) {
                 wm.writeToFile();
             }

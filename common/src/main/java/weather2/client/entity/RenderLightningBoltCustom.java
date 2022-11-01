@@ -16,7 +16,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import weather2.ClientTickHandler;
 import weather2.entity.EntityLightningBoltCustom;
-import weather2.weathersystem.storm.WeatherObjectSandstorm;
+import weather2.weathersystem.storm.SandstormObject;
 
 import java.util.List;
 
@@ -76,7 +76,7 @@ public class RenderLightningBoltCustom extends Render<EntityLightningBoltCustom>
         EntityPlayer player = mc.player;
         World world = mc.world;
         Vec3 posPlayer = new Vec3(mc.player.posX, 0/*mc.player.posY*/, mc.player.posZ);
-        WeatherObjectSandstorm sandstorm = ClientTickHandler.weatherManager.getClosestSandstormByIntensity(posPlayer);
+        SandstormObject sandstorm = ClientTickHandler.weatherManager.getClosestSandstormByIntensity(posPlayer);
         if (sandstorm != null) {
             List<Vec3> wat = sandstorm.getSandstormAsShape();
             entity.listVec.clear();

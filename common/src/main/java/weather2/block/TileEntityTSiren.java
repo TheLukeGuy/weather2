@@ -12,7 +12,7 @@ import weather2.config.ConfigMisc;
 import weather2.config.ConfigSand;
 import weather2.util.WeatherUtilSound;
 import weather2.weathersystem.storm.StormObject;
-import weather2.weathersystem.storm.WeatherObjectSandstorm;
+import weather2.weathersystem.storm.SandstormObject;
 
 import java.util.List;
 
@@ -44,7 +44,7 @@ public class TileEntityTSiren extends TileEntity implements ITickable {
                 WeatherUtilSound.playNonMovingSound(pos, "streaming.siren", 1.0F, 1.0F, 120);
             } else {
                 if (!ConfigSand.Sandstorm_Siren_PleaseNoDarude) {
-                    WeatherObjectSandstorm sandstorm = ClientTickHandler.weatherManager.getClosestSandstormByIntensity(pos);
+                    SandstormObject sandstorm = ClientTickHandler.weatherManager.getClosestSandstormByIntensity(pos);
 
                     if (sandstorm != null) {
                         List<Vec3> points = sandstorm.getSandstormAsShape();

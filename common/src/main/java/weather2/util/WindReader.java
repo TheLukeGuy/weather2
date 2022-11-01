@@ -51,13 +51,13 @@ public class WindReader {
 
         if (wMan != null) {
             if (parWindType == WindType.PRIORITY) {
-                return wMan.windMan.getWindAngleForPriority(null);
+                return wMan.windManager.getWindAngleForPriority(null);
             } else if (parWindType == WindType.EVENT) {
-                return wMan.windMan.getWindAngleForEvents();
+                return wMan.windManager.getWindAngleForEvents();
             } else if (parWindType == WindType.GUST) {
-                return wMan.windMan.getWindAngleForGusts();
+                return wMan.windManager.getWindAngleForGusts();
             } else if (parWindType == WindType.CLOUD) {
-                return wMan.windMan.getWindAngleForClouds();
+                return wMan.windManager.getWindAngleForClouds();
             } else {
                 return 0;
             }
@@ -80,13 +80,13 @@ public class WindReader {
 
         if (wMan != null) {
             if (parWindType == WindType.PRIORITY) {
-                return wMan.windMan.getWindSpeedForPriority();
+                return wMan.windManager.getWindSpeedForPriority();
             } else if (parWindType == WindType.EVENT) {
-                return wMan.windMan.getWindSpeedForEvents();
+                return wMan.windManager.getWindSpeedForEvents();
             } else if (parWindType == WindType.GUST) {
-                return wMan.windMan.getWindSpeedForGusts();
+                return wMan.windManager.getWindSpeedForGusts();
             } else if (parWindType == WindType.CLOUD) {
-                return wMan.windMan.getWindSpeedForClouds();
+                return wMan.windManager.getWindSpeedForClouds();
             } else {
                 return 0;
             }

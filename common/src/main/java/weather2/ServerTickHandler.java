@@ -21,7 +21,7 @@ import weather2.entity.EntityLightningBoltCustom;
 import weather2.util.WeatherUtilBlock;
 import weather2.util.WeatherUtilConfig;
 import weather2.weathersystem.WeatherManager;
-import weather2.weathersystem.WeatherManagerServer;
+import weather2.weathersystem.ServerWeatherManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,10 +29,10 @@ import java.util.List;
 
 public class ServerTickHandler {
     //Used for easy iteration, could be replaced
-    public static ArrayList<WeatherManagerServer> listWeatherMans;
+    public static ArrayList<ServerWeatherManager> listWeatherMans;
 
     //Main lookup method for dim to weather systems
-    public static HashMap<Integer, WeatherManagerServer> lookupDimToWeatherMan;
+    public static HashMap<Integer, ServerWeatherManager> lookupDimToWeatherMan;
 
     public static World lastWorld;
 
@@ -41,7 +41,7 @@ public class ServerTickHandler {
     static {
 
         listWeatherMans = new ArrayList();
-        lookupDimToWeatherMan = new HashMap<Integer, WeatherManagerServer>();
+        lookupDimToWeatherMan = new HashMap<Integer, ServerWeatherManager>();
 
     }
 
@@ -79,7 +79,7 @@ public class ServerTickHandler {
             }
 
             //tick it
-            WeatherManagerServer wms = lookupDimToWeatherMan.get(worlds[i].provider.getDimension());
+            ServerWeatherManager wms = lookupDimToWeatherMan.get(worlds[i].provider.getDimension());
             if (wms != null) {
                 lookupDimToWeatherMan.get(worlds[i].provider.getDimension()).tick();
             }
@@ -174,7 +174,7 @@ public class ServerTickHandler {
     //must only be used when world is active, soonest allowed is TickType.WORLDLOAD
     public static void addWorldToWeather(int dim) {
         Weather.dbg("Registering Weather2 manager for dim: " + dim);
-        WeatherManagerServer wm = new WeatherManagerServer(dim);
+        ServerWeatherManager wm = new ServerWeatherManager(dim);
 
         listWeatherMans.add(wm);
         lookupDimToWeatherMan.put(dim, wm);
@@ -184,7 +184,7 @@ public class ServerTickHandler {
 
     public static void removeWorldFromWeather(int dim) {
         Weather.dbg("Weather2: Unregistering manager for dim: " + dim);
-        WeatherManagerServer wm = lookupDimToWeatherMan.get(dim);
+        ServerWeatherManager wm = lookupDimToWeatherMan.get(dim);
 
         if (wm != null) {
             listWeatherMans.remove(wm);
@@ -197,7 +197,7 @@ public class ServerTickHandler {
     }
 
     public static void playerClientRequestsFullSync(EntityPlayerMP entP) {
-        WeatherManagerServer wm = lookupDimToWeatherMan.get(entP.world.provider.getDimension());
+        ServerWeatherManager wm = lookupDimToWeatherMan.get(entP.world.provider.getDimension());
         if (wm != null) {
             wm.playerJoinedWorldSyncFull(entP);
         }
@@ -232,7 +232,7 @@ public class ServerTickHandler {
         }
     }
 
-    public static WeatherManagerServer getWeatherSystemForDim(int dimID) {
+    public static ServerWeatherManager getWeatherSystemForDim(int dimID) {
         return lookupDimToWeatherMan.get(dimID);
     }
 

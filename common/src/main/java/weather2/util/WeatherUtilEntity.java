@@ -169,7 +169,7 @@ public class WeatherUtilEntity {
         //weather2: shouldnt be needed since its particles only now, ish
         //if (!WeatherUtil.canUseWindOn(ent)) return false;
 
-        WindManager windMan = ClientTickHandler.weatherManager.windMan;
+        WindManager windMan = ClientTickHandler.weatherManager.windManager;
 
         double speed = 10.0D;
         int startX = (int) (ent.posX - speed * (double) (-MathHelper.sin(windMan.getWindAngleForPriority(null) / 180.0F * (float) Math.PI) * MathHelper.cos(0F/*weatherMan.wind.yDirection*/ / 180.0F * (float) Math.PI)));

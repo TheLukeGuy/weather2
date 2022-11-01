@@ -13,7 +13,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import weather2.ServerTickHandler;
 import weather2.config.ConfigStorm;
-import weather2.weathersystem.WeatherManagerServer;
+import weather2.weathersystem.ServerWeatherManager;
 import weather2.weathersystem.storm.StormObject;
 import weather2.weathersystem.storm.WeatherObject;
 
@@ -40,7 +40,7 @@ public class TileEntityWeatherDeflector extends TileEntity implements ITickable 
 
             if (mode == MODE_KILLSTORMS) {
                 if (world.getTotalWorldTime() % 100 == 0) {
-                    WeatherManagerServer wm = ServerTickHandler.lookupDimToWeatherMan.get(world.provider.getDimension());
+                    ServerWeatherManager wm = ServerTickHandler.lookupDimToWeatherMan.get(world.provider.getDimension());
                     if (wm != null) {
                         List<WeatherObject> storms = wm.getStormsAroundForDeflector(new Vec3(getPos().getX(), StormObject.layers.get(0), getPos().getZ()), ConfigStorm.Storm_Deflector_RadiusOfStormRemoval);
 
@@ -64,7 +64,7 @@ public class TileEntityWeatherDeflector extends TileEntity implements ITickable 
     }
 
     public void maintainBlockDamageDeflect() {
-        WeatherManagerServer wm = ServerTickHandler.lookupDimToWeatherMan.get(world.provider.getDimension());
+        ServerWeatherManager wm = ServerTickHandler.lookupDimToWeatherMan.get(world.provider.getDimension());
         if (wm != null) {
             if (mode == MODE_KILLSTORMS) {
                 if (wm.getListWeatherBlockDamageDeflector().contains(getPos().toLong())) {
@@ -117,7 +117,7 @@ public class TileEntityWeatherDeflector extends TileEntity implements ITickable 
 
         if (!world.isRemote) {
             //always try to remove, incase they removed the block before the tick code could run after switching mode
-            WeatherManagerServer wm = ServerTickHandler.lookupDimToWeatherMan.get(world.provider.getDimension());
+            ServerWeatherManager wm = ServerTickHandler.lookupDimToWeatherMan.get(world.provider.getDimension());
             wm.getListWeatherBlockDamageDeflector().remove(getPos().toLong());
         }
 

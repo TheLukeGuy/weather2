@@ -14,7 +14,7 @@ import weather2.ServerTickHandler;
 import weather2.config.ConfigMisc;
 import weather2.weathersystem.WeatherManager;
 import weather2.weathersystem.storm.StormObject;
-import weather2.weathersystem.storm.WeatherObjectSandstorm;
+import weather2.weathersystem.storm.SandstormObject;
 
 import java.util.List;
 
@@ -62,7 +62,7 @@ public class EntityAIMoveIndoorsStorm extends EntityAIBase implements ITaskIniti
                 runInside = true;
             } else {
                 //sandstorms check
-                WeatherObjectSandstorm sandstorm = weatherManager.getClosestSandstormByIntensity(pos);
+                SandstormObject sandstorm = weatherManager.getClosestSandstormByIntensity(pos);
 
                 if (sandstorm != null) {
                     List<Vec3> points = sandstorm.getSandstormAsShape();

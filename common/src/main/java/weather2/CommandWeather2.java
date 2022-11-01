@@ -13,10 +13,10 @@ import net.minecraft.world.World;
 import weather2.entity.EntityLightningBolt;
 import weather2.util.WeatherUtilBlock;
 import weather2.volcano.VolcanoObject;
-import weather2.weathersystem.WeatherManagerServer;
+import weather2.weathersystem.ServerWeatherManager;
 import weather2.weathersystem.storm.StormObject;
 import weather2.weathersystem.storm.WeatherObject;
-import weather2.weathersystem.storm.WeatherObjectSandstorm;
+import weather2.weathersystem.storm.SandstormObject;
 
 import java.util.List;
 import java.util.Random;
@@ -50,7 +50,7 @@ public class CommandWeather2 extends CommandBase {
             if (var2[0].equals("volcano")) {
                 if (var2[1].equals("create") && posVec != Vec3d.ZERO) {
                     if (dimension == 0) {
-                        WeatherManagerServer wm = ServerTickHandler.lookupDimToWeatherMan.get(0);
+                        ServerWeatherManager wm = ServerTickHandler.lookupDimToWeatherMan.get(0);
                         VolcanoObject vo = new VolcanoObject(wm);
                         vo.pos = new Vec3(posVec);
                         vo.initFirstTime();
@@ -68,15 +68,15 @@ public class CommandWeather2 extends CommandBase {
                 Random rand = new Random();
                 EntityLightningBolt ent = new EntityLightningBolt(world, posBlock.getX() + rand.nextInt(2) - +rand.nextInt(2)
                         , posBlock.getY(), posBlock.getZ() + rand.nextInt(2) - +rand.nextInt(2));
-                WeatherManagerServer wm = ServerTickHandler.lookupDimToWeatherMan.get(dimension);
+                ServerWeatherManager wm = ServerTickHandler.lookupDimToWeatherMan.get(dimension);
                 wm.getWorld().weatherEffects.add(ent);
                 wm.syncLightningNew(ent, false);
                 sendCommandSenderMsg(var1, "spawned lightning");
             } else if (var2[0].equals("storm")) {
                 if (var2[1].equalsIgnoreCase("killAll")) {
-                    WeatherManagerServer wm = ServerTickHandler.lookupDimToWeatherMan.get(dimension);
+                    ServerWeatherManager wm = ServerTickHandler.lookupDimToWeatherMan.get(dimension);
                     sendCommandSenderMsg(var1, "killing all storms");
-                    List<WeatherObject> listStorms = wm.getStormObjects();
+                    List<WeatherObject> listStorms = wm.getStorms();
                     for (int i = 0; i < listStorms.size(); i++) {
                         WeatherObject wo = listStorms.get(i);
                         if (wo instanceof WeatherObject) {
@@ -86,9 +86,9 @@ public class CommandWeather2 extends CommandBase {
                         }
                     }
                 } else if (var2[1].equalsIgnoreCase("killDeadly")) {
-                    WeatherManagerServer wm = ServerTickHandler.lookupDimToWeatherMan.get(dimension);
+                    ServerWeatherManager wm = ServerTickHandler.lookupDimToWeatherMan.get(dimension);
                     sendCommandSenderMsg(var1, "killing all deadly storms");
-                    List<WeatherObject> listStorms = wm.getStormObjects();
+                    List<WeatherObject> listStorms = wm.getStorms();
                     for (int i = 0; i < listStorms.size(); i++) {
                         WeatherObject wo = listStorms.get(i);
                         if (wo instanceof StormObject) {
@@ -100,9 +100,9 @@ public class CommandWeather2 extends CommandBase {
                         }
                     }
                 } else if (var2[1].equalsIgnoreCase("killRain") || var2[1].equalsIgnoreCase("killStorm")) {
-                    WeatherManagerServer wm = ServerTickHandler.lookupDimToWeatherMan.get(dimension);
+                    ServerWeatherManager wm = ServerTickHandler.lookupDimToWeatherMan.get(dimension);
                     sendCommandSenderMsg(var1, "killing all raining or deadly storms");
-                    List<WeatherObject> listStorms = wm.getStormObjects();
+                    List<WeatherObject> listStorms = wm.getStorms();
                     for (int i = 0; i < listStorms.size(); i++) {
                         WeatherObject wo = listStorms.get(i);
                         if (wo instanceof StormObject) {
@@ -117,7 +117,7 @@ public class CommandWeather2 extends CommandBase {
                     if (var2.length > 2 && posVec != Vec3d.ZERO) {
                         //TODO: make this handle non StormObject types better, currently makes instance and doesnt use that type if its a sandstorm
                         boolean spawnCloudStorm = true;
-                        WeatherManagerServer wm = ServerTickHandler.lookupDimToWeatherMan.get(dimension);
+                        ServerWeatherManager wm = ServerTickHandler.lookupDimToWeatherMan.get(dimension);
                         StormObject so = new StormObject(wm);
                         so.layer = 0;
                         so.userSpawnedFor = CoroUtilEntity.getName(player);
@@ -187,7 +187,7 @@ public class CommandWeather2 extends CommandBase {
                             so.levelCurIntensityStage = StormObject.STATE_THUNDER;
                         } else if (var2[2].equalsIgnoreCase("sandstormUpwind")) {
 
-                            WeatherObjectSandstorm sandstorm = new WeatherObjectSandstorm(wm);
+                            SandstormObject sandstorm = new SandstormObject(wm);
 
                             //sandstorm.pos = new Vec3(player.posX, player.world.getHeight(new BlockPos(player.posX, 0, player.posZ)).getY() + 1, player.posZ);
 
@@ -212,8 +212,8 @@ public class CommandWeather2 extends CommandBase {
                             wm.syncStormNew(sandstorm);
                             spawnCloudStorm = false;
 
-                            wm.windMan.startHighWindEvent();
-                            wm.windMan.lowWindTimer = 0;
+                            wm.windManager.startHighWindEvent();
+                            wm.windManager.lowWindTimer = 0;
 
                         } else if (var2[2].equalsIgnoreCase("sandstorm")) {
                             boolean spawned = wm.trySpawnSandstormNearPos(world, new Vec3(posVec));
@@ -222,8 +222,8 @@ public class CommandWeather2 extends CommandBase {
                                 sendCommandSenderMsg(var1, "couldnt find spot to spawn");
                                 return;
                             } else {
-                                wm.windMan.startHighWindEvent();
-                                wm.windMan.lowWindTimer = 0;
+                                wm.windManager.startHighWindEvent();
+                                wm.windManager.lowWindTimer = 0;
                             }
                         }
 
@@ -269,14 +269,14 @@ public class CommandWeather2 extends CommandBase {
                     } else {
                         doHighOn = true;
                     }
-                    WeatherManagerServer wm = ServerTickHandler.getWeatherSystemForDim(dimension);
+                    ServerWeatherManager wm = ServerTickHandler.getWeatherSystemForDim(dimension);
                     if (doHighOn) {
-                        wm.windMan.startHighWindEvent();
+                        wm.windManager.startHighWindEvent();
                         //cancel any low wind state if there is one
-                        wm.windMan.lowWindTimer = 0;
+                        wm.windManager.lowWindTimer = 0;
                         sendCommandSenderMsg(var1, "started high wind event");
                     } else if (doHighOff) {
-                        wm.windMan.stopHighWindEvent();
+                        wm.windManager.stopHighWindEvent();
                         sendCommandSenderMsg(var1, "stopped high wind event");
                     }
                 } else if (var2[1].equals("low")) {
@@ -291,14 +291,14 @@ public class CommandWeather2 extends CommandBase {
                     } else {
                         doLowOn = true;
                     }
-                    WeatherManagerServer wm = ServerTickHandler.getWeatherSystemForDim(dimension);
+                    ServerWeatherManager wm = ServerTickHandler.getWeatherSystemForDim(dimension);
                     if (doLowOn) {
-                        wm.windMan.startLowWindEvent();
+                        wm.windManager.startLowWindEvent();
                         //cancel any high wind state if there is one
-                        wm.windMan.highWindTimer = 0;
+                        wm.windManager.highWindTimer = 0;
                         sendCommandSenderMsg(var1, "started low wind event");
                     } else if (doLowOff) {
-                        wm.windMan.stopLowWindEvent();
+                        wm.windManager.stopLowWindEvent();
                         sendCommandSenderMsg(var1, "stopped low wind event");
                     }
                 }

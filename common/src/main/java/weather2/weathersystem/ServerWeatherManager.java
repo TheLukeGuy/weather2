@@ -25,19 +25,19 @@ import weather2.util.WeatherUtilEntity;
 import weather2.volcano.VolcanoObject;
 import weather2.weathersystem.storm.StormObject;
 import weather2.weathersystem.storm.WeatherObject;
-import weather2.weathersystem.storm.WeatherObjectSandstorm;
+import weather2.weathersystem.storm.SandstormObject;
 import weather2.weathersystem.wind.WindManager;
 
 import java.util.Iterator;
 import java.util.Random;
 
-public class WeatherManagerServer extends WeatherManager {
+public class ServerWeatherManager extends WeatherManager {
 
     //storm logic, syncing to client
 
     public int syncRange = 256;
 
-    public WeatherManagerServer(int parDim) {
+    public ServerWeatherManager(int parDim) {
         super(parDim);
     }
 
@@ -65,8 +65,8 @@ public class WeatherManagerServer extends WeatherManager {
 
             //System.out.println("getStormObjects().size(): " + getStormObjects().size());
 
-            for (int i = 0; i < getStormObjects().size(); i++) {
-                WeatherObject wo = getStormObjects().get(i);
+            for (int i = 0; i < getStorms().size(); i++) {
+                WeatherObject wo = getStorms().get(i);
                 int updateRate = wo.getUpdateRateForNetwork();
                 if (world.getTotalWorldTime() % updateRate == 0) {
                     syncStormUpdate(wo);
@@ -83,7 +83,7 @@ public class WeatherManagerServer extends WeatherManager {
 
             //sync wind
             if (world.getTotalWorldTime() % 60 == 0) {
-                syncWindUpdate(windMan);
+                syncWindUpdate(windManager);
             }
 
             //IMC
@@ -97,8 +97,8 @@ public class WeatherManagerServer extends WeatherManager {
             //sim box work
             int rate = 20;
             if (world.getTotalWorldTime() % rate == 0) {
-                for (int i = 0; i < getStormObjects().size(); i++) {
-                    WeatherObject so = getStormObjects().get(i);
+                for (int i = 0; i < getStorms().size(); i++) {
+                    WeatherObject so = getStorms().get(i);
                     EntityPlayer closestPlayer = WeatherUtilEntity.getClosestPlayerAny(world, so.posGround.xCoord, so.posGround.yCoord, so.posGround.zCoord, ConfigMisc.Misc_simBoxRadiusCutoff);
 
                     //isDead check is done in WeatherManagerBase
@@ -159,7 +159,7 @@ public class WeatherManagerServer extends WeatherManager {
                         //Weather.dbg("getStormObjects().size(): " + getStormObjects().size());
 
                         //layer 0
-                        if (getStormObjectsByLayer(0).size() < ConfigStorm.Storm_MaxPerPlayerPerLayer * world.playerEntities.size()) {
+                        if (getStormsByLayer(0).size() < ConfigStorm.Storm_MaxPerPlayerPerLayer * world.playerEntities.size()) {
                             if (rand.nextInt(5) == 0) {
                                 //if (rand.nextFloat() <= cloudIntensity) {
                                 trySpawnStormCloudNearPlayerForLayer(entP, 0);
@@ -168,7 +168,7 @@ public class WeatherManagerServer extends WeatherManager {
                         }
 
                         //layer 1
-                        if (getStormObjectsByLayer(1).size() < ConfigStorm.Storm_MaxPerPlayerPerLayer * world.playerEntities.size()) {
+                        if (getStormsByLayer(1).size() < ConfigStorm.Storm_MaxPerPlayerPerLayer * world.playerEntities.size()) {
                             if (ConfigMisc.Cloud_Layer1_Enable) {
                                 if (rand.nextInt(5) == 0) {
                                     //if (rand.nextFloat() <= cloudIntensity) {
@@ -182,7 +182,7 @@ public class WeatherManagerServer extends WeatherManager {
             }
 
             //if dimension can have storms, tick sandstorm spawning every 10 seconds
-            if (!ConfigMisc.Aesthetic_Only_Mode && !ConfigSand.Storm_NoSandstorms && WeatherUtilConfig.listDimensionsStorms.contains(world.provider.getDimension()) && world.getTotalWorldTime() % 200 == 0 && windMan.isHighWindEventActive()) {
+            if (!ConfigMisc.Aesthetic_Only_Mode && !ConfigSand.Storm_NoSandstorms && WeatherUtilConfig.listDimensionsStorms.contains(world.provider.getDimension()) && world.getTotalWorldTime() % 200 == 0 && windManager.isHighWindEventActive()) {
                 Random rand = new Random();
                 if (ConfigSand.Sandstorm_OddsTo1 <= 0 || rand.nextInt(ConfigSand.Sandstorm_OddsTo1) == 0) {
                     if (ConfigSand.Sandstorm_UseGlobalServerRate) {
@@ -228,8 +228,8 @@ public class WeatherManagerServer extends WeatherManager {
 
             //if (ConfigMisc.overcastMode) {
             if (world.getTotalWorldTime() % 40 == 0) {
-                isVanillaRainActiveOnServer = getWorld().isRaining();
-                isVanillaThunderActiveOnServer = getWorld().isThundering();
+                vanillaRainActiveOnServer = getWorld().isRaining();
+                vanillaThunderActiveOnServer = getWorld().isThundering();
                 vanillaRainTimeOnServer = getWorld().getWorldInfo().getRainTime();
                 syncWeatherVanilla();
             }
@@ -287,7 +287,7 @@ public class WeatherManagerServer extends WeatherManager {
 
         int searchRadius = 512;
 
-        double angle = windMan.getWindAngleForClouds();
+        double angle = windManager.getWindAngleForClouds();
         //-1 for upwind
         double dirX = -Math.sin(Math.toRadians(angle));
         double dirZ = Math.cos(Math.toRadians(angle));
@@ -309,7 +309,7 @@ public class WeatherManagerServer extends WeatherManager {
             if (!world.isBlockLoaded(pos)) continue;
             Biome biomeIn = world.getBiomeForCoordsBody(pos);
 
-            if (WeatherObjectSandstorm.isDesert(biomeIn, true)) {
+            if (SandstormObject.isDesert(biomeIn, true)) {
                 //found
                 foundPos = pos;
                 //break;
@@ -323,11 +323,11 @@ public class WeatherManagerServer extends WeatherManager {
                 double distLeftRight = 20;
                 BlockPos posLeft = new BlockPos(foundPos.getX() + (dirXLeft * distLeftRight), 0, foundPos.getZ() + (dirZLeft * distLeftRight));
                 if (!world.isBlockLoaded(posLeft)) continue;
-                if (!WeatherObjectSandstorm.isDesert(world.getBiomeForCoordsBody(posLeft))) continue;
+                if (!SandstormObject.isDesert(world.getBiomeForCoordsBody(posLeft))) continue;
 
                 BlockPos posRight = new BlockPos(foundPos.getX() + (dirXRight * distLeftRight), 0, foundPos.getZ() + (dirZRight * distLeftRight));
                 if (!world.isBlockLoaded(posRight)) continue;
-                if (!WeatherObjectSandstorm.isDesert(world.getBiomeForCoordsBody(posRight))) continue;
+                if (!SandstormObject.isDesert(world.getBiomeForCoordsBody(posRight))) continue;
 
                 //go as far upwind as possible until no desert / unloaded area
 
@@ -336,7 +336,7 @@ public class WeatherManagerServer extends WeatherManager {
                 BlockPos posFindLastGoodDownwind = new BlockPos(foundPos);
                 double tickDist = 10;
 
-                while (world.isBlockLoaded(posFind) && WeatherObjectSandstorm.isDesert(world.getBiomeForCoordsBody(posFind))) {
+                while (world.isBlockLoaded(posFind) && SandstormObject.isDesert(world.getBiomeForCoordsBody(posFind))) {
                     //update last good
                     posFindLastGoodUpwind = new BlockPos(posFind);
 
@@ -350,7 +350,7 @@ public class WeatherManagerServer extends WeatherManager {
                 //reset for downwind scan
                 posFind = new BlockPos(foundPos);
 
-                while (world.isBlockLoaded(posFind) && WeatherObjectSandstorm.isDesert(world.getBiomeForCoordsBody(posFind))) {
+                while (world.isBlockLoaded(posFind) && SandstormObject.isDesert(world.getBiomeForCoordsBody(posFind))) {
                     //update last good
                     posFindLastGoodDownwind = new BlockPos(posFind);
 
@@ -366,7 +366,7 @@ public class WeatherManagerServer extends WeatherManager {
 
                 if (dist >= minDistanceOfDesertStretchNeeded) {
 
-                    WeatherObjectSandstorm sandstorm = new WeatherObjectSandstorm(this);
+                    SandstormObject sandstorm = new SandstormObject(this);
 
                     sandstorm.initFirstTime();
                     BlockPos posSpawn = new BlockPos(WeatherUtilBlock.getPrecipitationHeightSafe(world, posFindLastGoodUpwind)).add(0, 1, 0);
@@ -409,7 +409,7 @@ public class WeatherManagerServer extends WeatherManager {
 
         //use 256 or the cutoff val if its configured small
         float windOffsetDist = Math.min(256, ConfigMisc.Misc_simBoxRadiusCutoff / 4 * 3);
-        double angle = windMan.getWindAngleForClouds();
+        double angle = windManager.getWindAngleForClouds();
         double vecX = -Math.sin(Math.toRadians(angle)) * windOffsetDist;
         double vecZ = Math.cos(Math.toRadians(angle)) * windOffsetDist;
 
@@ -447,10 +447,10 @@ public class WeatherManagerServer extends WeatherManager {
         Weather.dbg("Weather2: playerJoinedWorldSyncFull for dim: " + dim);
         World world = getWorld();
         if (world != null) {
-            Weather.dbg("Weather2: playerJoinedWorldSyncFull, sending " + getStormObjects().size() + " weather objects to: " + entP.getName() + ", dim: " + dim);
+            Weather.dbg("Weather2: playerJoinedWorldSyncFull, sending " + getStorms().size() + " weather objects to: " + entP.getName() + ", dim: " + dim);
             //sync storms
-            for (int i = 0; i < getStormObjects().size(); i++) {
-                syncStormNew(getStormObjects().get(i), entP);
+            for (int i = 0; i < getStorms().size(); i++) {
+                syncStormNew(getStorms().get(i), entP);
             }
 
             //sync volcanos
@@ -464,8 +464,8 @@ public class WeatherManagerServer extends WeatherManager {
     public void nbtStormsForIMC() {
         NBTTagCompound data = new NBTTagCompound();
 
-        for (int i = 0; i < getStormObjects().size(); i++) {
-            WeatherObject wo = getStormObjects().get(i);
+        for (int i = 0; i < getStorms().size(); i++) {
+            WeatherObject wo = getStorms().get(i);
 
             if (wo instanceof StormObject) {
                 StormObject so = (StormObject) wo;
@@ -611,8 +611,8 @@ public class WeatherManagerServer extends WeatherManager {
         NBTTagCompound data = new NBTTagCompound();
         data.setString("packetCommand", "WeatherData");
         data.setString("command", "syncWeatherUpdate");
-        data.setBoolean("isVanillaRainActiveOnServer", isVanillaRainActiveOnServer);
-        data.setBoolean("isVanillaThunderActiveOnServer", isVanillaThunderActiveOnServer);
+        data.setBoolean("isVanillaRainActiveOnServer", vanillaRainActiveOnServer);
+        data.setBoolean("isVanillaThunderActiveOnServer", vanillaThunderActiveOnServer);
         data.setInteger("vanillaRainTimeOnServer", vanillaRainTimeOnServer);
         Weather.eventChannel.sendToDimension(PacketHelper.getNBTPacket(data, Weather.eventChannelName), getWorld().provider.getDimension());
     }

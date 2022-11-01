@@ -43,7 +43,7 @@ import java.util.Random;
  *
  * @author Corosus
  */
-public class WeatherObjectSandstorm extends WeatherObject {
+public class SandstormObject extends WeatherObject {
 
     public int height = 0;
 
@@ -67,10 +67,10 @@ public class WeatherObjectSandstorm extends WeatherObject {
 
     public Random rand = new Random();
 
-    public WeatherObjectSandstorm(WeatherManager parManager) {
+    public SandstormObject(WeatherManager parManager) {
         super(parManager);
 
-        this.weatherObjectType = EnumWeatherObjectType.SAND;
+        this.weatherObjectType = WeatherObjectType.SAND;
 
         if (parManager.getWorld().isRemote) {
             listParticlesCloud = new ArrayList<EntityRotFX>();

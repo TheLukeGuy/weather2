@@ -11,7 +11,7 @@ import weather2.config.ConfigMisc;
 import weather2.config.ConfigWind;
 import weather2.util.WeatherUtilEntity;
 import weather2.weathersystem.WeatherManager;
-import weather2.weathersystem.WeatherManagerServer;
+import weather2.weathersystem.ServerWeatherManager;
 import weather2.weathersystem.storm.StormObject;
 
 import java.util.Random;
@@ -367,8 +367,8 @@ public class WindManager {
     }
 
     public void syncData() {
-        if (manager instanceof WeatherManagerServer) {
-            ((WeatherManagerServer) manager).syncWindUpdate(this);
+        if (manager instanceof ServerWeatherManager) {
+            ((ServerWeatherManager) manager).syncWindUpdate(this);
         }
     }
 

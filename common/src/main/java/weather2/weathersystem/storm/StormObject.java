@@ -39,7 +39,7 @@ import weather2.entity.EntityLightningBolt;
 import weather2.player.PlayerData;
 import weather2.util.*;
 import weather2.weathersystem.WeatherManager;
-import weather2.weathersystem.WeatherManagerServer;
+import weather2.weathersystem.ServerWeatherManager;
 import weather2.weathersystem.wind.WindManager;
 
 import java.util.*;
@@ -1170,7 +1170,7 @@ public class StormObject extends WeatherObject {
 
             //actual storm formation chance
 
-            WeatherManagerServer wm = ServerTickHandler.lookupDimToWeatherMan.get(world.provider.getDimension());
+            ServerWeatherManager wm = ServerTickHandler.lookupDimToWeatherMan.get(world.provider.getDimension());
 
             boolean tryFormStorm = false;
 
@@ -1231,8 +1231,8 @@ public class StormObject extends WeatherObject {
                         playerNBT.setLong("lastStormDeadlyTime", world.getTotalWorldTime());
                     }
                 } else if (rand.nextInt(randomChanceOfCollide) == 0) {
-                    for (int i = 0; i < manager.getStormObjects().size(); i++) {
-                        WeatherObject wo = manager.getStormObjects().get(i);
+                    for (int i = 0; i < manager.getStorms().size(); i++) {
+                        WeatherObject wo = manager.getStorms().get(i);
 
                         if (wo instanceof StormObject) {
                             StormObject so = (StormObject) wo;
@@ -1472,7 +1472,7 @@ public class StormObject extends WeatherObject {
         if (stormToAbsorb != null) {
             Weather.dbg("stormfront collision happened between ID " + this.ID + " and " + stormToAbsorb.ID);
             manager.removeStormObject(stormToAbsorb.ID);
-            ((WeatherManagerServer) manager).syncStormRemove(stormToAbsorb);
+            ((ServerWeatherManager) manager).syncStormRemove(stormToAbsorb);
         } else {
             Weather.dbg("ocean storm happened, ID " + this.ID);
         }
@@ -2199,11 +2199,11 @@ public class StormObject extends WeatherObject {
     }
 
     public float getAdjustedSpeed() {
-        return manager.windMan.getWindSpeedForClouds();
+        return manager.windManager.getWindSpeedForClouds();
     }
 
     public float getAdjustedAngle() {
-        float angle = manager.windMan.getWindAngleForClouds();
+        float angle = manager.windManager.getWindAngleForClouds();
 
         float angleAdjust = Math.max(10, Math.min(45, 45F * levelTemperature * 0.2F));
         float targetYaw = 0;
@@ -2557,7 +2557,7 @@ public class StormObject extends WeatherObject {
             baseBright = 0.2F;
         } else if (attrib_precipitation) {
             baseBright = 0.2F;
-        } else if (manager.isVanillaRainActiveOnServer) {
+        } else if (manager.vanillaRainActiveOnServer) {
             baseBright = 0.2F;
         } else {
             float adj = Math.min(1F, levelWater / levelWaterStartRaining) * 0.6F;
@@ -2624,7 +2624,7 @@ public class StormObject extends WeatherObject {
     public void addWeatherEffectLightning(EntityLightningBolt parEnt, boolean custom) {
         //manager.getWorld().addWeatherEffect(parEnt);
         manager.getWorld().weatherEffects.add(parEnt);
-        ((WeatherManagerServer) manager).syncLightningNew(parEnt, custom);
+        ((ServerWeatherManager) manager).syncLightningNew(parEnt, custom);
     }
 
     @Override

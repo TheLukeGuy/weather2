@@ -57,9 +57,9 @@ import weather2.config.ConfigMisc;
 import weather2.config.ConfigParticle;
 import weather2.config.ConfigStorm;
 import weather2.util.*;
-import weather2.weathersystem.WeatherManagerClient;
+import weather2.weathersystem.ClientWeatherManager;
 import weather2.weathersystem.storm.StormObject;
-import weather2.weathersystem.storm.WeatherObjectSandstorm;
+import weather2.weathersystem.storm.SandstormObject;
 import weather2.weathersystem.wind.WindManager;
 
 import java.lang.reflect.Field;
@@ -523,7 +523,7 @@ public class SceneEnhancer implements Runnable {
 
             if (entP.posY >= StormObject.static_YPos_layer0) return;
 
-            WeatherManagerClient weatherMan = ClientTickHandler.weatherManager;
+            ClientWeatherManager weatherMan = ClientTickHandler.weatherManager;
             if (weatherMan == null) return;
             WindManager windMan = weatherMan.getWindManager();
             if (windMan == null) return;
@@ -1400,7 +1400,7 @@ public class SceneEnhancer implements Runnable {
                     curPrecipStrTarget = 0;
                 }
             } else {
-                if (ClientTickHandler.weatherManager.isVanillaRainActiveOnServer) {
+                if (ClientTickHandler.weatherManager.vanillaRainActiveOnServer) {
                     mc.world.getWorldInfo().setRaining(true);
                     mc.world.getWorldInfo().setThundering(true);
 
@@ -1476,7 +1476,7 @@ public class SceneEnhancer implements Runnable {
     }
 
     public static StormObject getClosestStormCached(EntityPlayer entP) {
-        if (WeatherManagerClient.closestStormCached == null || entP.world.getTotalWorldTime() % 5 == 0) {
+        if (ClientWeatherManager.closestStormCached == null || entP.world.getTotalWorldTime() % 5 == 0) {
             Minecraft mc = FMLClientHandler.instance().getClient();
 
             double maxStormDist = 512 / 4 * 3;
@@ -1484,10 +1484,10 @@ public class SceneEnhancer implements Runnable {
 
             ClientTickHandler.checkClientWeather();
 
-            WeatherManagerClient.closestStormCached = ClientTickHandler.weatherManager.getClosestStorm(plPos, maxStormDist, StormObject.STATE_FORMING, true);
+            ClientWeatherManager.closestStormCached = ClientTickHandler.weatherManager.getClosestStorm(plPos, maxStormDist, StormObject.STATE_FORMING, true);
         }
 
-        return WeatherManagerClient.closestStormCached;
+        return ClientWeatherManager.closestStormCached;
     }
 
     public synchronized void tryParticleSpawning() {
@@ -1534,9 +1534,9 @@ public class SceneEnhancer implements Runnable {
         Minecraft mc = FMLClientHandler.instance().getClient();
         World worldRef = lastWorldDetected;
         EntityPlayer player = FMLClientHandler.instance().getClient().player;
-        WeatherManagerClient manager = ClientTickHandler.weatherManager;
+        ClientWeatherManager manager = ClientTickHandler.weatherManager;
 
-        if (worldRef == null || player == null || manager == null || manager.windMan == null) {
+        if (worldRef == null || player == null || manager == null || manager.windManager == null) {
             try {
                 Thread.sleep(1000L);
             } catch (Exception ex) {
@@ -1561,7 +1561,7 @@ public class SceneEnhancer implements Runnable {
         int curZ = (int) player.posZ;
         //if (true) return;
 
-        float windStr = manager.windMan.getWindSpeedForPriority();//(weatherMan.wind.strength <= 1F ? weatherMan.wind.strength : 1F);
+        float windStr = manager.windManager.getWindSpeedForPriority();//(weatherMan.wind.strength <= 1F ? weatherMan.wind.strength : 1F);
 
         /*if (mc.objectMouseOver != null && mc.objectMouseOver.getBlockPos() != null) {
         	Block id = mc.world.getBlockState(new BlockPos(mc.objectMouseOver.getBlockPos().getX(), mc.objectMouseOver.getBlockPos().getY(), mc.objectMouseOver.getBlockPos().getZ())).getBlock();
@@ -1873,7 +1873,7 @@ public class SceneEnhancer implements Runnable {
 
         List list = world.loadedEntityList;
 
-        WeatherManagerClient weatherMan = ClientTickHandler.weatherManager;
+        ClientWeatherManager weatherMan = ClientTickHandler.weatherManager;
         if (weatherMan == null) return;
         WindManager windMan = weatherMan.getWindManager();
         if (windMan == null) return;
@@ -1911,7 +1911,7 @@ public class SceneEnhancer implements Runnable {
                 continue;
             }
 
-            if (ClientTickHandler.weatherManager.windMan.getWindSpeedForPriority() >= 0.10) {
+            if (ClientTickHandler.weatherManager.windManager.getWindSpeedForPriority() >= 0.10) {
 
                 handleCount++;
 
@@ -2210,7 +2210,7 @@ public class SceneEnhancer implements Runnable {
         EntityPlayer player = mc.player;
         World world = mc.world;
         Vec3 posPlayer = new Vec3(mc.player.posX, 0/*mc.player.posY*/, mc.player.posZ);
-        WeatherObjectSandstorm sandstorm = ClientTickHandler.weatherManager.getClosestSandstormByIntensity(posPlayer);
+        SandstormObject sandstorm = ClientTickHandler.weatherManager.getClosestSandstormByIntensity(posPlayer);
         WindManager windMan = ClientTickHandler.weatherManager.getWindManager();
         float scaleIntensityTarget = 0F;
         if (sandstorm != null) {

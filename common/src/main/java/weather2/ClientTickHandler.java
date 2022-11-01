@@ -21,7 +21,7 @@ import weather2.config.ConfigMisc;
 import weather2.util.WeatherUtilConfig;
 import weather2.util.WindReader;
 import weather2.weathersystem.EntityRendererProxyWeather2Mini;
-import weather2.weathersystem.WeatherManagerClient;
+import weather2.weathersystem.ClientWeatherManager;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -30,7 +30,7 @@ public class ClientTickHandler {
 
     public static World lastWorld;
 
-    public static WeatherManagerClient weatherManager;
+    public static ClientWeatherManager weatherManager;
     public static SceneEnhancer sceneEnhancer;
     public static FoliageEnhancerShader foliageEnhancer;
 
@@ -279,7 +279,7 @@ public class ClientTickHandler {
         Weather.dbg("Weather2: Initializing WeatherManagerClient for client world and requesting full sync");
 
         lastWorld = world;
-        weatherManager = new WeatherManagerClient(world.provider.getDimension());
+        weatherManager = new ClientWeatherManager(world.provider.getDimension());
 
         //request a full sync from server
         NBTTagCompound data = new NBTTagCompound();

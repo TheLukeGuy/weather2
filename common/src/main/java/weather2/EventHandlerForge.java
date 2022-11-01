@@ -282,7 +282,7 @@ public class EventHandlerForge {
         Entity ent = event.getEntity();
         if (!ent.world.isRemote) {
             if (WeatherUtilData.isWindAffected(ent)) {
-                WindManager windMan = ServerTickHandler.getWeatherSystemForDim(ent.world.provider.getDimension()).windMan;
+                WindManager windMan = ServerTickHandler.getWeatherSystemForDim(ent.world.provider.getDimension()).windManager;
                 windMan.applyWindForceNew(ent, 1F / 20F, 0.5F);
             }
 

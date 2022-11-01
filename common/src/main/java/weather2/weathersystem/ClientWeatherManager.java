@@ -12,16 +12,16 @@ import weather2.Weather;
 import weather2.entity.EntityLightningBolt;
 import weather2.entity.EntityLightningBoltCustom;
 import weather2.volcano.VolcanoObject;
-import weather2.weathersystem.storm.EnumWeatherObjectType;
+import weather2.weathersystem.storm.WeatherObjectType;
 import weather2.weathersystem.storm.StormObject;
 import weather2.weathersystem.storm.WeatherObject;
-import weather2.weathersystem.storm.WeatherObjectSandstorm;
+import weather2.weathersystem.storm.SandstormObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
-public class WeatherManagerClient extends WeatherManager {
+public class ClientWeatherManager extends WeatherManager {
 
     //data for client, stormfronts synced from server
 
@@ -31,7 +31,7 @@ public class WeatherManagerClient extends WeatherManager {
     public static StormObject closestStormCached;
 
 
-    public WeatherManagerClient(int parDim) {
+    public ClientWeatherManager(int parDim) {
         super(parDim);
     }
 
@@ -64,13 +64,13 @@ public class WeatherManagerClient extends WeatherManager {
             long ID = stormNBT.getLong("ID");
             Weather.dbg("syncStormNew, ID: " + ID);
 
-            EnumWeatherObjectType weatherObjectType = EnumWeatherObjectType.get(stormNBT.getInteger("weatherObjectType"));
+            WeatherObjectType weatherObjectType = WeatherObjectType.get(stormNBT.getInteger("weatherObjectType"));
 
             WeatherObject wo = null;
-            if (weatherObjectType == EnumWeatherObjectType.CLOUD) {
+            if (weatherObjectType == WeatherObjectType.CLOUD) {
                 wo = new StormObject(ClientTickHandler.weatherManager);
-            } else if (weatherObjectType == EnumWeatherObjectType.SAND) {
-                wo = new WeatherObjectSandstorm(ClientTickHandler.weatherManager);
+            } else if (weatherObjectType == WeatherObjectType.SAND) {
+                wo = new SandstormObject(ClientTickHandler.weatherManager);
             }
 
             //StormObject so
@@ -84,7 +84,7 @@ public class WeatherManagerClient extends WeatherManager {
             NBTTagCompound stormNBT = parNBT.getCompoundTag("data");
             long ID = stormNBT.getLong("ID");
 
-            WeatherObject so = lookupStormObjectsByID.get(ID);
+            WeatherObject so = stormsById.get(ID);
             if (so != null) {
                 removeStormObject(ID);
             } else {
@@ -95,7 +95,7 @@ public class WeatherManagerClient extends WeatherManager {
             NBTTagCompound stormNBT = parNBT.getCompoundTag("data");
             long ID = stormNBT.getLong("ID");
 
-            WeatherObject so = lookupStormObjectsByID.get(ID);
+            WeatherObject so = stormsById.get(ID);
             if (so != null) {
                 so.getNbtCache().setNewNBT(stormNBT);
                 so.nbtSyncFromServer();
@@ -118,7 +118,7 @@ public class WeatherManagerClient extends WeatherManager {
             NBTTagCompound stormNBT = parNBT.getCompoundTag("data");
             long ID = stormNBT.getLong("ID");
 
-            VolcanoObject so = lookupVolcanoes.get(ID);
+            VolcanoObject so = volcanoesById.get(ID);
             if (so != null) {
                 removeVolcanoObject(ID);
             }
@@ -127,7 +127,7 @@ public class WeatherManagerClient extends WeatherManager {
             NBTTagCompound stormNBT = parNBT.getCompoundTag("data");
             long ID = stormNBT.getLong("ID");
 
-            VolcanoObject so = lookupVolcanoes.get(ID);
+            VolcanoObject so = volcanoesById.get(ID);
             if (so != null) {
                 so.nbtSyncFromServer(stormNBT);
             } else {
@@ -138,7 +138,7 @@ public class WeatherManagerClient extends WeatherManager {
 
             NBTTagCompound nbt = parNBT.getCompoundTag("data");
 
-            windMan.nbtSyncFromServer(nbt);
+            windManager.nbtSyncFromServer(nbt);
         } else if (command.equals("syncLightningNew")) {
             //Weather.dbg("updating client side wind");
 
@@ -174,8 +174,8 @@ public class WeatherManagerClient extends WeatherManager {
             //Weather.dbg("updating client side wind");
 
             //NBTTagCompound nbt = parNBT.getCompoundTag("data");
-            isVanillaRainActiveOnServer = parNBT.getBoolean("isVanillaRainActiveOnServer");
-            isVanillaThunderActiveOnServer = parNBT.getBoolean("isVanillaThunderActiveOnServer");
+            vanillaRainActiveOnServer = parNBT.getBoolean("isVanillaRainActiveOnServer");
+            vanillaThunderActiveOnServer = parNBT.getBoolean("isVanillaThunderActiveOnServer");
             vanillaRainTimeOnServer = parNBT.getInteger("vanillaRainTimeOnServer");
             //windMan.nbtSyncFromServer(nbt);
         }

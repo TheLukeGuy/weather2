@@ -45,7 +45,7 @@ public class TileEntityWeatherForecast extends TileEntity implements ITickable {
                 if (ConfigMisc.radarCloudDebug) {
                     //storms.clear();
                     List<WeatherObject> listAdd = new ArrayList<>();
-                    for (WeatherObject wo : ClientTickHandler.weatherManager.getStormObjects()) {
+                    for (WeatherObject wo : ClientTickHandler.weatherManager.getStorms()) {
                         //if (wo instanceof StormObject && !((StormObject) wo).isCloudlessStorm()) {
                         listAdd.add(wo);
                         //}

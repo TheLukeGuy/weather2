@@ -8,7 +8,7 @@ import weather2.ServerTickHandler;
 import weather2.Weather;
 import weather2.config.ConfigMisc;
 import weather2.config.ConfigTornado;
-import weather2.weathersystem.WeatherManagerServer;
+import weather2.weathersystem.ServerWeatherManager;
 import weather2.weathersystem.storm.StormObject;
 
 import java.util.Random;
@@ -72,7 +72,7 @@ public class TileEntityWeatherMachine extends TileEntity implements ITickable {
     }
 
     public void killStorm() {
-        WeatherManagerServer wm = ServerTickHandler.lookupDimToWeatherMan.get(world.provider.getDimension());
+        ServerWeatherManager wm = ServerTickHandler.lookupDimToWeatherMan.get(world.provider.getDimension());
         if (wm != null) {
             //StormObject lastTickStormObject = wm.getClosestStorm(new Vec3(xCoord, StormObject.layers.get(0), zCoord), deflectorRadius, StormObject.STATE_NORMAL, true);
 
@@ -109,10 +109,10 @@ public class TileEntityWeatherMachine extends TileEntity implements ITickable {
 
                 //for when world is reloaded, regrab instance so a duplicate isnt greated (and so old one doesnt get loose)
                 if (lastTickStormObject == null && lastTickStormObjectID != -1) {
-                    WeatherManagerServer manager = ServerTickHandler.lookupDimToWeatherMan.get(world.provider.getDimension());
+                    ServerWeatherManager manager = ServerTickHandler.lookupDimToWeatherMan.get(world.provider.getDimension());
 
                     if (manager != null) {
-                        StormObject obj = manager.getStormObjectByID(lastTickStormObjectID);
+                        StormObject obj = manager.getStormById(lastTickStormObjectID);
                         if (obj != null) {
                             lastTickStormObject = obj;
                             Weather.dbg("regrabbed old storm instance by ID " + obj.ID + " for weather machine");
@@ -121,7 +121,7 @@ public class TileEntityWeatherMachine extends TileEntity implements ITickable {
                 }
 
                 if (lastTickStormObject == null && !ConfigMisc.Aesthetic_Only_Mode) {
-                    WeatherManagerServer manager = ServerTickHandler.lookupDimToWeatherMan.get(world.provider.getDimension());
+                    ServerWeatherManager manager = ServerTickHandler.lookupDimToWeatherMan.get(world.provider.getDimension());
 
                     if (manager != null) {
                         StormObject so = new StormObject(manager);
