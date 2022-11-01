@@ -24,13 +24,11 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import weather2.config.ConfigMisc;
-import weather2.config.ConfigTornado;
 import weather2.entity.EntityLightningBoltCustom;
 import weather2.util.WeatherUtilBlock;
 import weather2.util.WeatherUtilConfig;
-import weather2.weathersystem.WeatherManagerBase;
+import weather2.weathersystem.WeatherManager;
 import weather2.weathersystem.WeatherManagerServer;
-import weather2.weathersystem.wind.WindManager;
 
 public class ServerTickHandler
 {   
@@ -225,7 +223,7 @@ public class ServerTickHandler
     	//World worlds[] = DimensionManager.getWorlds();
     	//for (int i = 0; i < worlds.length; i++) {
     	for (int i = 0; i < listWeatherMans.size(); i++) {
-    		WeatherManagerBase wm = listWeatherMans.get(i);
+    		WeatherManager wm = listWeatherMans.get(i);
     		int dim = wm.dim;
     		if (lookupDimToWeatherMan.containsKey(dim)) {
     			removeWorldFromWeather(dim);

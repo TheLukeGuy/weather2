@@ -17,7 +17,6 @@ import weather2.Weather;
 import weather2.config.ConfigMisc;
 import weather2.config.ConfigSand;
 import weather2.config.ConfigStorm;
-import weather2.config.ConfigTornado;
 import weather2.player.PlayerData;
 import weather2.util.CachedNBTTagCompound;
 import weather2.util.WeatherUtilBlock;
@@ -32,7 +31,7 @@ import CoroUtil.packet.PacketHelper;
 import CoroUtil.util.CoroUtilEntity;
 import CoroUtil.util.Vec3;
 
-public class WeatherManagerServer extends WeatherManagerBase {
+public class WeatherManagerServer extends WeatherManager {
 
 	//storm logic, syncing to client
 	

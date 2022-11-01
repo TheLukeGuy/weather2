@@ -12,7 +12,7 @@ import net.minecraft.village.Village;
 import net.minecraft.village.VillageDoorInfo;
 import weather2.ServerTickHandler;
 import weather2.config.ConfigMisc;
-import weather2.weathersystem.WeatherManagerBase;
+import weather2.weathersystem.WeatherManager;
 import weather2.weathersystem.storm.StormObject;
 import weather2.weathersystem.storm.WeatherObjectSandstorm;
 
@@ -49,7 +49,7 @@ public class EntityAIMoveIndoorsStorm extends EntityAIBase implements ITaskIniti
     public boolean shouldExecute()
     {
 
-        WeatherManagerBase weatherManager = ServerTickHandler.getWeatherSystemForDim(entityObj.world.provider.getDimension());
+        WeatherManager weatherManager = ServerTickHandler.getWeatherSystemForDim(entityObj.world.provider.getDimension());
         if (weatherManager == null) return false;
 
         BlockPos blockpos = new BlockPos(this.entityObj);

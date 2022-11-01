@@ -5,7 +5,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import weather2.ClientTickHandler;
 import weather2.ServerTickHandler;
-import weather2.weathersystem.WeatherManagerBase;
+import weather2.weathersystem.WeatherManager;
 import CoroUtil.util.Vec3;
 
 public class WindReader {
@@ -42,7 +42,7 @@ public class WindReader {
 	}
 	
 	public static float getWindAngle(World parWorld, Vec3 parLocation, WindType parWindType) {
-		WeatherManagerBase wMan = null;
+		WeatherManager wMan = null;
 		if (parWorld.isRemote) {
 			wMan = getWeatherManagerClient();
 		} else {
@@ -71,7 +71,7 @@ public class WindReader {
 	}
 	
 	public static float getWindSpeed(World parWorld, Vec3 parLocation, WindType parWindType) {
-		WeatherManagerBase wMan = null;
+		WeatherManager wMan = null;
 		if (parWorld.isRemote) {
 			wMan = getWeatherManagerClient();
 		} else {
@@ -96,7 +96,7 @@ public class WindReader {
 	}
 	
 	@SideOnly(Side.CLIENT)
-	private static WeatherManagerBase getWeatherManagerClient() {
+	private static WeatherManager getWeatherManagerClient() {
 		return ClientTickHandler.weatherManager;
 	}
 }

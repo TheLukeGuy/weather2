@@ -6,7 +6,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import weather2.ClientTickHandler;
 import weather2.ServerTickHandler;
-import weather2.weathersystem.WeatherManagerBase;
+import weather2.weathersystem.WeatherManager;
 
 /**
  * Main Helper class for getting wind data via weather2 api
@@ -56,7 +56,7 @@ public class WindDataHelper {
 	 * @return degree between 0 and 360
 	 */
 	public static float getWindAngle(World parWorld, BlockPos parLocation, WindType parWindType) {
-		WeatherManagerBase wMan = null;
+		WeatherManager wMan = null;
 		if (parWorld.isRemote) {
 			wMan = getWeatherManagerClient();
 		} else {
@@ -100,7 +100,7 @@ public class WindDataHelper {
 	 * @return usually ranging between 0 and 1, might be over 1 in some extreme weather cases
 	 */
 	public static float getWindSpeed(World parWorld, BlockPos parLocation, WindType parWindType) {
-		WeatherManagerBase wMan = null;
+		WeatherManager wMan = null;
 		if (parWorld.isRemote) {
 			wMan = getWeatherManagerClient();
 		} else {
@@ -125,7 +125,7 @@ public class WindDataHelper {
 	}
 	
 	@SideOnly(Side.CLIENT)
-	private static WeatherManagerBase getWeatherManagerClient() {
+	private static WeatherManager getWeatherManagerClient() {
 		return ClientTickHandler.weatherManager;
 	}
 }

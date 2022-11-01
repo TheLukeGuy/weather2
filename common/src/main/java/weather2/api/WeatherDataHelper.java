@@ -7,7 +7,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import weather2.ClientTickHandler;
 import weather2.ServerTickHandler;
-import weather2.weathersystem.WeatherManagerBase;
+import weather2.weathersystem.WeatherManager;
 
 public class WeatherDataHelper {
 
@@ -20,7 +20,7 @@ public class WeatherDataHelper {
      * @return
      */
 	public static boolean isPrecipitatingAt(World world, BlockPos position) {
-	    WeatherManagerBase weatherManager;
+	    WeatherManager weatherManager;
 	    if (world.isRemote) {
 	        weatherManager = getWeatherManagerForClient();
         } else {
@@ -33,7 +33,7 @@ public class WeatherDataHelper {
     }
 
     @SideOnly(Side.CLIENT)
-    public static WeatherManagerBase getWeatherManagerForClient() {
+    public static WeatherManager getWeatherManagerForClient() {
 	    return ClientTickHandler.weatherManager;
     }
 

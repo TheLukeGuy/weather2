@@ -6,7 +6,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import weather2.util.CachedNBTTagCompound;
-import weather2.weathersystem.WeatherManagerBase;
+import weather2.weathersystem.WeatherManager;
 
 public class WeatherObject {
 
@@ -21,7 +21,7 @@ public class WeatherObject {
 	 */
 	public int ticksSinceNoNearPlayer = 0;
 	
-	public WeatherManagerBase manager;
+	public WeatherManager manager;
 	
 	public Vec3 pos = new Vec3(0, 0, 0);
 	public Vec3 posGround = new Vec3(0, 0, 0);
@@ -37,7 +37,7 @@ public class WeatherObject {
 
 	//private NBTTagCompound cachedClientNBTState;
 
-	public WeatherObject(WeatherManagerBase parManager) {
+	public WeatherObject(WeatherManager parManager) {
 		manager = parManager;
 		nbtCache = new CachedNBTTagCompound();
 	}

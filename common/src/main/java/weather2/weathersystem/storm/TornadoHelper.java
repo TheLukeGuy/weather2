@@ -35,7 +35,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import weather2.ClientConfigData;
 import weather2.ClientTickHandler;
-import weather2.Weather;
 import weather2.config.ConfigMisc;
 import weather2.config.ConfigStorm;
 import weather2.config.ConfigTornado;
@@ -46,7 +45,6 @@ import weather2.util.WeatherUtilEntity;
 import weather2.util.WeatherUtilSound;
 import CoroUtil.util.CoroUtilBlock;
 import CoroUtil.util.Vec3;
-import weather2.weathersystem.WeatherManagerBase;
 
 public class TornadoHelper {
 	

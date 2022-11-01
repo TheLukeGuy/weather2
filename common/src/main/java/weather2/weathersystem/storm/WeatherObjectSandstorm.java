@@ -20,7 +20,7 @@ import weather2.config.ConfigSand;
 import weather2.util.CachedNBTTagCompound;
 import weather2.util.WeatherUtil;
 import weather2.util.WeatherUtilBlock;
-import weather2.weathersystem.WeatherManagerBase;
+import weather2.weathersystem.WeatherManager;
 import weather2.weathersystem.wind.WindManager;
 import CoroUtil.util.Vec3;
 import extendedrenderer.particle.ParticleRegistry;
@@ -70,7 +70,7 @@ public class WeatherObjectSandstorm extends WeatherObject {
 	
 	public Random rand = new Random();
 	
-	public WeatherObjectSandstorm(WeatherManagerBase parManager) {
+	public WeatherObjectSandstorm(WeatherManager parManager) {
 		super(parManager);
 		
 		this.weatherObjectType = EnumWeatherObjectType.SAND;

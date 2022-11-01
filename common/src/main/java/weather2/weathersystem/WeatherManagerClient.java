@@ -21,7 +21,7 @@ import weather2.weathersystem.storm.WeatherObject;
 import weather2.weathersystem.storm.WeatherObjectSandstorm;
 
 @SideOnly(Side.CLIENT)
-public class WeatherManagerClient extends WeatherManagerBase {
+public class WeatherManagerClient extends WeatherManager {
 
 	//data for client, stormfronts synced from server
 	

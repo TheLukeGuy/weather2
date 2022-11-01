@@ -37,7 +37,7 @@ import weather2.entity.EntityIceBall;
 import weather2.entity.EntityLightningBolt;
 import weather2.player.PlayerData;
 import weather2.util.*;
-import weather2.weathersystem.WeatherManagerBase;
+import weather2.weathersystem.WeatherManager;
 import weather2.weathersystem.WeatherManagerServer;
 import extendedrenderer.ExtendedRenderer;
 import extendedrenderer.particle.ParticleRegistry;
@@ -200,7 +200,7 @@ public class StormObject extends WeatherObject {
 
 	public List<EntityLivingBase> listEntitiesUnderClouds = new ArrayList<>();
     
-	public StormObject(WeatherManagerBase parManager) {
+	public StormObject(WeatherManager parManager) {
 		super(parManager);
 		
 		pos = new Vec3(0, static_YPos_layer0, 0);

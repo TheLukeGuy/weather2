@@ -11,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -22,7 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import weather2.Weather;
 import weather2.util.WeatherUtil;
 import weather2.util.WeatherUtilBlock;
-import weather2.weathersystem.WeatherManagerBase;
+import weather2.weathersystem.WeatherManager;
 import CoroUtil.util.CoroUtilBlock;
 import CoroUtil.util.Vec3;
 import extendedrenderer.ExtendedRenderer;
@@ -37,7 +38,7 @@ public class VolcanoObject {
 	//management stuff
 	public static long lastUsedID = 0; //ID starts from 0, set on nbt load, who would max this out for volcanos? surely this will never fail...
 	public long ID;
-	public WeatherManagerBase manager;
+	public WeatherManager manager;
 	
 	@SideOnly(Side.CLIENT)
 	public List<EntityRotFX> listParticlesSmoke = new ArrayList<EntityRotFX>();
@@ -92,7 +93,7 @@ public class VolcanoObject {
 	
 	public int growthStage = 0;
 	
-	public VolcanoObject(WeatherManagerBase parManager) {
+	public VolcanoObject(WeatherManager parManager) {
 		manager = parManager;
 	}
 	
@@ -113,7 +114,7 @@ public class VolcanoObject {
 		ticksPerformedCooldown = 0;
 	}
 	
-	public void readFromNBT(NBTTagCompound data)
+	public void readFromNBT(NbtCompound data)
     {
 		ID = data.getLong("ID");
 		
@@ -136,7 +137,7 @@ public class VolcanoObject {
 		
     }
 	
-	public void writeToNBT(NBTTagCompound data)
+	public void writeToNBT(NbtCompound data)
     {
 		data.setLong("ID", ID);
 		

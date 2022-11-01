@@ -1,139 +1,140 @@
 package weather2.util;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NbtCompound;
+
+import java.util.Objects;
 
 /**
  * Caches nbt data to remove redundant data sending over network
  *
  * @author cosmicdan
- *
+ * <p>
  * revisions made to further integrate it into the newer design of WeatherObjects
  */
 public class CachedNBTTagCompound {
-	private NBTTagCompound newData;
-	private NBTTagCompound cachedData;
-	private boolean forced = false;
+    private NbtCompound newData;
+    private NbtCompound cachedData;
+    private boolean forced = false;
 
-	public CachedNBTTagCompound() {
-		this.newData = new NBTTagCompound();
-		this.cachedData = new NBTTagCompound();
-	}
+    public CachedNBTTagCompound() {
+        this.newData = new NbtCompound();
+        this.cachedData = new NbtCompound();
+    }
 
-	public void setCachedNBT(NBTTagCompound cachedData) {
-		if (cachedData == null)
-			cachedData = new NBTTagCompound();
-		this.cachedData = cachedData;
-	}
+    public void setCachedNBT(NbtCompound cachedData) {
+        if (cachedData == null)
+            cachedData = new NbtCompound();
+        this.cachedData = cachedData;
+    }
 
-	public NBTTagCompound getCachedNBT() {
-		return cachedData;
-	}
+    public NbtCompound getCachedNBT() {
+        return cachedData;
+    }
 
-	public NBTTagCompound getNewNBT() {
-		return newData;
-	}
+    public NbtCompound getNewNBT() {
+        return newData;
+    }
 
-	public void setNewNBT(NBTTagCompound newData) {
-		this.newData = newData;
-	}
+    public void setNewNBT(NbtCompound newData) {
+        this.newData = newData;
+    }
 
-	public void setUpdateForced(boolean forced) {
-		this.forced = forced;
-	}
+    public void setUpdateForced(boolean forced) {
+        this.forced = forced;
+    }
 
-	public long getLong(String key) {
-		if (!newData.hasKey(key))
-			newData.setLong(key, cachedData.getLong(key));
-		return newData.getLong(key);
-	}
+    public long getLong(String key) {
+        if (!newData.contains(key))
+            newData.putLong(key, cachedData.getLong(key));
+        return newData.getLong(key);
+    }
 
-	public void setLong(String key, long newVal) {
-		if (!cachedData.hasKey(key) || cachedData.getLong(key) != newVal || forced) {
-			newData.setLong(key, newVal);
-		}
-		cachedData.setLong(key, newVal);
-	}
+    public void setLong(String key, long newVal) {
+        if (!cachedData.contains(key) || cachedData.getLong(key) != newVal || forced) {
+            newData.putLong(key, newVal);
+        }
+        cachedData.putLong(key, newVal);
+    }
 
-	public int getInteger(String key) {
-		if (!newData.hasKey(key))
-			newData.setInteger(key, cachedData.getInteger(key));
-		return newData.getInteger(key);
-	}
+    public int getInteger(String key) {
+        if (!newData.contains(key))
+            newData.putInt(key, cachedData.getInt(key));
+        return newData.getInt(key);
+    }
 
-	public void setInteger(String key, int newVal) {
-		if (!cachedData.hasKey(key) || cachedData.getInteger(key) != newVal || forced) {
-			newData.setInteger(key, newVal);
-		}
-		cachedData.setInteger(key, newVal);
-	}
+    public void setInteger(String key, int newVal) {
+        if (!cachedData.contains(key) || cachedData.getInt(key) != newVal || forced) {
+            newData.putInt(key, newVal);
+        }
+        cachedData.putInt(key, newVal);
+    }
 
-	public short getShort(String key) {
-		if (!newData.hasKey(key))
-			newData.setShort(key, cachedData.getShort(key));
-		return newData.getShort(key);
-	}
+    public short getShort(String key) {
+        if (!newData.contains(key))
+            newData.putShort(key, cachedData.getShort(key));
+        return newData.getShort(key);
+    }
 
-	public void setShort(String key, short newVal) {
-		if (!cachedData.hasKey(key) || cachedData.getShort(key) != newVal || forced) {
-			newData.setShort(key, newVal);
-		}
-		cachedData.setShort(key, newVal);
-	}
+    public void setShort(String key, short newVal) {
+        if (!cachedData.contains(key) || cachedData.getShort(key) != newVal || forced) {
+            newData.putShort(key, newVal);
+        }
+        cachedData.putShort(key, newVal);
+    }
 
-	public String getString(String key) {
-		if (!newData.hasKey(key))
-			newData.setString(key, cachedData.getString(key));
-		return newData.getString(key);
-	}
+    public String getString(String key) {
+        if (!newData.contains(key))
+            newData.putString(key, cachedData.getString(key));
+        return newData.getString(key);
+    }
 
-	public void setString(String key, String newVal) {
-		if (!cachedData.hasKey(key) || cachedData.getString(key) != newVal || forced) {
-			newData.setString(key, newVal);
-		}
-		cachedData.setString(key, newVal);
-	}
+    public void setString(String key, String newVal) {
+        if (!cachedData.contains(key) || !Objects.equals(cachedData.getString(key), newVal) || forced) {
+            newData.putString(key, newVal);
+        }
+        cachedData.putString(key, newVal);
+    }
 
-	public boolean getBoolean(String key) {
-		if (!newData.hasKey(key))
-			newData.setBoolean(key, cachedData.getBoolean(key));
-		return newData.getBoolean(key);
-	}
+    public boolean getBoolean(String key) {
+        if (!newData.contains(key))
+            newData.putBoolean(key, cachedData.getBoolean(key));
+        return newData.getBoolean(key);
+    }
 
-	public void setBoolean(String key, boolean newVal) {
-		if (!cachedData.hasKey(key) || cachedData.getBoolean(key) != newVal || forced) {
-			newData.setBoolean(key, newVal);
-		}
-		cachedData.setBoolean(key, newVal);
-	}
+    public void setBoolean(String key, boolean newVal) {
+        if (!cachedData.contains(key) || cachedData.getBoolean(key) != newVal || forced) {
+            newData.putBoolean(key, newVal);
+        }
+        cachedData.putBoolean(key, newVal);
+    }
 
-	public float getFloat(String key) {
-		if (!newData.hasKey(key))
-			newData.setFloat(key, cachedData.getFloat(key));
-		return newData.getFloat(key);
-	}
+    public float getFloat(String key) {
+        if (!newData.contains(key))
+            newData.putFloat(key, cachedData.getFloat(key));
+        return newData.getFloat(key);
+    }
 
-	public void setFloat(String key, float newVal) {
-		if (!cachedData.hasKey(key) || cachedData.getFloat(key) != newVal || forced) {
-			newData.setFloat(key, newVal);
-		}
-		cachedData.setFloat(key, newVal);
-	}
+    public void setFloat(String key, float newVal) {
+        if (!cachedData.contains(key) || cachedData.getFloat(key) != newVal || forced) {
+            newData.putFloat(key, newVal);
+        }
+        cachedData.putFloat(key, newVal);
+    }
 
-	public double getDouble(String key) {
-		if (!newData.hasKey(key))
-			newData.setDouble(key, cachedData.getDouble(key));
-		return newData.getDouble(key);
-	}
+    public double getDouble(String key) {
+        if (!newData.contains(key))
+            newData.putDouble(key, cachedData.getDouble(key));
+        return newData.getDouble(key);
+    }
 
-	public void setDouble(String key, double newVal) {
-		if (!cachedData.hasKey(key) || cachedData.getDouble(key) != newVal || forced) {
-			newData.setDouble(key, newVal);
-		}
-		cachedData.setDouble(key, newVal);
-	}
+    public void setDouble(String key, double newVal) {
+        if (!cachedData.contains(key) || cachedData.getDouble(key) != newVal || forced) {
+            newData.putDouble(key, newVal);
+        }
+        cachedData.putDouble(key, newVal);
+    }
 
-	public void updateCacheFromNew() {
-		this.cachedData = this.newData;
-	}
-
+    public void updateCacheFromNew() {
+        this.cachedData = this.newData;
+    }
 }
