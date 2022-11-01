@@ -20,12 +20,12 @@ public class ShaderProgramParticle extends ShaderProgram {
     @Override
     public void setupAttribLocations() {
         int offset = 0;
-        ShaderManager.glBindAttribLocation(getProgramId(), vertexShaderAttributeIndexPosition+offset, "position");
-        ShaderManager.glBindAttribLocation(getProgramId(), vertexShaderAttributeTexCoord+offset, "texCoord");
+        ShaderManager.glBindAttribLocation(getProgramId(), vertexShaderAttributeIndexPosition + offset, "position");
+        ShaderManager.glBindAttribLocation(getProgramId(), vertexShaderAttributeTexCoord + offset, "texCoord");
         //ShaderManager.glBindAttribLocation(programId, vertexShaderAttributeVertexNormal, "vertexNormal");
-        ShaderManager.glBindAttribLocation(getProgramId(), vertexShaderAttributeModelMatrix+offset, "modelMatrix");
-        ShaderManager.glBindAttribLocation(getProgramId(), vertexShaderAttributeBrightness+offset, "brightness");
+        ShaderManager.glBindAttribLocation(getProgramId(), vertexShaderAttributeModelMatrix + offset, "modelMatrix");
+        ShaderManager.glBindAttribLocation(getProgramId(), vertexShaderAttributeBrightness + offset, "brightness");
         //ShaderManager.glBindAttribLocation(programId, vertexShaderAttributeRGBA, "rgba");
-        ShaderManager.glBindAttribLocation(getProgramId(), vertexShaderAttributeRGBATest+offset, "rgba");
+        ShaderManager.glBindAttribLocation(getProgramId(), vertexShaderAttributeRGBATest + offset, "rgba");
     }
 }

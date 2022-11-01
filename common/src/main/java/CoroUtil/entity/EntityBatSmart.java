@@ -1,7 +1,5 @@
 package CoroUtil.entity;
 
-import java.util.Calendar;
-import javax.annotation.Nullable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
@@ -10,7 +8,6 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWaterFlying;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.EntityFlyHelper;
-import net.minecraft.entity.passive.EntityAmbientCreature;
 import net.minecraft.entity.passive.EntityFlying;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -28,16 +25,19 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
 
-public class EntityBatSmart extends EntityCreature implements EntityFlying
-{
+import javax.annotation.Nullable;
+import java.util.Calendar;
+
+public class EntityBatSmart extends EntityCreature implements EntityFlying {
     private static final DataParameter<Byte> HANGING = EntityDataManager.<Byte>createKey(EntityBatSmart.class, DataSerializers.BYTE);
-    /** Coordinates of where the bat spawned. */
+    /**
+     * Coordinates of where the bat spawned.
+     */
     private BlockPos currentFlightTarget;
 
     public boolean useVanillaAI = false;
 
-    public EntityBatSmart(World worldIn)
-    {
+    public EntityBatSmart(World worldIn) {
         super(worldIn);
         this.setSize(0.5F, 0.9F);
         this.setIsBatHanging(true);
@@ -46,15 +46,13 @@ public class EntityBatSmart extends EntityCreature implements EntityFlying
         this.moveHelper = new EntityFlyHelper(this);
     }
 
-    protected void entityInit()
-    {
+    protected void entityInit() {
         super.entityInit();
-        this.dataManager.register(HANGING, Byte.valueOf((byte)0));
+        this.dataManager.register(HANGING, Byte.valueOf((byte) 0));
     }
 
     @Override
-    protected PathNavigate createNavigator(World worldIn)
-    {
+    protected PathNavigate createNavigator(World worldIn) {
         PathNavigateFlying pathnavigateflying = new PathNavigateFlying(this, worldIn);
         pathnavigateflying.setCanOpenDoors(false);
         pathnavigateflying.setCanFloat(true);
@@ -63,8 +61,7 @@ public class EntityBatSmart extends EntityCreature implements EntityFlying
     }
 
     @Override
-    protected void initEntityAI()
-    {
+    protected void initEntityAI() {
         //this.aiSit = new EntityAISit(this);
         //this.tasks.addTask(0, new EntityAIPanic(this, 1.25D));
         this.tasks.addTask(0, new EntityAISwimming(this));
@@ -79,53 +76,44 @@ public class EntityBatSmart extends EntityCreature implements EntityFlying
     /**
      * Returns the volume for the sounds this mob makes.
      */
-    protected float getSoundVolume()
-    {
+    protected float getSoundVolume() {
         return 0.1F;
     }
 
     /**
      * Gets the pitch of living sounds in living entities.
      */
-    protected float getSoundPitch()
-    {
+    protected float getSoundPitch() {
         return super.getSoundPitch() * 0.95F;
     }
 
     @Nullable
-    public SoundEvent getAmbientSound()
-    {
+    public SoundEvent getAmbientSound() {
         return this.getIsBatHanging() && this.rand.nextInt(4) != 0 ? null : SoundEvents.ENTITY_BAT_AMBIENT;
     }
 
-    protected SoundEvent getHurtSound(DamageSource p_184601_1_)
-    {
+    protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
         return SoundEvents.ENTITY_BAT_HURT;
     }
 
-    protected SoundEvent getDeathSound()
-    {
+    protected SoundEvent getDeathSound() {
         return SoundEvents.ENTITY_BAT_DEATH;
     }
 
     /**
      * Returns true if this entity should push and be pushed by other entities when colliding.
      */
-    public boolean canBePushed()
-    {
+    public boolean canBePushed() {
         return false;
     }
 
-    protected void collideWithEntity(Entity entityIn)
-    {
+    protected void collideWithEntity(Entity entityIn) {
     }
 
-    protected void collideWithNearbyEntities()
-    {
+    protected void collideWithNearbyEntities() {
     }
 
-    protected void applyEntityAttributes()
-    {
+    protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(6.0D);
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.FLYING_SPEED);
@@ -133,47 +121,37 @@ public class EntityBatSmart extends EntityCreature implements EntityFlying
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.20000000298023224D);
     }
 
-    public boolean getIsBatHanging()
-    {
-        return (((Byte)this.dataManager.get(HANGING)).byteValue() & 1) != 0;
+    public boolean getIsBatHanging() {
+        return (((Byte) this.dataManager.get(HANGING)).byteValue() & 1) != 0;
     }
 
-    public void setIsBatHanging(boolean isHanging)
-    {
-        byte b0 = ((Byte)this.dataManager.get(HANGING)).byteValue();
+    public void setIsBatHanging(boolean isHanging) {
+        byte b0 = ((Byte) this.dataManager.get(HANGING)).byteValue();
 
-        if (isHanging)
-        {
-            this.dataManager.set(HANGING, Byte.valueOf((byte)(b0 | 1)));
-        }
-        else
-        {
-            this.dataManager.set(HANGING, Byte.valueOf((byte)(b0 & -2)));
+        if (isHanging) {
+            this.dataManager.set(HANGING, Byte.valueOf((byte) (b0 | 1)));
+        } else {
+            this.dataManager.set(HANGING, Byte.valueOf((byte) (b0 & -2)));
         }
     }
 
     /**
      * Called to update the entity's position/logic.
      */
-    public void onUpdate()
-    {
+    public void onUpdate() {
         super.onUpdate();
 
-        if (this.getIsBatHanging())
-        {
+        if (this.getIsBatHanging()) {
             this.motionX = 0.0D;
             this.motionY = 0.0D;
             this.motionZ = 0.0D;
-            this.posY = (double)MathHelper.floor(this.posY) + 1.0D - (double)this.height;
-        }
-        else
-        {
+            this.posY = (double) MathHelper.floor(this.posY) + 1.0D - (double) this.height;
+        } else {
             this.motionY *= 0.6000000238418579D;
         }
     }
 
-    protected void updateAITasks()
-    {
+    protected void updateAITasks() {
         super.updateAITasks();
         if (useVanillaAI) {
             BlockPos blockpos = new BlockPos(this);
@@ -224,40 +202,31 @@ public class EntityBatSmart extends EntityCreature implements EntityFlying
      * returns if this entity triggers Block.onEntityWalking on the blocks they walk on. used for spiders and wolves to
      * prevent them from trampling crops
      */
-    protected boolean canTriggerWalking()
-    {
+    protected boolean canTriggerWalking() {
         return false;
     }
 
-    public void fall(float distance, float damageMultiplier)
-    {
+    public void fall(float distance, float damageMultiplier) {
     }
 
-    protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos)
-    {
+    protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
     }
 
     /**
      * Return whether this entity should NOT trigger a pressure plate or a tripwire.
      */
-    public boolean doesEntityNotTriggerPressurePlate()
-    {
+    public boolean doesEntityNotTriggerPressurePlate() {
         return true;
     }
 
     /**
      * Called when the entity is attacked.
      */
-    public boolean attackEntityFrom(DamageSource source, float amount)
-    {
-        if (this.isEntityInvulnerable(source))
-        {
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+        if (this.isEntityInvulnerable(source)) {
             return false;
-        }
-        else
-        {
-            if (!this.world.isRemote && this.getIsBatHanging())
-            {
+        } else {
+            if (!this.world.isRemote && this.getIsBatHanging()) {
                 this.setIsBatHanging(false);
             }
 
@@ -268,8 +237,7 @@ public class EntityBatSmart extends EntityCreature implements EntityFlying
     /**
      * (abstract) Protected helper method to read subclass entity data from NBT.
      */
-    public void readEntityFromNBT(NBTTagCompound compound)
-    {
+    public void readEntityFromNBT(NBTTagCompound compound) {
         super.readEntityFromNBT(compound);
         this.dataManager.set(HANGING, Byte.valueOf(compound.getByte("BatFlags")));
     }
@@ -277,34 +245,26 @@ public class EntityBatSmart extends EntityCreature implements EntityFlying
     /**
      * (abstract) Protected helper method to write subclass entity data to NBT.
      */
-    public void writeEntityToNBT(NBTTagCompound compound)
-    {
+    public void writeEntityToNBT(NBTTagCompound compound) {
         super.writeEntityToNBT(compound);
-        compound.setByte("BatFlags", ((Byte)this.dataManager.get(HANGING)).byteValue());
+        compound.setByte("BatFlags", ((Byte) this.dataManager.get(HANGING)).byteValue());
     }
 
     /**
      * Checks if the entity's current position is a valid location to spawn this entity.
      */
-    public boolean getCanSpawnHere()
-    {
+    public boolean getCanSpawnHere() {
         BlockPos blockpos = new BlockPos(this.posX, this.getEntityBoundingBox().minY, this.posZ);
 
-        if (blockpos.getY() >= this.world.getSeaLevel())
-        {
+        if (blockpos.getY() >= this.world.getSeaLevel()) {
             return false;
-        }
-        else
-        {
+        } else {
             int i = this.world.getLightFromNeighbors(blockpos);
             int j = 4;
 
-            if (this.isDateAroundHalloween(this.world.getCurrentDate()))
-            {
+            if (this.isDateAroundHalloween(this.world.getCurrentDate())) {
                 j = 7;
-            }
-            else if (this.rand.nextBoolean())
-            {
+            } else if (this.rand.nextBoolean()) {
                 return false;
             }
 
@@ -312,19 +272,16 @@ public class EntityBatSmart extends EntityCreature implements EntityFlying
         }
     }
 
-    private boolean isDateAroundHalloween(Calendar p_175569_1_)
-    {
+    private boolean isDateAroundHalloween(Calendar p_175569_1_) {
         return p_175569_1_.get(2) + 1 == 10 && p_175569_1_.get(5) >= 20 || p_175569_1_.get(2) + 1 == 11 && p_175569_1_.get(5) <= 3;
     }
 
-    public float getEyeHeight()
-    {
+    public float getEyeHeight() {
         return this.height / 2.0F;
     }
 
     @Nullable
-    protected ResourceLocation getLootTable()
-    {
+    protected ResourceLocation getLootTable() {
         return LootTableList.ENTITIES_BAT;
     }
 }

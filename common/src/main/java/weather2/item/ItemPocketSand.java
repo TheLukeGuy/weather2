@@ -9,19 +9,13 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -31,9 +25,7 @@ import weather2.Weather;
 import weather2.client.SceneEnhancer;
 import weather2.client.entity.particle.ParticleSandstorm;
 import weather2.util.WeatherUtilBlock;
-import weather2.weathersystem.wind.WindManager;
 
-import javax.annotation.Nullable;
 import java.util.Random;
 
 public class ItemPocketSand extends Item {
@@ -48,8 +40,7 @@ public class ItemPocketSand extends Item {
 
         if (!player.world.isRemote) {
 
-            if (!(player).capabilities.isCreativeMode)
-            {
+            if (!(player).capabilities.isCreativeMode) {
                 if (itemStackIn.getCount() > 0) {
                     itemStackIn.shrink(1);
                 }
@@ -57,7 +48,7 @@ public class ItemPocketSand extends Item {
             int y = (int) player.getEntityBoundingBox().minY;
             double randSize = 20;
             double randAngle = player.world.rand.nextDouble() * randSize - player.world.rand.nextDouble() * randSize;
-            WeatherUtilBlock.fillAgainstWallSmoothly(player.world, new Vec3(player.posX, y + 0.5D, player.posZ), player.rotationYawHead + (float)randAngle, 15, 2, CommonProxy.blockSandLayer, 2);
+            WeatherUtilBlock.fillAgainstWallSmoothly(player.world, new Vec3(player.posX, y + 0.5D, player.posZ), player.rotationYawHead + (float) randAngle, 15, 2, CommonProxy.blockSandLayer, 2);
 
             particulateToClients(worldIn, player);
         } else {
@@ -68,7 +59,6 @@ public class ItemPocketSand extends Item {
     }
 
     /**
-     *
      * @param world
      * @param player The sand item using source
      */

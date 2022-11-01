@@ -18,12 +18,16 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
 import java.nio.FloatBuffer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
+import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
 import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL15.GL_DYNAMIC_DRAW;
 
@@ -43,34 +47,30 @@ public class FoliageRenderer {
 
     /**
      * ordered mesh list -> renderables should be enough for no translucency
-     *
+     * <p>
      * if in future i need translucency, keep above list and make a new one for translucency with:
-     *
+     * <p>
      * render order list to help lack of use of depth mask
      * - TextureAtlasSprite to Foliage
-     *
-     *
+     * <p>
+     * <p>
      * possible solution to alpha sorting for translucency layer?
      * "batch all physobj renders into a single BufferBuilder draw call, call sortVertexData before draw()
      * remember vanilla is regularly sorting all translucent quads in the worldl
      * and all FastTESR quads are sorted"
-     *
+     * <p>
      * vanilla model -> mesh:
-     *
+     * <p>
      * instead of doing different sway by singling out certain vertex ids, use:
      * - sway amount = height index + vertex height
      * - will make meshes work more generically for more complex models
-     *
+     * <p>
      * get the more complex model via:
      * - ModelBakeEvent
      * - instead of json editing models and losing their model
      * -- leave json alone
      * -- hook into event, steal model for my shader, override vanilla model/render with blank
      * -- BufferBuilder.addVertexData eg
-     *
-     *
-     *
-     *
      */
 
     public ConcurrentHashMap<TextureAtlasSprite, List<Foliage>> foliage = new ConcurrentHashMap<>();
@@ -103,8 +103,7 @@ public class FoliageRenderer {
         return foliage.get(sprite);
     }
 
-    public void render(Entity entityIn, float partialTicks)
-    {
+    public void render(Entity entityIn, float partialTicks) {
 
         if (RotatingParticleManager.useShaders) {
 
@@ -124,8 +123,7 @@ public class FoliageRenderer {
         return mesh.dirtyVBO2Flag;
     }
 
-    public void renderJustShaders(Entity entityIn, float partialTicks)
-    {
+    public void renderJustShaders(Entity entityIn, float partialTicks) {
 
         Minecraft mc = Minecraft.getMinecraft();
         EntityRenderer er = mc.entityRenderer;
@@ -267,7 +265,7 @@ public class FoliageRenderer {
         TextureAtlasSprite sprite = map.getAtlasSprite("minecraft:blocks/wheat_stage_7");*/
 
         for (Map.Entry<TextureAtlasSprite, List<Foliage>> entry : foliage.entrySet()) {
-        //for (int iii = 0; iii < 1; iii++) {
+            //for (int iii = 0; iii < 1; iii++) {
             InstancedMeshFoliage mesh = MeshBufferManagerFoliage.getMesh(entry.getKey());
 
             //InstancedMeshFoliage mesh = MeshBufferManagerFoliage.getMesh(sprite);
@@ -371,9 +369,9 @@ public class FoliageRenderer {
 
             }
 
-            float interpX = (float)((entityIn.prevPosX + (entityIn.posX - entityIn.prevPosX) * partialTicks) - mesh.interpPosX);
-            float interpY = (float)((entityIn.prevPosY + (entityIn.posY - entityIn.prevPosY) * partialTicks) - mesh.interpPosY);
-            float interpZ = (float)((entityIn.prevPosZ + (entityIn.posZ - entityIn.prevPosZ) * partialTicks) - mesh.interpPosZ);
+            float interpX = (float) ((entityIn.prevPosX + (entityIn.posX - entityIn.prevPosX) * partialTicks) - mesh.interpPosX);
+            float interpY = (float) ((entityIn.prevPosY + (entityIn.posY - entityIn.prevPosY) * partialTicks) - mesh.interpPosY);
+            float interpZ = (float) ((entityIn.prevPosZ + (entityIn.posZ - entityIn.prevPosZ) * partialTicks) - mesh.interpPosZ);
 
             Matrix4fe matrixFix = new Matrix4fe();
             matrixFix = matrixFix.translationRotateScale(

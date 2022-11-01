@@ -6,7 +6,6 @@ import CoroUtil.block.BlockRepairingBlock;
 import CoroUtil.config.ConfigCoroUtilAdvanced;
 import CoroUtil.forge.CULog;
 import CoroUtil.util.CoroUtilBlock;
-import CoroUtil.util.CoroUtilPath;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -15,14 +14,10 @@ import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.pathfinding.Path;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 
 import java.util.List;
 import java.util.Random;
@@ -30,10 +25,11 @@ import java.util.Random;
 /**
  * Hastily converted code from old hostile worlds, seems to work well enough to start
  */
-public class EntityAIHoist extends EntityAIBase implements ITaskInitializer, IInvasionControlledTask
-{
+public class EntityAIHoist extends EntityAIBase implements ITaskInitializer, IInvasionControlledTask {
     protected EntityCreature entity;
-    /** The speed with which the mob will approach the target */
+    /**
+     * The speed with which the mob will approach the target
+     */
     double speedTowardsTarget;
 
     public int tryHoist = 0;
@@ -54,8 +50,7 @@ public class EntityAIHoist extends EntityAIBase implements ITaskInitializer, IIn
      * Returns whether the EntityAIBase should begin execution.
      */
     @Override
-    public boolean shouldExecute()
-    {
+    public boolean shouldExecute() {
         return true;
     }
 
@@ -63,8 +58,7 @@ public class EntityAIHoist extends EntityAIBase implements ITaskInitializer, IIn
      * Returns whether an in-progress EntityAIBase should continue executing
      */
     @Override
-    public boolean shouldContinueExecuting()
-    {
+    public boolean shouldContinueExecuting() {
         return true;
     }
 
@@ -72,8 +66,7 @@ public class EntityAIHoist extends EntityAIBase implements ITaskInitializer, IIn
      * Execute a one shot task or start executing a continuous task
      */
     @Override
-    public void startExecuting()
-    {
+    public void startExecuting() {
 
     }
 
@@ -81,8 +74,7 @@ public class EntityAIHoist extends EntityAIBase implements ITaskInitializer, IIn
      * Reset the task's internal state. Called when this task is interrupted by another one
      */
     @Override
-    public void resetTask()
-    {
+    public void resetTask() {
 
     }
 
@@ -90,8 +82,7 @@ public class EntityAIHoist extends EntityAIBase implements ITaskInitializer, IIn
      * Keep ticking a continuous task that has already been started
      */
     @Override
-    public void updateTask()
-    {
+    public void updateTask() {
         //CULog.dbg("running hoist");
         //if (true) return;
 
@@ -149,7 +140,6 @@ public class EntityAIHoist extends EntityAIBase implements ITaskInitializer, IIn
         }
 
 
-
         if (!stackMode) {
             if (target != null && entity.getNavigator().noPath() && !entity.isInWater() && (noMoveTicks > 60 || (factor != -1 && factor > 5))) {
                 stackMode = true;
@@ -184,7 +174,7 @@ public class EntityAIHoist extends EntityAIBase implements ITaskInitializer, IIn
                 for (int i = 0; i < var2.size(); i++) {
                     if (var2.get(i) != entity && var2.get(i) instanceof EntityZombie &&
                             entity.getEntityId() > var2.get(i).getEntityId() &&
-                            entity.getEntityBoundingBox().minY+1.5D > var2.get(i).getEntityBoundingBox().minY &&
+                            entity.getEntityBoundingBox().minY + 1.5D > var2.get(i).getEntityBoundingBox().minY &&
                             entity.getEntityBoundingBox().minY < var2.get(i).getEntityBoundingBox().maxY) {
                         ent = var2.get(i);
                         break;
@@ -223,14 +213,13 @@ public class EntityAIHoist extends EntityAIBase implements ITaskInitializer, IIn
                 }
 
 
-
                 if (tryHoist > 0) {
 
                     //break through leafs
                     if (!entity.world.isRemote) {
-                        double tryX = entity.posX-0.8D+rand.nextFloat();
-                        double tryY = entity.posY+0.5D+(rand.nextFloat() * 2D);
-                        double tryZ = entity.posZ-0.8D+rand.nextFloat();
+                        double tryX = entity.posX - 0.8D + rand.nextFloat();
+                        double tryY = entity.posY + 0.5D + (rand.nextFloat() * 2D);
+                        double tryZ = entity.posZ - 0.8D + rand.nextFloat();
                         BlockPos pos = new BlockPos(tryX, tryY, tryZ);
                         IBlockState state = entity.world.getBlockState(pos);
                         //Block id = entity.world.getBlock((int)(tryX), (int)(tryY), (int)(tryZ));
@@ -248,7 +237,7 @@ public class EntityAIHoist extends EntityAIBase implements ITaskInitializer, IIn
                     double vecY = ent.posY - entity.posY;
                     double vecZ = ent.posZ - entity.posZ;
 
-                    double dist = (double)MathHelper.sqrt(vecX * vecX/* + vecY * vecY*/ + vecZ * vecZ);
+                    double dist = (double) MathHelper.sqrt(vecX * vecX/* + vecY * vecY*/ + vecZ * vecZ);
                     if (dist > 0.1D) {
                         entity.motionX = vecX / dist * shiftSpeed * rangeShiftAdjToStack;
                         //entity.motionY = vecY / var9 * shiftSpeed;
@@ -262,10 +251,10 @@ public class EntityAIHoist extends EntityAIBase implements ITaskInitializer, IIn
                     //}
 
 
-                    var9 = (double)MathHelper.sqrt(vecX * vecX/* + vecY * vecY*/ + vecZ * vecZ);
-                    if (dist+shiftSpeed < rangeNeededToShiftToTarget) {
-                        BlockPos pos1 = new BlockPos(entity.posX+0.0D+(vecX/var9*1.5F), entity.posY, entity.posZ+0.0D+(vecZ/var9*1.5F));
-                        BlockPos pos2 = new BlockPos(entity.posX+0.5D, 0, entity.posZ+0.5D);
+                    var9 = (double) MathHelper.sqrt(vecX * vecX/* + vecY * vecY*/ + vecZ * vecZ);
+                    if (dist + shiftSpeed < rangeNeededToShiftToTarget) {
+                        BlockPos pos1 = new BlockPos(entity.posX + 0.0D + (vecX / var9 * 1.5F), entity.posY, entity.posZ + 0.0D + (vecZ / var9 * 1.5F));
+                        BlockPos pos2 = new BlockPos(entity.posX + 0.5D, 0, entity.posZ + 0.5D);
                         int height = entity.world.getHeight(pos1).getY();
                         int height2 = entity.world.getHeight(pos2).getY();
                         if (height <= entity.posY || (height2 > target.posY + 1)) {
@@ -278,7 +267,6 @@ public class EntityAIHoist extends EntityAIBase implements ITaskInitializer, IIn
                             entity.motionZ = -vecZ / var9 * shiftSpeed * /*rand.nextFloat() * */rangeShiftAdjFromTarget;
                         }
                     }
-
 
 
                     float wat = 0.15F;// + rand.nextFloat() * 0.05F;
@@ -315,9 +303,8 @@ public class EntityAIHoist extends EntityAIBase implements ITaskInitializer, IIn
 
     }
 
-    protected double getAttackReachSqr(EntityLivingBase attackTarget)
-    {
-        return (double)(this.entity.width * 2.0F * this.entity.width * 2.0F + attackTarget.width);
+    protected double getAttackReachSqr(EntityLivingBase attackTarget) {
+        return (double) (this.entity.width * 2.0F * this.entity.width * 2.0F + attackTarget.width);
     }
 
     @Override
@@ -339,8 +326,7 @@ public class EntityAIHoist extends EntityAIBase implements ITaskInitializer, IIn
         return false;
     }
 
-    public boolean isNearWall(AxisAlignedBB par1AxisAlignedBB)
-    {
+    public boolean isNearWall(AxisAlignedBB par1AxisAlignedBB) {
         int var3 = MathHelper.floor(par1AxisAlignedBB.minX);
         int var4 = MathHelper.floor(par1AxisAlignedBB.maxX + 1.0D);
         int var5 = MathHelper.floor(par1AxisAlignedBB.minY);
@@ -348,16 +334,12 @@ public class EntityAIHoist extends EntityAIBase implements ITaskInitializer, IIn
         int var7 = MathHelper.floor(par1AxisAlignedBB.minZ);
         int var8 = MathHelper.floor(par1AxisAlignedBB.maxZ + 1.0D);
 
-        for (int var9 = var3-1; var9 < var4+1; ++var9)
-        {
-            for (int var10 = var5; var10 < var6+1; ++var10)
-            {
-                for (int var11 = var7-1; var11 < var8+1; ++var11)
-                {
+        for (int var9 = var3 - 1; var9 < var4 + 1; ++var9) {
+            for (int var10 = var5; var10 < var6 + 1; ++var10) {
+                for (int var11 = var7 - 1; var11 < var8 + 1; ++var11) {
                     Block var12 = entity.world.getBlockState(new BlockPos(var9, var10, var11)).getBlock();
 
-                    if (!CoroUtilBlock.isAir(var12)/* && var12.blockMaterial == par2Material*/)
-                    {
+                    if (!CoroUtilBlock.isAir(var12)/* && var12.blockMaterial == par2Material*/) {
                         return true;
                     }
                 }

@@ -9,10 +9,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent;
@@ -23,8 +21,7 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @Mod.EventBusSubscriber(modid = CoroUtil.modID)
-public class CommonProxy implements IGuiHandler
-{
+public class CommonProxy implements IGuiHandler {
     public World mainWorld;
     private int entityId = 0;
 
@@ -42,28 +39,26 @@ public class CommonProxy implements IGuiHandler
     @GameRegistry.ObjectHolder(CoroUtil.modID + ":" + item_repairing_gel_name)
     public static Item itemRepairingGel;
 
-    public CommonProxy()
-    {
+    public CommonProxy() {
     }
 
-    public void init(CoroUtil pMod)
-    {
+    public void init(CoroUtil pMod) {
         mod = pMod;
 
         addMapping(EntityBatSmart.class, "bat_smart", 0, 64, 2, true);
     }
 
-	@Override
-	public Object getServerGuiElement(int ID, EntityPlayer player, World world,
-			int x, int y, int z) {
-		return null;
-	}
+    @Override
+    public Object getServerGuiElement(int ID, EntityPlayer player, World world,
+                                      int x, int y, int z) {
+        return null;
+    }
 
-	@Override
-	public Object getClientGuiElement(int ID, EntityPlayer player, World world,
-			int x, int y, int z) {
-		return null;
-	}
+    @Override
+    public Object getClientGuiElement(int ID, EntityPlayer player, World world,
+                                      int x, int y, int z) {
+        return null;
+    }
 
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {

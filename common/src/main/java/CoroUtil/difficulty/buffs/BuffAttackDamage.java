@@ -2,7 +2,6 @@ package CoroUtil.difficulty.buffs;
 
 import CoroUtil.difficulty.UtilEntityBuffs;
 import CoroUtil.difficulty.data.cmods.CmodAttributeAttackDamage;
-import CoroUtil.difficulty.data.cmods.CmodAttributeHealth;
 import CoroUtil.forge.CULog;
 import CoroUtil.util.CoroUtilMisc;
 import CoroUtil.util.EnumAttribModifierType;
@@ -20,7 +19,7 @@ public class BuffAttackDamage extends BuffBase {
     @Override
     public boolean applyBuff(EntityCreature ent, float difficulty) {
 
-        CmodAttributeAttackDamage cmod = (CmodAttributeAttackDamage)UtilEntityBuffs.getCmodData(ent, getTagName());
+        CmodAttributeAttackDamage cmod = (CmodAttributeAttackDamage) UtilEntityBuffs.getCmodData(ent, getTagName());
 
         if (cmod != null) {
 

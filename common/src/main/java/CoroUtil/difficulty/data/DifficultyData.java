@@ -9,7 +9,6 @@ import java.util.List;
 
 /**
  * Created by Corosus on 2/1/2017.
- *
  */
 public class DifficultyData {
 

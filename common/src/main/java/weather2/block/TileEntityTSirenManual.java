@@ -10,32 +10,27 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import weather2.CommonProxy;
 import weather2.util.WeatherUtilSound;
 
-import java.util.List;
-
-public class TileEntityTSirenManual extends TileEntity implements ITickable
-{
+public class TileEntityTSirenManual extends TileEntity implements ITickable {
     public long lastPlayTime = 0L;
 
     @Override
-    public void update()
-    {
-    	if (world.isRemote) {
-    	    int meta = CommonProxy.blockTSiren.getMetaFromState(this.world.getBlockState(this.getPos()));
+    public void update() {
+        if (world.isRemote) {
+            int meta = CommonProxy.blockTSiren.getMetaFromState(this.world.getBlockState(this.getPos()));
             if (BlockTSiren.isEnabled(meta)) {
                 //System.out.println("enabled");
                 tickClient();
             }
 
-    	}
+        }
     }
-    
+
     @SideOnly(Side.CLIENT)
     public void tickClient() {
-    	
-    	Minecraft mc = FMLClientHandler.instance().getClient();
-    	
-    	if (this.lastPlayTime < System.currentTimeMillis())
-        {
+
+        Minecraft mc = FMLClientHandler.instance().getClient();
+
+        if (this.lastPlayTime < System.currentTimeMillis()) {
             Vec3 pos = new Vec3(getPos().getX(), getPos().getY(), getPos().getZ());
 
             this.lastPlayTime = System.currentTimeMillis() + 13000L;
@@ -43,5 +38,5 @@ public class TileEntityTSirenManual extends TileEntity implements ITickable
 
         }
     }
-    
+
 }

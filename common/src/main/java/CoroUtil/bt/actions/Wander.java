@@ -6,13 +6,13 @@ import CoroUtil.bt.leaf.LeafAction;
 
 public class Wander extends LeafAction {
 
-	public Wander(Behavior parParent) {
-		super(parParent);
-	}
-	
-	@Override
-	public EnumBehaviorState tick() {
-		return EnumBehaviorState.FAILURE;
-	}
-	
+    public Wander(Behavior parParent) {
+        super(parParent);
+    }
+
+    @Override
+    public EnumBehaviorState tick() {
+        return EnumBehaviorState.FAILURE;
+    }
+
 }

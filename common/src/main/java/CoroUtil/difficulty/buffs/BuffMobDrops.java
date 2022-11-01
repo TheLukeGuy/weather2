@@ -31,7 +31,7 @@ public class BuffMobDrops extends BuffBase {
 
     @Override
     public void applyBuffOnDeath(EntityCreature ent, float difficulty, LivingDeathEvent event) {
-        CmodMobDrops cmod = (CmodMobDrops)UtilEntityBuffs.getCmodData(ent, getTagName());
+        CmodMobDrops cmod = (CmodMobDrops) UtilEntityBuffs.getCmodData(ent, getTagName());
 
         if (cmod != null) {
 

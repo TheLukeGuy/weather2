@@ -40,7 +40,7 @@ public class InstancedMeshParticle extends Mesh {
      * TODO: despite the mesh only being a size of 2 vbos instead of 5, lowering this to 2 breaks something somehow (no rendering)
      * need to figure out where to fix so i can optimize memory usage
      * not even sure if the memory is unoptimized, theres just gaps in the memory used probably
-     *
+     * <p>
      * fixed, didnt account for attrib location values in shader program
      */
     public static int vboSizeMesh = 2;

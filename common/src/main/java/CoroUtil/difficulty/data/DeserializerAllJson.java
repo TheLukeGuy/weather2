@@ -215,7 +215,7 @@ public class DeserializerAllJson implements JsonDeserializer<DifficultyData> {
 
                 if (DifficultyDataReader.lookupJsonNameToConditionDeserializer.containsKey(name)) {
                     //DataCondition cmod = context.deserialize(obj, DifficultyDataReader.lookupJsonNameToConditionDeserializer.get(name));
-                    DataCondition cmod = (DataCondition)(new Gson()).fromJson(obj, DifficultyDataReader.lookupJsonNameToConditionDeserializer.get(name));
+                    DataCondition cmod = (DataCondition) (new Gson()).fromJson(obj, DifficultyDataReader.lookupJsonNameToConditionDeserializer.get(name));
 
                     list.add(clazz.cast(cmod));
                 }
@@ -273,6 +273,7 @@ public class DeserializerAllJson implements JsonDeserializer<DifficultyData> {
      * - top level condition overrides one in a template if are of the same type
      * - there may be scenarios where i want to layer and use both conditions?
      * - what about 2 templates referenced, each with a random?
+     *
      * @return
      */
     public static List<DataCondition> getConditionsFlattened(List<DataCondition> conditions) {

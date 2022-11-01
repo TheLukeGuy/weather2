@@ -4,7 +4,8 @@ package modconfig;
  * Unlike IConfigCategory, this data will be handled in mc internal nbt systems and not forge config files, unless a special case comes up where outside editing in a txt editor is recommended */
 public interface IConfigInstance {
 
-	public void readData();
-	public void writeData();
-	
+    public void readData();
+
+    public void writeData();
+
 }

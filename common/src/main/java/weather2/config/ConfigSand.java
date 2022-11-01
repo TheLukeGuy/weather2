@@ -13,11 +13,11 @@ public class ConfigSand implements IConfigCategory {
     @ConfigComment("Takes the sand out of sandwiches")
     public static boolean Storm_NoSandstorms = false;
 
-	//sandstorm settings
-	public static boolean Sandstorm_UseGlobalServerRate = false;
-	public static int Sandstorm_OddsTo1 = 30;
-	@ConfigComment("Time between sandstorms for either each player or entire server depending on if global rate is on, default: 3 mc days")
-	public static int Sandstorm_TimeBetweenInTicks = 20*60*20*3;
+    //sandstorm settings
+    public static boolean Sandstorm_UseGlobalServerRate = false;
+    public static int Sandstorm_OddsTo1 = 30;
+    @ConfigComment("Time between sandstorms for either each player or entire server depending on if global rate is on, default: 3 mc days")
+    public static int Sandstorm_TimeBetweenInTicks = 20 * 60 * 20 * 3;
 
     @ConfigComment("Amount of game ticks between sand buildup iterations, keep it high to prevent client side chunk update spam that destroys FPS")
     public static int Sandstorm_Sand_Buildup_TickRate = 40;

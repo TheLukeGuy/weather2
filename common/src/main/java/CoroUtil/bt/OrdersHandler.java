@@ -3,19 +3,19 @@ package CoroUtil.bt;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class OrdersHandler {
-	
-	public IBTAgent ent;
-	
-	public OrdersData activeOrders;
-	public String ordersAcceptable = "<NULL>";
-	
-	public OrdersHandler(IBTAgent parEnt) {
-		ent = parEnt;
-	}
-	
-	public void setOrders(OrdersData parNewOrders) {
-		activeOrders = parNewOrders;
-	}
+
+    public IBTAgent ent;
+
+    public OrdersData activeOrders;
+    public String ordersAcceptable = "<NULL>";
+
+    public OrdersHandler(IBTAgent parEnt) {
+        ent = parEnt;
+    }
+
+    public void setOrders(OrdersData parNewOrders) {
+        activeOrders = parNewOrders;
+    }
 	
 	/*public void readFromNBT(NBTTagCompound parNBT, TownObject team) {
 		String activeOrdersName = parNBT.getString("activeOrdersName");
@@ -40,15 +40,15 @@ public class OrdersHandler {
 			
 		}
 	}*/
-	
-	public NBTTagCompound writeToNBT(NBTTagCompound parentCompound) {
-		if (activeOrders != null) {
-			parentCompound.setString("activeOrdersName", activeOrders.activeOrdersName);
-			
-			NBTTagCompound activeOrdersNBT = new NBTTagCompound();
-			activeOrdersNBT = activeOrders.writeToNBT(activeOrdersNBT);
-			parentCompound.setTag("activeOrdersNBT", activeOrdersNBT);
-		}
-		return parentCompound;
-	}
+
+    public NBTTagCompound writeToNBT(NBTTagCompound parentCompound) {
+        if (activeOrders != null) {
+            parentCompound.setString("activeOrdersName", activeOrders.activeOrdersName);
+
+            NBTTagCompound activeOrdersNBT = new NBTTagCompound();
+            activeOrdersNBT = activeOrders.writeToNBT(activeOrdersNBT);
+            parentCompound.setTag("activeOrdersNBT", activeOrdersNBT);
+        }
+        return parentCompound;
+    }
 }

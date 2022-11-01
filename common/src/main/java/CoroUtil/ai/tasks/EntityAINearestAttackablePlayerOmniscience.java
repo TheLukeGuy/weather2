@@ -6,21 +6,23 @@ import CoroUtil.config.ConfigCoroUtilAdvanced;
 import CoroUtil.difficulty.UtilEntityBuffs;
 import CoroUtil.forge.CULog;
 import com.google.common.base.Predicate;
-import java.util.Comparator;
-import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EntitySelectors;
 
-public class EntityAINearestAttackablePlayerOmniscience<T extends EntityLivingBase> extends EntityAITargetBetter implements ITaskInitializer, IInvasionControlledTask
-{
+import javax.annotation.Nullable;
+import java.util.Comparator;
+
+public class EntityAINearestAttackablePlayerOmniscience<T extends EntityLivingBase> extends EntityAITargetBetter implements ITaskInitializer, IInvasionControlledTask {
     protected Class<EntityPlayer> targetClass;
     private int targetChance;
-    /** Instance of EntityAINearestAttackableTargetSorter. */
+    /**
+     * Instance of EntityAINearestAttackableTargetSorter.
+     */
     protected EntityAINearestAttackablePlayerOmniscience.Sorter sorter;
-    protected Predicate <? super T > targetEntitySelector;
+    protected Predicate<? super T> targetEntitySelector;
     protected EntityPlayer targetEntity;
 
     private boolean disableAtSunrise = true;
@@ -32,16 +34,11 @@ public class EntityAINearestAttackablePlayerOmniscience<T extends EntityLivingBa
         this.targetClass = EntityPlayer.class;
         this.targetChance = 40;
         this.setMutexBits(0);
-        this.targetEntitySelector = new Predicate<T>()
-        {
-            public boolean apply(@Nullable T p_apply_1_)
-            {
-                if (p_apply_1_ == null)
-                {
+        this.targetEntitySelector = new Predicate<T>() {
+            public boolean apply(@Nullable T p_apply_1_) {
+                if (p_apply_1_ == null) {
                     return false;
-                }
-                else
-                {
+                } else {
                     return !EntitySelectors.NOT_SPECTATING.apply(p_apply_1_) ? false : EntityAINearestAttackablePlayerOmniscience.this.isPlayerItSpawnedForOrBlank(p_apply_1_);
                 }
             }
@@ -52,8 +49,7 @@ public class EntityAINearestAttackablePlayerOmniscience<T extends EntityLivingBa
      * A method used to see if an entity is a suitable target through a number of checks. Args : entity,
      * canTargetInvinciblePlayer
      */
-    protected boolean isPlayerItSpawnedForOrBlank(@Nullable EntityLivingBase target)
-    {
+    protected boolean isPlayerItSpawnedForOrBlank(@Nullable EntityLivingBase target) {
         if (target instanceof EntityPlayer) {
             if (this.taskOwner.getEntityData().hasKey(UtilEntityBuffs.dataEntityBuffed_PlayerSpawnedFor)) {
                 String spawnName = this.taskOwner.getEntityData().getString(UtilEntityBuffs.dataEntityBuffed_PlayerSpawnedFor);
@@ -72,18 +68,14 @@ public class EntityAINearestAttackablePlayerOmniscience<T extends EntityLivingBa
      * Returns whether the EntityAIBase should begin execution.
      */
     @Override
-    public boolean shouldExecute()
-    {
+    public boolean shouldExecute() {
 
-        if (this.targetChance > 0 && this.taskOwner.getRNG().nextInt(this.targetChance) != 0)
-        {
+        if (this.targetChance > 0 && this.taskOwner.getRNG().nextInt(this.targetChance) != 0) {
             return false;
-        }
-        else
-        {
+        } else {
             this.targetEntity = this.taskOwner.world.getNearestAttackablePlayer(
-                    this.taskOwner.posX, this.taskOwner.posY + (double)this.taskOwner.getEyeHeight(), this.taskOwner.posZ,
-                    this.getTargetDistance(), this.getTargetDistance(), null, (Predicate<EntityPlayer>)this.targetEntitySelector);
+                    this.taskOwner.posX, this.taskOwner.posY + (double) this.taskOwner.getEyeHeight(), this.taskOwner.posZ,
+                    this.getTargetDistance(), this.getTargetDistance(), null, (Predicate<EntityPlayer>) this.targetEntitySelector);
             return this.targetEntity != null;
         }
     }
@@ -97,8 +89,7 @@ public class EntityAINearestAttackablePlayerOmniscience<T extends EntityLivingBa
      * Execute a one shot task or start executing a continuous task
      */
     @Override
-    public void startExecuting()
-    {
+    public void startExecuting() {
         this.taskOwner.setAttackTarget(this.targetEntity);
         super.startExecuting();
     }
@@ -127,28 +118,22 @@ public class EntityAINearestAttackablePlayerOmniscience<T extends EntityLivingBa
         return false;
     }
 
-    public static class Sorter implements Comparator<Entity>
-        {
-            private final Entity entity;
+    public static class Sorter implements Comparator<Entity> {
+        private final Entity entity;
 
-            public Sorter(Entity entityIn)
-            {
-                this.entity = entityIn;
-            }
+        public Sorter(Entity entityIn) {
+            this.entity = entityIn;
+        }
 
-            public int compare(Entity p_compare_1_, Entity p_compare_2_)
-            {
-                double d0 = this.entity.getDistanceSqToEntity(p_compare_1_);
-                double d1 = this.entity.getDistanceSqToEntity(p_compare_2_);
+        public int compare(Entity p_compare_1_, Entity p_compare_2_) {
+            double d0 = this.entity.getDistanceSqToEntity(p_compare_1_);
+            double d1 = this.entity.getDistanceSqToEntity(p_compare_2_);
 
-                if (d0 < d1)
-                {
-                    return -1;
-                }
-                else
-                {
-                    return d0 > d1 ? 1 : 0;
-                }
+            if (d0 < d1) {
+                return -1;
+            } else {
+                return d0 > d1 ? 1 : 0;
             }
         }
+    }
 }

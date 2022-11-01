@@ -25,7 +25,7 @@ public class BuffInventoryDifficultyScaled extends BuffBase {
     @Override
     public boolean applyBuff(EntityCreature ent, float difficulty) {
 
-        CmodInventoryDifficultyScaled cmod = (CmodInventoryDifficultyScaled)UtilEntityBuffs.getCmodData(ent, getTagName());
+        CmodInventoryDifficultyScaled cmod = (CmodInventoryDifficultyScaled) UtilEntityBuffs.getCmodData(ent, getTagName());
 
         if (cmod != null) {
             CmodInventory cmodInventory = null;

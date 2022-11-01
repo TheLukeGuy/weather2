@@ -1,107 +1,106 @@
 package CoroUtil.entity.data;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import CoroUtil.difficulty.DamageSourceEntry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AttackData extends EntityData {
-	private long lastLogTime;
-	private float lastDamage;
-	
-	private List<Float> listDPSs = new ArrayList<Float>();
+    private long lastLogTime;
+    private float lastDamage;
 
-	private Entity source_entityTrue = null;
-	private Entity source_entityImmediate = null;
-	private String source_type = "";
+    private List<Float> listDPSs = new ArrayList<Float>();
 
-	public DamageSourceEntry highestDamage;
-	
-	public AttackData(EntityCreature ent) {
-		super(ent);
-		highestDamage = new DamageSourceEntry();
-	}
+    private Entity source_entityTrue = null;
+    private Entity source_entityImmediate = null;
+    private String source_type = "";
 
-	public long getLastLogTime() {
-		return lastLogTime;
-	}
+    public DamageSourceEntry highestDamage;
 
-	public void setLastLogTime(long lastLogTime) {
-		this.lastLogTime = lastLogTime;
-	}
+    public AttackData(EntityCreature ent) {
+        super(ent);
+        highestDamage = new DamageSourceEntry();
+    }
 
-	public float getLastDamage() {
-		return lastDamage;
-	}
+    public long getLastLogTime() {
+        return lastLogTime;
+    }
 
-	public void setLastDamage(float lastDamage) {
-		this.lastDamage = lastDamage;
-	}
+    public void setLastLogTime(long lastLogTime) {
+        this.lastLogTime = lastLogTime;
+    }
 
-	public List<Float> getListDPSs() {
-		return listDPSs;
-	}
+    public float getLastDamage() {
+        return lastDamage;
+    }
 
-	public void setListDPSs(List<Float> listDPSs) {
-		this.listDPSs = listDPSs;
-	}
+    public void setLastDamage(float lastDamage) {
+        this.lastDamage = lastDamage;
+    }
 
-	public void trackSources(DamageSource source) {
-		source_entityTrue = source.getTrueSource();
-		source_type = source.getDamageType();
-		if (source_type == null) {
-			source_type = "<NULL>";
-		}
-		source_entityImmediate = source.getImmediateSource();
-	}
+    public List<Float> getListDPSs() {
+        return listDPSs;
+    }
 
-	public boolean isSameSource(DamageSource source) {
-		if (!source.getDamageType().equals(source_type)) {
-			return false;
-		}
+    public void setListDPSs(List<Float> listDPSs) {
+        this.listDPSs = listDPSs;
+    }
 
-		if (source.getTrueSource() != source_entityTrue) {
-			return false;
-		}
+    public void trackSources(DamageSource source) {
+        source_entityTrue = source.getTrueSource();
+        source_type = source.getDamageType();
+        if (source_type == null) {
+            source_type = "<NULL>";
+        }
+        source_entityImmediate = source.getImmediateSource();
+    }
 
-		if (source.getImmediateSource() != source_entityImmediate) {
-			return false;
-		}
+    public boolean isSameSource(DamageSource source) {
+        if (!source.getDamageType().equals(source_type)) {
+            return false;
+        }
 
-		return true;
-	}
+        if (source.getTrueSource() != source_entityTrue) {
+            return false;
+        }
 
-	public Entity getSource_entityTrue() {
-		return source_entityTrue;
-	}
+        if (source.getImmediateSource() != source_entityImmediate) {
+            return false;
+        }
 
-	public void setSource_entityTrue(Entity source_entityTrue) {
-		this.source_entityTrue = source_entityTrue;
-	}
+        return true;
+    }
 
-	public Entity getSource_entityImmediate() {
-		return source_entityImmediate;
-	}
+    public Entity getSource_entityTrue() {
+        return source_entityTrue;
+    }
 
-	public void setSource_entityImmediate(Entity source_entityImmediate) {
-		this.source_entityImmediate = source_entityImmediate;
-	}
+    public void setSource_entityTrue(Entity source_entityTrue) {
+        this.source_entityTrue = source_entityTrue;
+    }
 
-	public String getSource_type() {
-		return source_type;
-	}
+    public Entity getSource_entityImmediate() {
+        return source_entityImmediate;
+    }
 
-	public void setSource_type(String source_type) {
-		this.source_type = source_type;
-	}
+    public void setSource_entityImmediate(Entity source_entityImmediate) {
+        this.source_entityImmediate = source_entityImmediate;
+    }
 
-	public void cleanup() {
-		super.cleanup();
-		listDPSs.clear();
-	}
-	
+    public String getSource_type() {
+        return source_type;
+    }
+
+    public void setSource_type(String source_type) {
+        this.source_type = source_type;
+    }
+
+    public void cleanup() {
+        super.cleanup();
+        listDPSs.clear();
+    }
+
 }

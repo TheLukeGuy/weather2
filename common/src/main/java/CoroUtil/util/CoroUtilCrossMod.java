@@ -16,12 +16,12 @@ import java.util.List;
 /**
  * TODO: respect infernal mobs config of specifically disabled modifiers, and maybe some other things?
  * - see InfernalMobsCore.mobMods, contains list of allowed mods, does not contain config removed ones
- *
+ * <p>
  * his settings:
  * - elite: 2 + 3 rand
  * - ultra: + 3 + 2 rand
  * - infernal: + 3 + 2 rand
- *
+ * <p>
  * Created by Corosus on 1/7/2017.
  */
 public class CoroUtilCrossMod {
@@ -115,7 +115,9 @@ public class CoroUtilCrossMod {
         CULog.dbg("listModifiersToUse size: " + listModifiersToUse.size());
 
         List<Integer> listInts = new ArrayList<>();
-        for (int i = 0; i < listModifiersToUse.size(); i++) { listInts.add(i); }
+        for (int i = 0; i < listModifiersToUse.size(); i++) {
+            listInts.add(i);
+        }
         Collections.shuffle(listInts);
 
         for (int i = 0; i < modifierCount; i++) {
@@ -200,7 +202,7 @@ public class CoroUtilCrossMod {
         String infernalNBTString = "InfernalMobsMod";
 
         if (event.getEntity() instanceof EntityLivingBase) {
-            EntityLivingBase ent = (EntityLivingBase)event.getEntity();
+            EntityLivingBase ent = (EntityLivingBase) event.getEntity();
             /**
              * Aggressively remove infernal modifiers and nbt data for it, unless we added them ourselves
              */
@@ -234,7 +236,6 @@ public class CoroUtilCrossMod {
     }
 
 
-
     public static boolean gameStages_hasStages(EntityPlayer player, List<String> stages, boolean matchAllOf) {
         // public static boolean hasAnyOf (EntityPlayer player, Collection<String> stages) {
         // public static boolean hasAllOf (EntityPlayer player, Collection<String> stages) {
@@ -246,7 +247,7 @@ public class CoroUtilCrossMod {
                 if (method_GS_hasAllOf == null) {
                     method_GS_hasAllOf = class_GS_GameStageHelper.getDeclaredMethod("hasAllOf", EntityPlayer.class, Collection.class);
                 }
-                return (Boolean)method_GS_hasAllOf.invoke(null, player, stages);
+                return (Boolean) method_GS_hasAllOf.invoke(null, player, stages);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 hasGameStages = false;
@@ -256,7 +257,7 @@ public class CoroUtilCrossMod {
                 if (method_GS_hasAnyOf == null) {
                     method_GS_hasAnyOf = class_GS_GameStageHelper.getDeclaredMethod("hasAnyOf", EntityPlayer.class, Collection.class);
                 }
-                return (Boolean)method_GS_hasAnyOf.invoke(null, player, stages);
+                return (Boolean) method_GS_hasAnyOf.invoke(null, player, stages);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 hasGameStages = false;

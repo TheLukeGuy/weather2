@@ -47,9 +47,9 @@ public class ParticleCustomMatrix extends ParticleTexFX {
         }
         float deltaRot = rotationAroundCenterPrev + (rotationAroundCenter - rotationAroundCenterPrev) * partialTicks;
         //deltaRot = rotationAroundCenter;
-        matrixFunnel.translate(new Vector3f((float)Math.sin(Math.toRadians(deltaRot)) * rotationDistAroundCenter,
+        matrixFunnel.translate(new Vector3f((float) Math.sin(Math.toRadians(deltaRot)) * rotationDistAroundCenter,
                 0,
-                (float)Math.cos(Math.toRadians(deltaRot)) * rotationDistAroundCenter));
+                (float) Math.cos(Math.toRadians(deltaRot)) * rotationDistAroundCenter));
         Vector3f posExtraRot = matrixFunnel.getTranslation();
 
         pos.x += posExtraRot.x;
@@ -83,19 +83,14 @@ public class ParticleCustomMatrix extends ParticleTexFX {
         mesh.curBufferPos++;
     }
 
-    public static float lerpDegrees(float start, float end, float amount)
-    {
+    public static float lerpDegrees(float start, float end, float amount) {
         float difference = Math.abs(end - start);
-        if (difference > 180)
-        {
+        if (difference > 180) {
             // We need to add on to one of the values.
-            if (end > start)
-            {
+            if (end > start) {
                 // We'll add it on to start...
                 start += 360;
-            }
-            else
-            {
+            } else {
                 // Add it on to end.
                 end += 360;
             }

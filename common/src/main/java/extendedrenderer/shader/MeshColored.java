@@ -43,7 +43,6 @@ public class MeshColored {
             glBindVertexArray(vaoId);
 
 
-
             // Create the VBO and bint to it
             posVboId = glGenBuffers();
             glBindBuffer(GL_ARRAY_BUFFER, posVboId);

@@ -5,7 +5,6 @@ import CoroUtil.difficulty.data.DeserializerAllJson;
 import CoroUtil.difficulty.data.DifficultyDataReader;
 import CoroUtil.util.CoroUtilEntity;
 import CoroUtil.util.EnumSpawnPlacementType;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.text.TextFormatting;
 
 import java.util.ArrayList;

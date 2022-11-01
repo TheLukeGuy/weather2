@@ -18,7 +18,7 @@ public class BuffAI_Infernal extends BuffBase {
     @Override
     public boolean applyBuff(EntityCreature ent, float difficulty) {
 
-        CmodAIInfernal cmod = (CmodAIInfernal)UtilEntityBuffs.getCmodData(ent, getTagName());
+        CmodAIInfernal cmod = (CmodAIInfernal) UtilEntityBuffs.getCmodData(ent, getTagName());
 
         if (cmod.randomly_choose_count > 0) {
 
@@ -41,7 +41,7 @@ public class BuffAI_Infernal extends BuffBase {
             }
             CoroUtilCrossMod.infernalMobs_AddModifiers(ent, infernalmods);*/
 
-            int count = (int)((float)cmod.randomly_choose_count * cmod.difficulty_multiplier * difficulty);
+            int count = (int) ((float) cmod.randomly_choose_count * cmod.difficulty_multiplier * difficulty);
             if (cmod.randomly_choose_count_max != -1 && count > cmod.randomly_choose_count_max) {
                 count = cmod.randomly_choose_count_max;
             }
@@ -73,6 +73,6 @@ public class BuffAI_Infernal extends BuffBase {
      * @return
      */
     public int getBuffsForDifficulty(float difficulty) {
-        return (int)(difficulty * 10D);
+        return (int) (difficulty * 10D);
     }
 }

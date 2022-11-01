@@ -20,13 +20,12 @@ import java.util.List;
 
 /**
  * Based off of EntityAIMoveIndoors
- *
+ * <p>
  * If global overcast is on, this probably isnt needed as original task executes on global rain active
- *
+ * <p>
  * Inject with same priority as original task, do not override original task
  */
-public class EntityAIMoveIndoorsStorm extends EntityAIBase implements ITaskInitializer
-{
+public class EntityAIMoveIndoorsStorm extends EntityAIBase implements ITaskInitializer {
     private EntityCreature entityObj;
     private VillageDoorInfo doorInfo;
     private int insidePosX = -1;
@@ -36,8 +35,7 @@ public class EntityAIMoveIndoorsStorm extends EntityAIBase implements ITaskIniti
         this.setMutexBits(1);
     }
 
-    public EntityAIMoveIndoorsStorm(EntityCreature entityObjIn)
-    {
+    public EntityAIMoveIndoorsStorm(EntityCreature entityObjIn) {
         this();
         this.entityObj = entityObjIn;
     }
@@ -46,8 +44,7 @@ public class EntityAIMoveIndoorsStorm extends EntityAIBase implements ITaskIniti
      * Returns whether the EntityAIBase should begin execution.
      */
     @Override
-    public boolean shouldExecute()
-    {
+    public boolean shouldExecute() {
 
         WeatherManager weatherManager = ServerTickHandler.getWeatherSystemForDim(entityObj.world.provider.getDimension());
         if (weatherManager == null) return false;
@@ -77,35 +74,26 @@ public class EntityAIMoveIndoorsStorm extends EntityAIBase implements ITaskIniti
             }
         }
 
-        if (runInside)
-        {
+        if (runInside) {
             /*if (this.entityObj.getRNG().nextInt(10) != 0)
             {
                 return false;
             }
             else */
             //if villager is right next to its safe spot, cancel
-            if (this.insidePosX != -1 && this.entityObj.getDistanceSq((double)this.insidePosX, this.entityObj.posY, (double)this.insidePosZ) < 4.0D)
-            {
+            if (this.insidePosX != -1 && this.entityObj.getDistanceSq((double) this.insidePosX, this.entityObj.posY, (double) this.insidePosZ) < 4.0D) {
                 return false;
-            }
-            else
-            {
+            } else {
                 Village village = this.entityObj.world.getVillageCollection().getNearestVillage(blockpos, 14);
 
-                if (village == null)
-                {
+                if (village == null) {
                     return false;
-                }
-                else
-                {
+                } else {
                     this.doorInfo = village.getDoorInfo(blockpos);
                     return this.doorInfo != null;
                 }
             }
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -115,8 +103,7 @@ public class EntityAIMoveIndoorsStorm extends EntityAIBase implements ITaskIniti
      */
 
     @Override
-    public boolean shouldContinueExecuting()
-    {
+    public boolean shouldContinueExecuting() {
         return !this.entityObj.getNavigator().noPath();
     }
 
@@ -124,26 +111,21 @@ public class EntityAIMoveIndoorsStorm extends EntityAIBase implements ITaskIniti
      * Execute a one shot task or start executing a continuous task
      */
     @Override
-    public void startExecuting()
-    {
+    public void startExecuting() {
         this.insidePosX = -1;
         BlockPos blockpos = this.doorInfo.getInsideBlockPos();
         int i = blockpos.getX();
         int j = blockpos.getY();
         int k = blockpos.getZ();
 
-        if (this.entityObj.getDistanceSq(blockpos) > 256.0D)
-        {
-            Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockTowards(this.entityObj, 14, 3, new Vec3d((double)i + 0.5D, (double)j, (double)k + 0.5D));
+        if (this.entityObj.getDistanceSq(blockpos) > 256.0D) {
+            Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockTowards(this.entityObj, 14, 3, new Vec3d((double) i + 0.5D, (double) j, (double) k + 0.5D));
 
-            if (vec3d != null)
-            {
+            if (vec3d != null) {
                 this.entityObj.getNavigator().tryMoveToXYZ(vec3d.x, vec3d.y, vec3d.z, 1.0D);
             }
-        }
-        else
-        {
-            this.entityObj.getNavigator().tryMoveToXYZ((double)i + 0.5D, (double)j, (double)k + 0.5D, 1.0D);
+        } else {
+            this.entityObj.getNavigator().tryMoveToXYZ((double) i + 0.5D, (double) j, (double) k + 0.5D, 1.0D);
         }
     }
 
@@ -151,8 +133,7 @@ public class EntityAIMoveIndoorsStorm extends EntityAIBase implements ITaskIniti
      * Resets the task
      */
     @Override
-    public void resetTask()
-    {
+    public void resetTask() {
         this.insidePosX = this.doorInfo.getInsideBlockPos().getX();
         this.insidePosZ = this.doorInfo.getInsideBlockPos().getZ();
         this.doorInfo = null;

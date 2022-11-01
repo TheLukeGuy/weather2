@@ -1,7 +1,6 @@
 package weather2.block;
 
-import java.util.Random;
-
+import CoroUtil.util.Vec3;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -18,15 +17,14 @@ import weather2.ServerTickHandler;
 import weather2.config.ConfigMisc;
 import weather2.weathersystem.WeatherManagerServer;
 import weather2.weathersystem.storm.StormObject;
-import CoroUtil.util.Vec3;
 
-public class BlockTSensor extends Block
-{
-	
-	public static final PropertyInteger POWER = PropertyInteger.create("power", 0, 15);
-	
-    public BlockTSensor()
-    {
+import java.util.Random;
+
+public class BlockTSensor extends Block {
+
+    public static final PropertyInteger POWER = PropertyInteger.create("power", 0, 15);
+
+    public BlockTSensor() {
         super(Material.CLAY);
         this.setDefaultState(this.blockState.getBaseState().withProperty(POWER, Integer.valueOf(0)));
         this.setTickRandomly(true);
@@ -35,39 +33,35 @@ public class BlockTSensor extends Block
     }
 
     @Override
-    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand)
-    {
-    	
-    	if (world.isRemote) return;
-    	
-    	boolean enable = false;
-    	
-    	WeatherManagerServer wms = ServerTickHandler.lookupDimToWeatherMan.get(world.provider.getDimension());
-    	if (wms != null) {
-    		StormObject so = wms.getClosestStorm(new Vec3(pos.getX(), pos.getY(), pos.getZ()), ConfigMisc.sensorActivateDistance, StormObject.STATE_FORMING);
-    		if (so != null/* && so.attrib_tornado_severity > 0*/) {
-    			enable = true;
-    		}
-    	}
+    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 
-        if (enable)
-        {
-        	world.setBlockState(pos, state.withProperty(POWER, 15), 3);
+        if (world.isRemote) return;
+
+        boolean enable = false;
+
+        WeatherManagerServer wms = ServerTickHandler.lookupDimToWeatherMan.get(world.provider.getDimension());
+        if (wms != null) {
+            StormObject so = wms.getClosestStorm(new Vec3(pos.getX(), pos.getY(), pos.getZ()), ConfigMisc.sensorActivateDistance, StormObject.STATE_FORMING);
+            if (so != null/* && so.attrib_tornado_severity > 0*/) {
+                enable = true;
+            }
         }
-        else
-        {
-        	world.setBlockState(pos, state.withProperty(POWER, 0), 3);
+
+        if (enable) {
+            world.setBlockState(pos, state.withProperty(POWER, 15), 3);
+        } else {
+            world.setBlockState(pos, state.withProperty(POWER, 0), 3);
         }
-        
+
         world.scheduleBlockUpdate(pos, this, 100, 1);
     }
-    
+
     @Override
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos,
-    		EnumFacing facing, float hitX, float hitY, float hitZ, int meta,
-    		EntityLivingBase placer) {
-    	worldIn.scheduleBlockUpdate(pos, this, 10, 1);
-    	return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer);
+                                            EnumFacing facing, float hitX, float hitY, float hitZ, int meta,
+                                            EntityLivingBase placer) {
+        worldIn.scheduleBlockUpdate(pos, this, 10, 1);
+        return super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer);
     }
 
     @Override
@@ -76,35 +70,30 @@ public class BlockTSensor extends Block
     }
 
     @Override
-    public int getWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
-    {
-        return ((Integer)blockState.getValue(POWER)).intValue();
+    public int getWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+        return ((Integer) blockState.getValue(POWER)).intValue();
     }
-    
+
     @Override
-    public boolean canProvidePower(IBlockState state)
-    {
+    public boolean canProvidePower(IBlockState state) {
         return true;
     }
 
     /**
      * Convert the given metadata into a BlockState for this Block
      */
-    public IBlockState getStateFromMeta(int meta)
-    {
+    public IBlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(POWER, Integer.valueOf(meta));
     }
 
     /**
      * Convert the BlockState into the correct metadata value
      */
-    public int getMetaFromState(IBlockState state)
-    {
-        return ((Integer)state.getValue(POWER)).intValue();
+    public int getMetaFromState(IBlockState state) {
+        return ((Integer) state.getValue(POWER)).intValue();
     }
 
-    protected BlockStateContainer createBlockState()
-    {
-        return new BlockStateContainer(this, new IProperty[] {POWER});
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, new IProperty[]{POWER});
     }
 }

@@ -21,7 +21,6 @@ public class DataMobSpawnsTemplate {
     }
 
 
-
     @Override
     public String toString() {
         String str = TextFormatting.AQUA + "Profile: " + TextFormatting.RESET + name + " | ";

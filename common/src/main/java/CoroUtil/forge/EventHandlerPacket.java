@@ -2,6 +2,7 @@ package CoroUtil.forge;
 
 import CoroUtil.client.debug.DebugRenderEntry;
 import CoroUtil.client.debug.DebugRenderer;
+import CoroUtil.packet.INBTPacketHandler;
 import CoroUtil.packet.PacketHelper;
 import CoroUtil.util.UtilMining;
 import net.minecraft.client.Minecraft;
@@ -14,90 +15,89 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import CoroUtil.packet.INBTPacketHandler;
 
 public class EventHandlerPacket {
-	
-	//if im going to load nbt, i probably should package it at the VERY end of the packet so it loads properly
-	//does .payload continue from where i last read or is it whole thing?
-	//maybe i should just do nbt only
-	
-	//changes from 1.6.4 to 1.7.2:
-	//all nbt now:
-	//- inv writes stack to nbt, dont use buffer
-	//- any sending code needs a full reverification that it matches up with how its received in this class
-	//- READ ABOVE ^
-	//- CoroAI_Inv could be factored out and replaced with CoroAI_Ent, epoch entities use it this way
 
-	@SideOnly(Side.CLIENT)
-	public World getClientWorld() {
-		return Minecraft.getMinecraft().world;
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public EntityPlayer getClientPlayer() {
-		return Minecraft.getMinecraft().player;
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public INBTPacketHandler getClientDataInterface() {
-		if (Minecraft.getMinecraft().currentScreen instanceof INBTPacketHandler) {
-			return (INBTPacketHandler)Minecraft.getMinecraft().currentScreen;
-		}
-		return null;
-	}
+    //if im going to load nbt, i probably should package it at the VERY end of the packet so it loads properly
+    //does .payload continue from where i last read or is it whole thing?
+    //maybe i should just do nbt only
 
-	@SideOnly(Side.CLIENT)
-	@SubscribeEvent
-	public void onPacketFromServer(FMLNetworkEvent.ClientCustomPacketEvent event) {
-		try {
-			final NBTTagCompound nbt = PacketHelper.readNBTTagCompound(event.getPacket().payload());
+    //changes from 1.6.4 to 1.7.2:
+    //all nbt now:
+    //- inv writes stack to nbt, dont use buffer
+    //- any sending code needs a full reverification that it matches up with how its received in this class
+    //- READ ABOVE ^
+    //- CoroAI_Inv could be factored out and replaced with CoroAI_Ent, epoch entities use it this way
 
-			String command = nbt.getString("command");
+    @SideOnly(Side.CLIENT)
+    public World getClientWorld() {
+        return Minecraft.getMinecraft().world;
+    }
 
-			if (command.equals("Ent_Motion")) {
+    @SideOnly(Side.CLIENT)
+    public EntityPlayer getClientPlayer() {
+        return Minecraft.getMinecraft().player;
+    }
 
-				final int entID = nbt.getInteger("entityID");
+    @SideOnly(Side.CLIENT)
+    public INBTPacketHandler getClientDataInterface() {
+        if (Minecraft.getMinecraft().currentScreen instanceof INBTPacketHandler) {
+            return (INBTPacketHandler) Minecraft.getMinecraft().currentScreen;
+        }
+        return null;
+    }
 
-				Minecraft.getMinecraft().addScheduledTask(() -> {
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public void onPacketFromServer(FMLNetworkEvent.ClientCustomPacketEvent event) {
+        try {
+            final NBTTagCompound nbt = PacketHelper.readNBTTagCompound(event.getPacket().payload());
 
-					Entity entity = getClientWorld().getEntityByID(entID);
-					if (entity != null) {
-						entity.motionX += nbt.getDouble("motionX");
-						entity.motionY += nbt.getDouble("motionY");
-						entity.motionZ += nbt.getDouble("motionZ");
-					}
+            String command = nbt.getString("command");
 
-				});
+            if (command.equals("Ent_Motion")) {
 
-			} else if (command.equals("UpdateBlockList")) {
-				Minecraft.getMinecraft().addScheduledTask(() -> {
-					World world = Minecraft.getMinecraft().world;
-					if (world == null) return;
-					String blacklistMineable_RegularBlocks = nbt.getString("blacklistRepairable_RegularBlocks");
-					String whitelistMineable_TileEntities = nbt.getString("whitelistMineable_TileEntities");
-					UtilMining.ClientData.listBlocksBlacklistedRepairing.clear();
-					UtilMining.ClientData.listTileEntitiesWhitelistedBreakable.clear();
-					UtilMining.processBlockBlacklist(blacklistMineable_RegularBlocks, UtilMining.ClientData.listBlocksBlacklistedRepairing);
-					UtilMining.processBlockBlacklist(whitelistMineable_TileEntities, UtilMining.ClientData.listTileEntitiesWhitelistedBreakable);
-				});
-			} else if (command.equals("DebugRender")) {
+                final int entID = nbt.getInteger("entityID");
 
-				Minecraft.getMinecraft().addScheduledTask(() -> {
-					World world = Minecraft.getMinecraft().world;
-					if (world == null) return;
-					BlockPos pos = new BlockPos(nbt.getInteger("posX"), nbt.getInteger("posY"), nbt.getInteger("posZ"));
-					DebugRenderEntry entry = new DebugRenderEntry(pos, world.getTotalWorldTime() + nbt.getInteger("time"), nbt.getInteger("color"));
-					DebugRenderer.addRenderable(entry);
-				});
+                Minecraft.getMinecraft().addScheduledTask(() -> {
 
-			} else if (command.equals("DebugRenderClear")) {
-				Minecraft.getMinecraft().addScheduledTask(() -> DebugRenderer.clearRenderables());
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-	}
+                    Entity entity = getClientWorld().getEntityByID(entID);
+                    if (entity != null) {
+                        entity.motionX += nbt.getDouble("motionX");
+                        entity.motionY += nbt.getDouble("motionY");
+                        entity.motionZ += nbt.getDouble("motionZ");
+                    }
+
+                });
+
+            } else if (command.equals("UpdateBlockList")) {
+                Minecraft.getMinecraft().addScheduledTask(() -> {
+                    World world = Minecraft.getMinecraft().world;
+                    if (world == null) return;
+                    String blacklistMineable_RegularBlocks = nbt.getString("blacklistRepairable_RegularBlocks");
+                    String whitelistMineable_TileEntities = nbt.getString("whitelistMineable_TileEntities");
+                    UtilMining.ClientData.listBlocksBlacklistedRepairing.clear();
+                    UtilMining.ClientData.listTileEntitiesWhitelistedBreakable.clear();
+                    UtilMining.processBlockBlacklist(blacklistMineable_RegularBlocks, UtilMining.ClientData.listBlocksBlacklistedRepairing);
+                    UtilMining.processBlockBlacklist(whitelistMineable_TileEntities, UtilMining.ClientData.listTileEntitiesWhitelistedBreakable);
+                });
+            } else if (command.equals("DebugRender")) {
+
+                Minecraft.getMinecraft().addScheduledTask(() -> {
+                    World world = Minecraft.getMinecraft().world;
+                    if (world == null) return;
+                    BlockPos pos = new BlockPos(nbt.getInteger("posX"), nbt.getInteger("posY"), nbt.getInteger("posZ"));
+                    DebugRenderEntry entry = new DebugRenderEntry(pos, world.getTotalWorldTime() + nbt.getInteger("time"), nbt.getInteger("color"));
+                    DebugRenderer.addRenderable(entry);
+                });
+
+            } else if (command.equals("DebugRenderClear")) {
+                Minecraft.getMinecraft().addScheduledTask(() -> DebugRenderer.clearRenderables());
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 	
 	/*@SideOnly(Side.CLIENT)
 	@SubscribeEvent
@@ -209,5 +209,5 @@ public class EventHandlerPacket {
 			ex.printStackTrace();
 		}
 	}*/
-	
+
 }

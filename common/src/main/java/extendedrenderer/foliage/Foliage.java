@@ -1,12 +1,14 @@
 package extendedrenderer.foliage;
 
 import CoroUtil.util.CoroUtilBlockLightCache;
-import extendedrenderer.shader.*;
+import extendedrenderer.shader.IShaderRenderedEntity;
+import extendedrenderer.shader.InstancedMeshFoliage;
+import extendedrenderer.shader.Matrix4fe;
+import extendedrenderer.shader.Transformation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.util.vector.Quaternion;
@@ -30,14 +32,22 @@ public class Foliage implements IShaderRenderedEntity {
 
     public float particleScale = 1F;
 
-    /** The red amount of color. Used as a percentage, 1.0 = 255 and 0.0 = 0. */
+    /**
+     * The red amount of color. Used as a percentage, 1.0 = 255 and 0.0 = 0.
+     */
     public float particleRed = 1F;
-    /** The green amount of color. Used as a percentage, 1.0 = 255 and 0.0 = 0. */
+    /**
+     * The green amount of color. Used as a percentage, 1.0 = 255 and 0.0 = 0.
+     */
     public float particleGreen = 1F;
-    /** The blue amount of color. Used as a percentage, 1.0 = 255 and 0.0 = 0. */
+    /**
+     * The blue amount of color. Used as a percentage, 1.0 = 255 and 0.0 = 0.
+     */
     public float particleBlue = 1F;
 
-    /** Particle alpha */
+    /**
+     * Particle alpha
+     */
     public float particleAlpha = 1F;
     public TextureAtlasSprite particleTexture;
 
@@ -78,7 +88,7 @@ public class Foliage implements IShaderRenderedEntity {
 
     @Override
     public Vector3f getPosition() {
-        return new Vector3f((float)posX, (float)posY, (float)posZ);
+        return new Vector3f((float) posX, (float) posY, (float) posZ);
     }
 
     @Override
@@ -109,8 +119,8 @@ public class Foliage implements IShaderRenderedEntity {
 
         Quaternion qY = new Quaternion();
         Quaternion qX = new Quaternion();
-        qY.setFromAxisAngle(new Vector4f(0, 1, 0, (float)Math.toRadians(-this.rotationYaw - 180F)));
-        qX.setFromAxisAngle(new Vector4f(1, 0, 0, (float)Math.toRadians(-this.rotationPitch)));
+        qY.setFromAxisAngle(new Vector4f(0, 1, 0, (float) Math.toRadians(-this.rotationYaw - 180F)));
+        qX.setFromAxisAngle(new Vector4f(1, 0, 0, (float) Math.toRadians(-this.rotationPitch)));
         if (this.rotateOrderXY) {
             Quaternion.mul(qX, qY, this.rotation);
         } else {
@@ -119,7 +129,7 @@ public class Foliage implements IShaderRenderedEntity {
     }
 
     public void renderForShaderVBO1(InstancedMeshFoliage mesh, Transformation transformation, Matrix4fe viewMatrix, Entity entityIn,
-                                        float partialTicks) {
+                                    float partialTicks) {
 
         if (mesh.curBufferPosVBO1 >= mesh.numInstances) {
             return;
@@ -131,7 +141,7 @@ public class Foliage implements IShaderRenderedEntity {
         //mesh.instanceDataBuffer.put(mesh.INSTANCE_SIZE_FLOATS * (mesh.curBufferPos), (float)Minecraft.getMinecraft().player.getDistance(this.posX, this.posY, this.posZ) - 2.5F);
 
         float brightness;
-        brightness = CoroUtilBlockLightCache.getBrightnessCached(Minecraft.getMinecraft().world, (float)this.posX, (float)this.posY, (float)this.posZ);
+        brightness = CoroUtilBlockLightCache.getBrightnessCached(Minecraft.getMinecraft().world, (float) this.posX, (float) this.posY, (float) this.posZ);
         //brightness = brightnessCache;
         //brightness = CoroUtilBlockLightCache.brightnessPlayer;
 
@@ -153,7 +163,7 @@ public class Foliage implements IShaderRenderedEntity {
     }
 
     public void renderForShaderVBO2(InstancedMeshFoliage mesh, Transformation transformation, Matrix4fe viewMatrix, Entity entityIn,
-                                            float partialTicks) {
+                                    float partialTicks) {
 
         boolean autoGrowBuffer = false;
         if (mesh.curBufferPosVBO2 >= mesh.numInstances) {
@@ -220,7 +230,7 @@ public class Foliage implements IShaderRenderedEntity {
         /*mesh.instanceDataBufferVBO2.put(mesh.INSTANCE_SIZE_FLOATS_SELDOM * (mesh.curBufferPosVBO2) + mesh.MATRIX_SIZE_FLOATS
                 + (rgbaIndex++), (((MathHelper.floor(this.posX) * 15)+(MathHelper.floor(this.posX) * 15))));*/
         mesh.instanceDataBufferVBO2.put(mesh.INSTANCE_SIZE_FLOATS_SELDOM * (mesh.curBufferPosVBO2) + mesh.MATRIX_SIZE_FLOATS
-                + (floatIndex++), (float)delayNoise.getValue(this.posX, this.posZ));
+                + (floatIndex++), (float) delayNoise.getValue(this.posX, this.posZ));
 
 
         mesh.instanceDataBufferVBO2.put(mesh.INSTANCE_SIZE_FLOATS_SELDOM * (mesh.curBufferPosVBO2) + mesh.MATRIX_SIZE_FLOATS

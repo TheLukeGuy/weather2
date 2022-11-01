@@ -15,7 +15,7 @@ public class CoroUtilWorldTime {
 
     /**
      * Use instead of vanilla methods, as they are light based, which thunder affects and cause it to count as night
-     *
+     * <p>
      * - night time first tick = 12542
      * - day time first tick = 23460
      *

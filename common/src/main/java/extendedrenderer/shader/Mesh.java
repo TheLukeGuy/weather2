@@ -62,12 +62,10 @@ public class Mesh {
         try {
 
 
-
             // Create the VAO and bind to it
             //if (true) throw new IllegalStateException();
             vaoId = ShaderManager.glGenVertexArrays();
             ShaderManager.glBindVertexArray(vaoId);
-
 
 
             // Create the VBO and bind to it

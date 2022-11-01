@@ -1,7 +1,7 @@
 /*
  * Java Color Thief
  * by Sven Woltmann, Fonpit AG
- * 
+ *
  * http://www.androidpit.com
  * http://www.androidpit.de
  *
@@ -18,11 +18,7 @@
 
 package CoroUtil.repack.de.androidpit.colorthief;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class MMCQ {
 
@@ -36,14 +32,10 @@ public class MMCQ {
 
     /**
      * Get reduced-space color index for a pixel.
-     * 
-     * @param r
-     *            the red value
-     * @param g
-     *            the green value
-     * @param b
-     *            the blue value
-     * 
+     *
+     * @param r the red value
+     * @param g the green value
+     * @param b the blue value
      * @return the color index
      */
     static int getColorIndex(int r, int g, int b) {
@@ -141,9 +133,9 @@ public class MMCQ {
                 }
 
                 if (ntot > 0) {
-                    _avg = new int[] {~~(rsum / ntot), ~~(gsum / ntot), ~~(bsum / ntot)};
+                    _avg = new int[]{~~(rsum / ntot), ~~(gsum / ntot), ~~(bsum / ntot)};
                 } else {
-                    _avg = new int[] {~~(MULT * (r1 + r2 + 1) / 2), ~~(MULT * (g1 + g2 + 1) / 2),
+                    _avg = new int[]{~~(MULT * (r1 + r2 + 1) / 2), ~~(MULT * (g1 + g2 + 1) / 2),
                             ~~(MULT * (b1 + b2 + 1) / 2)};
                 }
             }
@@ -282,7 +274,7 @@ public class MMCQ {
 
         // only one pixel, no split
         if (vbox.count(false) == 1) {
-            return new VBox[] {vbox.clone(), null};
+            return new VBox[]{vbox.clone(), null};
         }
 
         int rw = vbox.r2 - vbox.r1 + 1;
@@ -323,8 +315,7 @@ public class MMCQ {
                 partialsum[i] = total;
             }
         } else
-        /* maxw == bw */
-        {
+            /* maxw == bw */ {
             for (i = vbox.b1; i <= vbox.b2; i++) {
                 sum = 0;
                 for (j = vbox.r1; j <= vbox.r2; j++) {
@@ -347,7 +338,7 @@ public class MMCQ {
         // determine the cut planes
         return maxw == rw ? doCut('r', vbox, partialsum, lookaheadsum, total)
                 : maxw == gw ? doCut('g', vbox, partialsum, lookaheadsum, total)
-                        : doCut('b', vbox, partialsum, lookaheadsum, total);
+                : doCut('b', vbox, partialsum, lookaheadsum, total);
     }
 
     private static VBox[] doCut(
@@ -366,8 +357,7 @@ public class MMCQ {
             vbox_dim1 = vbox.g1;
             vbox_dim2 = vbox.g2;
         } else
-        /* color == 'b' */
-        {
+            /* color == 'b' */ {
             vbox_dim1 = vbox.b1;
             vbox_dim2 = vbox.b2;
         }
@@ -408,13 +398,12 @@ public class MMCQ {
                     vbox1.g2 = d2;
                     vbox2.g1 = d2 + 1;
                 } else
-                /* color == 'b' */
-                {
+                    /* color == 'b' */ {
                     vbox1.b2 = d2;
                     vbox2.b1 = d2 + 1;
                 }
 
-                return new VBox[] {vbox1, vbox2};
+                return new VBox[]{vbox1, vbox2};
             }
         }
 

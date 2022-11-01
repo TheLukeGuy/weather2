@@ -7,7 +7,6 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderBat;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.ClientCommandHandler;
@@ -16,20 +15,18 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-@SideOnly(Side.CLIENT)
-public class ClientProxy extends CommonProxy
-{
 
-    public ClientProxy()
-    {
-    	
+@SideOnly(Side.CLIENT)
+public class ClientProxy extends CommonProxy {
+
+    public ClientProxy() {
+
     }
 
     @Override
-    public void init(CoroUtil pMod)
-    {
+    public void init(CoroUtil pMod) {
         super.init(pMod);
-        
+
         ClientCommandHandler.instance.registerCommand(new CommandCoroUtilClient());
 
         addMapping(EntityBatSmart.class, new RenderBatSmart(Minecraft.getMinecraft().getRenderManager()));

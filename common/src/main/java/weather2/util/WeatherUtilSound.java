@@ -1,27 +1,17 @@
 package weather2.util;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLStreamHandler;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
+import CoroUtil.util.Vec3;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import paulscode.sound.SoundSystem;
 import weather2.SoundRegistry;
 import weather2.client.sound.MovingSoundStreamingSource;
 import weather2.weathersystem.storm.StormObject;
-import CoroUtil.util.Vec3;
+
+import java.util.HashMap;
+import java.util.Random;
 
 /**
  * TODO: rewrite this to use a class that contains array of sounds, amount of them, length of them, and the last played time and next random index
@@ -42,10 +32,10 @@ public class WeatherUtilSound {
      */
     public static int snd_rand[] = new int[6];
     public static long soundTimer[] = new long[6];
-    
+
     public static void init() {
-    	Random rand = new Random();
-    	snd_tornado_dmg_close[0] = "destruction_0_";
+        Random rand = new Random();
+        snd_tornado_dmg_close[0] = "destruction_0_";
         snd_tornado_dmg_close[1] = "destruction_1_";
         snd_tornado_dmg_close[2] = "destruction_2_";
         snd_wind_close[0] = "wind_close_0_";
@@ -89,40 +79,37 @@ public class WeatherUtilSound {
         soundToLength.put("siren_sandstorm_4", 44274);
         soundToLength.put("siren_sandstorm_5_extra", 1282);
     }
-    
+
     @SideOnly(Side.CLIENT)
-    public static void playNonMovingSound(Vec3 parPos, String var1, float var5, float var6, float parCutOffRange)
-    {
-    	//String prefix = "streaming.";
-    	String affix = ".ogg";
-    	//ResourceLocation res = new ResourceLocation(var1);
-    	SoundEvent event = SoundRegistry.get(var1);
-    	MovingSoundStreamingSource sound = new MovingSoundStreamingSource(parPos, event, SoundCategory.WEATHER, var5, var6, parCutOffRange);
-    	FMLClientHandler.instance().getClient().getSoundHandler().playSound(sound);
+    public static void playNonMovingSound(Vec3 parPos, String var1, float var5, float var6, float parCutOffRange) {
+        //String prefix = "streaming.";
+        String affix = ".ogg";
+        //ResourceLocation res = new ResourceLocation(var1);
+        SoundEvent event = SoundRegistry.get(var1);
+        MovingSoundStreamingSource sound = new MovingSoundStreamingSource(parPos, event, SoundCategory.WEATHER, var5, var6, parCutOffRange);
+        FMLClientHandler.instance().getClient().getSoundHandler().playSound(sound);
     }
-    
+
     @SideOnly(Side.CLIENT)
-    public static void playMovingSound(StormObject parStorm, String var1, float var5, float var6, float parCutOffRange)
-    {
-    	//String prefix = "streaming.";
-    	String affix = ".ogg";
-    	
-    	//ResourceLocation res = new ResourceLocation(var1);
-    	SoundEvent event = SoundRegistry.get(var1);
-    	
-    	MovingSoundStreamingSource sound = new MovingSoundStreamingSource(parStorm, event, SoundCategory.WEATHER, var5, var6, parCutOffRange);
-    	
-    	FMLClientHandler.instance().getClient().getSoundHandler().playSound(sound);
+    public static void playMovingSound(StormObject parStorm, String var1, float var5, float var6, float parCutOffRange) {
+        //String prefix = "streaming.";
+        String affix = ".ogg";
+
+        //ResourceLocation res = new ResourceLocation(var1);
+        SoundEvent event = SoundRegistry.get(var1);
+
+        MovingSoundStreamingSource sound = new MovingSoundStreamingSource(parStorm, event, SoundCategory.WEATHER, var5, var6, parCutOffRange);
+
+        FMLClientHandler.instance().getClient().getSoundHandler().playSound(sound);
 
     }
 
     @SideOnly(Side.CLIENT)
-    public static void playPlayerLockedSound(Vec3 parPos, String var1, float var5, float var6)
-    {
+    public static void playPlayerLockedSound(Vec3 parPos, String var1, float var5, float var6) {
         SoundEvent event = SoundRegistry.get(var1);
         MovingSoundStreamingSource sound = new MovingSoundStreamingSource(parPos, event, SoundCategory.WEATHER, var5, var6, true);
         FMLClientHandler.instance().getClient().getSoundHandler().playSound(sound);
     }
-	
-    
+
+
 }

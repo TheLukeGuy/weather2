@@ -1,12 +1,8 @@
 package CoroUtil.difficulty.buffs;
 
 import CoroUtil.ai.BehaviorModifier;
-import CoroUtil.ai.tasks.EntityAITaskAntiAir;
-import CoroUtil.ai.tasks.EntityAITaskEnhancedCombat;
-import CoroUtil.ai.tasks.TaskDigTowardsTarget;
 import CoroUtil.difficulty.UtilEntityBuffs;
 import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.ai.EntityAIZombieAttack;
 
 /**
  * Created by Corosus on 1/9/2017.

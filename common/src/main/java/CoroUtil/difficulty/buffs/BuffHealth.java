@@ -1,9 +1,7 @@
 package CoroUtil.difficulty.buffs;
 
-import CoroUtil.config.ConfigHWMonsters;
 import CoroUtil.difficulty.UtilEntityBuffs;
 import CoroUtil.difficulty.data.cmods.CmodAttributeHealth;
-import CoroUtil.difficulty.data.cmods.CmodInventory;
 import CoroUtil.forge.CULog;
 import CoroUtil.util.CoroUtilMisc;
 import CoroUtil.util.EnumAttribModifierType;
@@ -24,7 +22,7 @@ public class BuffHealth extends BuffBase {
     @Override
     public boolean applyBuff(EntityCreature ent, float difficulty) {
 
-        CmodAttributeHealth cmod = (CmodAttributeHealth)UtilEntityBuffs.getCmodData(ent, getTagName());
+        CmodAttributeHealth cmod = (CmodAttributeHealth) UtilEntityBuffs.getCmodData(ent, getTagName());
 
         if (cmod != null) {
             /**

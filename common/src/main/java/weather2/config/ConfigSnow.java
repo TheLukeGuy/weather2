@@ -9,12 +9,12 @@ import java.io.File;
 public class ConfigSnow implements IConfigCategory {
 
 
-	//snow
-	public static boolean Snow_PerformSnowfall = false;
-	//public static boolean Snow_ExtraPileUp = false;
-	public static int Snow_RarityOfBuildup = 64;
-	//public static int Snow_MaxBlockBuildupHeight = 3;
-	//public static boolean Snow_SmoothOutPlacement = false;
+    //snow
+    public static boolean Snow_PerformSnowfall = false;
+    //public static boolean Snow_ExtraPileUp = false;
+    public static int Snow_RarityOfBuildup = 64;
+    //public static int Snow_MaxBlockBuildupHeight = 3;
+    //public static boolean Snow_SmoothOutPlacement = false;
 
     @Override
     public String getName() {

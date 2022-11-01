@@ -1,7 +1,7 @@
 /*
  * Java Color Thief
  * by Sven Woltmann, Fonpit AG
- * 
+ *
  * http://www.androidpit.com
  * http://www.androidpit.de
  *
@@ -18,11 +18,11 @@
 
 package CoroUtil.repack.de.androidpit.colorthief;
 
+import CoroUtil.repack.de.androidpit.colorthief.MMCQ.CMap;
+
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.util.Arrays;
-
-import CoroUtil.repack.de.androidpit.colorthief.MMCQ.CMap;
 
 public class ColorThief {
 
@@ -33,9 +33,7 @@ public class ColorThief {
      * Use the median cut algorithm to cluster similar colors and return the base color from the
      * largest cluster.
      *
-     * @param sourceImage
-     *            the source image
-     *
+     * @param sourceImage the source image
      * @return the dominant color as RGB array
      */
     public static int[] getColor(BufferedImage sourceImage) {
@@ -51,18 +49,13 @@ public class ColorThief {
      * Use the median cut algorithm to cluster similar colors and return the base color from the
      * largest cluster.
      *
-     * @param sourceImage
-     *            the source image
-     * @param quality
-     *            1 is the highest quality settings. 10 is the default. There is a trade-off between
-     *            quality and speed. The bigger the number, the faster a color will be returned but
-     *            the greater the likelihood that it will not be the visually most dominant color.
-     * @param ignoreWhite
-     *            if <code>true</code>, white pixels are ignored
-     *
+     * @param sourceImage the source image
+     * @param quality     1 is the highest quality settings. 10 is the default. There is a trade-off between
+     *                    quality and speed. The bigger the number, the faster a color will be returned but
+     *                    the greater the likelihood that it will not be the visually most dominant color.
+     * @param ignoreWhite if <code>true</code>, white pixels are ignored
      * @return the dominant color as RGB array
-     * @throws IllegalArgumentException
-     *             if quality is < 1
+     * @throws IllegalArgumentException if quality is < 1
      */
     public static int[] getColor(BufferedImage sourceImage, int quality, boolean ignoreWhite) {
         int[][] palette = getPalette(sourceImage, 5, quality, ignoreWhite);
@@ -75,12 +68,9 @@ public class ColorThief {
 
     /**
      * Use the median cut algorithm to cluster similar colors.
-     * 
-     * @param sourceImage
-     *            the source image
-     * @param colorCount
-     *            the size of the palette; the number of colors returned
-     * 
+     *
+     * @param sourceImage the source image
+     * @param colorCount  the size of the palette; the number of colors returned
      * @return the palette as array of RGB arrays
      */
     public static int[][] getPalette(BufferedImage sourceImage, int colorCount) {
@@ -93,21 +83,15 @@ public class ColorThief {
 
     /**
      * Use the median cut algorithm to cluster similar colors.
-     * 
-     * @param sourceImage
-     *            the source image
-     * @param colorCount
-     *            the size of the palette; the number of colors returned
-     * @param quality
-     *            1 is the highest quality settings. 10 is the default. There is a trade-off between
-     *            quality and speed. The bigger the number, the faster the palette generation but
-     *            the greater the likelihood that colors will be missed.
-     * @param ignoreWhite
-     *            if <code>true</code>, white pixels are ignored
-     * 
+     *
+     * @param sourceImage the source image
+     * @param colorCount  the size of the palette; the number of colors returned
+     * @param quality     1 is the highest quality settings. 10 is the default. There is a trade-off between
+     *                    quality and speed. The bigger the number, the faster the palette generation but
+     *                    the greater the likelihood that colors will be missed.
+     * @param ignoreWhite if <code>true</code>, white pixels are ignored
      * @return the palette as array of RGB arrays
-     * @throws IllegalArgumentException
-     *             if quality is < 1
+     * @throws IllegalArgumentException if quality is < 1
      */
     public static int[][] getPalette(
             BufferedImage sourceImage,
@@ -123,12 +107,9 @@ public class ColorThief {
 
     /**
      * Use the median cut algorithm to cluster similar colors.
-     * 
-     * @param sourceImage
-     *            the source image
-     * @param colorCount
-     *            the size of the palette; the number of colors returned
-     * 
+     *
+     * @param sourceImage the source image
+     * @param colorCount  the size of the palette; the number of colors returned
      * @return the color map
      */
     public static CMap getColorMap(BufferedImage sourceImage, int colorCount) {
@@ -137,21 +118,15 @@ public class ColorThief {
 
     /**
      * Use the median cut algorithm to cluster similar colors.
-     * 
-     * @param sourceImage
-     *            the source image
-     * @param colorCount
-     *            the size of the palette; the number of colors returned
-     * @param quality
-     *            1 is the highest quality settings. 10 is the default. There is a trade-off between
-     *            quality and speed. The bigger the number, the faster the palette generation but
-     *            the greater the likelihood that colors will be missed.
-     * @param ignoreWhite
-     *            if <code>true</code>, white pixels are ignored
-     * 
+     *
+     * @param sourceImage the source image
+     * @param colorCount  the size of the palette; the number of colors returned
+     * @param quality     1 is the highest quality settings. 10 is the default. There is a trade-off between
+     *                    quality and speed. The bigger the number, the faster the palette generation but
+     *                    the greater the likelihood that colors will be missed.
+     * @param ignoreWhite if <code>true</code>, white pixels are ignored
      * @return the color map
-     * @throws IllegalArgumentException
-     *             if quality is < 1
+     * @throws IllegalArgumentException if quality is < 1
      */
     public static CMap getColorMap(
             BufferedImage sourceImage,
@@ -165,13 +140,13 @@ public class ColorThief {
         int[][] pixelArray;
 
         switch (sourceImage.getType()) {
-        case BufferedImage.TYPE_3BYTE_BGR:
-        case BufferedImage.TYPE_4BYTE_ABGR:
-            pixelArray = getPixelsFast(sourceImage, quality, ignoreWhite);
-            break;
+            case BufferedImage.TYPE_3BYTE_BGR:
+            case BufferedImage.TYPE_4BYTE_ABGR:
+                pixelArray = getPixelsFast(sourceImage, quality, ignoreWhite);
+                break;
 
-        default:
-            pixelArray = getPixelsSlow(sourceImage, quality, ignoreWhite);
+            default:
+                pixelArray = getPixelsSlow(sourceImage, quality, ignoreWhite);
         }
 
         // Send array to quantize function which clusters values using median cut algorithm
@@ -182,16 +157,12 @@ public class ColorThief {
     /**
      * Gets the image's pixels via BufferedImage.getRaster().getDataBuffer(). Fast, but doesn't work
      * for all color models.
-     * 
-     * @param sourceImage
-     *            the source image
-     * @param quality
-     *            1 is the highest quality settings. 10 is the default. There is a trade-off between
-     *            quality and speed. The bigger the number, the faster the palette generation but
-     *            the greater the likelihood that colors will be missed.
-     * @param ignoreWhite
-     *            if <code>true</code>, white pixels are ignored
-     * 
+     *
+     * @param sourceImage the source image
+     * @param quality     1 is the highest quality settings. 10 is the default. There is a trade-off between
+     *                    quality and speed. The bigger the number, the faster the palette generation but
+     *                    the greater the likelihood that colors will be missed.
+     * @param ignoreWhite if <code>true</code>, white pixels are ignored
      * @return an array of pixels (each an RGB int array)
      */
     private static int[][] getPixelsFast(
@@ -205,16 +176,16 @@ public class ColorThief {
         int colorDepth;
         int type = sourceImage.getType();
         switch (type) {
-        case BufferedImage.TYPE_3BYTE_BGR:
-            colorDepth = 3;
-            break;
+            case BufferedImage.TYPE_3BYTE_BGR:
+                colorDepth = 3;
+                break;
 
-        case BufferedImage.TYPE_4BYTE_ABGR:
-            colorDepth = 4;
-            break;
+            case BufferedImage.TYPE_4BYTE_ABGR:
+                colorDepth = 4;
+                break;
 
-        default:
-            throw new IllegalArgumentException("Unhandled type: " + type);
+            default:
+                throw new IllegalArgumentException("Unhandled type: " + type);
         }
 
         int expectedDataLength = pixelCount * colorDepth;
@@ -236,39 +207,39 @@ public class ColorThief {
 
         // Do the switch outside of the loop, that's much faster
         switch (type) {
-        case BufferedImage.TYPE_3BYTE_BGR:
-            for (int i = 0; i < pixelCount; i += quality) {
-                offset = i * 3;
-                b = pixels[offset] & 0xFF;
-                g = pixels[offset + 1] & 0xFF;
-                r = pixels[offset + 2] & 0xFF;
+            case BufferedImage.TYPE_3BYTE_BGR:
+                for (int i = 0; i < pixelCount; i += quality) {
+                    offset = i * 3;
+                    b = pixels[offset] & 0xFF;
+                    g = pixels[offset + 1] & 0xFF;
+                    r = pixels[offset + 2] & 0xFF;
 
-                // If pixel is not white
-                if (!(ignoreWhite && r > 250 && g > 250 && b > 250)) {
-                    pixelArray[numUsedPixels] = new int[] {r, g, b};
-                    numUsedPixels++;
+                    // If pixel is not white
+                    if (!(ignoreWhite && r > 250 && g > 250 && b > 250)) {
+                        pixelArray[numUsedPixels] = new int[]{r, g, b};
+                        numUsedPixels++;
+                    }
                 }
-            }
-            break;
+                break;
 
-        case BufferedImage.TYPE_4BYTE_ABGR:
-            for (int i = 0; i < pixelCount; i += quality) {
-                offset = i * 4;
-                a = pixels[offset] & 0xFF;
-                b = pixels[offset + 1] & 0xFF;
-                g = pixels[offset + 2] & 0xFF;
-                r = pixels[offset + 3] & 0xFF;
+            case BufferedImage.TYPE_4BYTE_ABGR:
+                for (int i = 0; i < pixelCount; i += quality) {
+                    offset = i * 4;
+                    a = pixels[offset] & 0xFF;
+                    b = pixels[offset + 1] & 0xFF;
+                    g = pixels[offset + 2] & 0xFF;
+                    r = pixels[offset + 3] & 0xFF;
 
-                // If pixel is mostly opaque and not white
-                if (a >= 125 && !(ignoreWhite && r > 250 && g > 250 && b > 250)) {
-                    pixelArray[numUsedPixels] = new int[] {r, g, b};
-                    numUsedPixels++;
+                    // If pixel is mostly opaque and not white
+                    if (a >= 125 && !(ignoreWhite && r > 250 && g > 250 && b > 250)) {
+                        pixelArray[numUsedPixels] = new int[]{r, g, b};
+                        numUsedPixels++;
+                    }
                 }
-            }
-            break;
+                break;
 
-        default:
-            throw new IllegalArgumentException("Unhandled type: " + type);
+            default:
+                throw new IllegalArgumentException("Unhandled type: " + type);
         }
 
         // Remove unused pixels from the array
@@ -278,16 +249,12 @@ public class ColorThief {
     /**
      * Gets the image's pixels via BufferedImage.getRGB(..). Slow, but the fast method doesn't work
      * for all color models.
-     * 
-     * @param sourceImage
-     *            the source image
-     * @param quality
-     *            1 is the highest quality settings. 10 is the default. There is a trade-off between
-     *            quality and speed. The bigger the number, the faster the palette generation but
-     *            the greater the likelihood that colors will be missed.
-     * @param ignoreWhite
-     *            if <code>true</code>, white pixels are ignored
-     * 
+     *
+     * @param sourceImage the source image
+     * @param quality     1 is the highest quality settings. 10 is the default. There is a trade-off between
+     *                    quality and speed. The bigger the number, the faster the palette generation but
+     *                    the greater the likelihood that colors will be missed.
+     * @param ignoreWhite if <code>true</code>, white pixels are ignored
      * @return an array of pixels (each an RGB int array)
      */
     private static int[][] getPixelsSlow(
@@ -317,7 +284,7 @@ public class ColorThief {
             g = (rgb >> 8) & 0xFF;
             b = (rgb) & 0xFF;
             if (!(ignoreWhite && r > 250 && g > 250 && b > 250)) {
-                res[numUsedPixels] = new int[] {r, g, b};
+                res[numUsedPixels] = new int[]{r, g, b};
                 numUsedPixels++;
             }
         }

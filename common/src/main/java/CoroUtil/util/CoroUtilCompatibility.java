@@ -171,35 +171,34 @@ public class CoroUtilCompatibility {
      * EIO:
      * - ILegacyPowerReceiver extends ILegacyPoweredTile
      * -- int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate);
-     *
+     * <p>
      * CoFH:
      * - IEnergyStorage
      * -- int receiveEnergy(int maxReceive, boolean simulate);
      * -- int extractEnergy(int maxExtract, boolean simulate);
-     *
+     * <p>
      * storage:
-     *
+     * <p>
      * Forge:
      * net.minecraftforge.energy.IEnergyStorage
      * - the cap, also uses that
      * EIO uses it, cofh too:
      * - https://github.com/CoFH/ThermalExpansion/blob/5340e2df6e328a1cc140a8b94692c8d09c5f06a7/src/main/java/cofh/thermalexpansion/block/TilePowered.java#L194
-     *
-     *
+     * <p>
+     * <p>
      * EIO:
      * - crazypants.enderio.base.power.ILegacyPoweredTile
      * -- int getEnergyStored();
      * - crazypants.enderio.base.machine.gui.IPowerBarData
      * -- int getEnergyStored();
-     *
+     * <p>
      * CoFH:
      * - cofh.redstoneflux.api.IEnergyStorage
      * -- int getEnergyStored();
-     *
-     *
+     * <p>
+     * <p>
      * Best idea: track relative power storage changes
      * - while EIO and CoFH/RF has a simulate boolean for extractEnergy (CoFH)
-     *
      */
 
     public static int lastPowerVal = -1;
@@ -295,10 +294,10 @@ public class CoroUtilCompatibility {
                 }
 
                 if (ent.getClass().isAssignableFrom(class_LycanitesMobs_Entity)) {
-                    if ((boolean)method_LycanitesMobs_useDirectNavigator.invoke(ent)) {
+                    if ((boolean) method_LycanitesMobs_useDirectNavigator.invoke(ent)) {
                         Object directNavigator = field_LycanitesMobs_directNavigator.get(ent);
                         invokedCustom = true;
-                        successCustom = (boolean)method_LycanitesMobs_setTargetPosition.invoke(directNavigator, new BlockPos(x, y, z), speed);
+                        successCustom = (boolean) method_LycanitesMobs_setTargetPosition.invoke(directNavigator, new BlockPos(x, y, z), speed);
                     }
                 }
 

@@ -1,7 +1,5 @@
 package CoroUtil.util;
 
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-
 import java.util.UUID;
 
 /**

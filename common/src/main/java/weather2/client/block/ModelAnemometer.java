@@ -2,12 +2,10 @@ package weather2.client.block;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-
 import org.lwjgl.opengl.GL11;
 
-public class ModelAnemometer extends ModelBase
-{
-	ModelRenderer Shape1;
+public class ModelAnemometer extends ModelBase {
+    ModelRenderer Shape1;
     ModelRenderer Shape22;
     ModelRenderer Shape2;
     ModelRenderer Shape3;
@@ -30,27 +28,25 @@ public class ModelAnemometer extends ModelBase
     ModelRenderer Shape13;
     ModelRenderer Shape14;
     ModelRenderer Shape15;
-    
-    public float scaleX = 1f;	
-    public float scaleY = 1f;	
+
+    public float scaleX = 1f;
+    public float scaleY = 1f;
     public float scaleZ = 1f;
     public float scaleItem = 1;
     public float offsetX = 0;
     public float offsetY = 0;
     public float offsetZ = 0;
     public float offsetInvX = 0;
-    public float offsetInvY = 0; 
+    public float offsetInvY = 0;
 
-    public ModelAnemometer()
-    {
-        this( 0.0f );
+    public ModelAnemometer() {
+        this(0.0f);
     }
 
-    public ModelAnemometer( float par1 )
-    {
-    	textureWidth = 64;
+    public ModelAnemometer(float par1) {
+        textureWidth = 64;
         textureHeight = 32;
-        
+
         Shape1 = new ModelRenderer(this, 0, 0);
         Shape1.addBox(0F, 0F, 0F, 2, 15, 2);
         Shape1.setRotationPoint(-1F, 9F, -1F);
@@ -191,40 +187,38 @@ public class ModelAnemometer extends ModelBase
         setRotation(Shape15, 0F, 0F, 0F);
     }
 
-    public void render(float scale, float topPieceRotation)
-    {
-      //setRotationAngles(entity, f, f1, f2, f3, f4, f5);
-      Shape1.renderWithRotation(scale);
-      GL11.glRotatef(topPieceRotation, 0, 1, 0);
-      Shape22.renderWithRotation(scale);
-      Shape2.renderWithRotation(scale);
-      Shape3.renderWithRotation(scale);
-      Shape44.renderWithRotation(scale);
-      Shape4.renderWithRotation(scale);
-      Shape55.renderWithRotation(scale);
-      Shape5.renderWithRotation(scale);
-      Shape444.renderWithRotation(scale);
-      Shape5555.renderWithRotation(scale);
-      Shape555.renderWithRotation(scale);
-      Shape4444.renderWithRotation(scale);
-      Shape33.renderWithRotation(scale);
-      Shape6.renderWithRotation(scale);
-      Shape7.renderWithRotation(scale);
-      Shape8.renderWithRotation(scale);
-      Shape9.renderWithRotation(scale);
-      Shape10.renderWithRotation(scale);
-      Shape11.renderWithRotation(scale);
-      Shape12.renderWithRotation(scale);
-      Shape13.renderWithRotation(scale);
-      Shape14.renderWithRotation(scale);
-      Shape15.renderWithRotation(scale);
+    public void render(float scale, float topPieceRotation) {
+        //setRotationAngles(entity, f, f1, f2, f3, f4, f5);
+        Shape1.renderWithRotation(scale);
+        GL11.glRotatef(topPieceRotation, 0, 1, 0);
+        Shape22.renderWithRotation(scale);
+        Shape2.renderWithRotation(scale);
+        Shape3.renderWithRotation(scale);
+        Shape44.renderWithRotation(scale);
+        Shape4.renderWithRotation(scale);
+        Shape55.renderWithRotation(scale);
+        Shape5.renderWithRotation(scale);
+        Shape444.renderWithRotation(scale);
+        Shape5555.renderWithRotation(scale);
+        Shape555.renderWithRotation(scale);
+        Shape4444.renderWithRotation(scale);
+        Shape33.renderWithRotation(scale);
+        Shape6.renderWithRotation(scale);
+        Shape7.renderWithRotation(scale);
+        Shape8.renderWithRotation(scale);
+        Shape9.renderWithRotation(scale);
+        Shape10.renderWithRotation(scale);
+        Shape11.renderWithRotation(scale);
+        Shape12.renderWithRotation(scale);
+        Shape13.renderWithRotation(scale);
+        Shape14.renderWithRotation(scale);
+        Shape15.renderWithRotation(scale);
     }
-    
-    private void setRotation(ModelRenderer model, float x, float y, float z)
-    {
-      model.rotateAngleX = x;
-      model.rotateAngleY = y;
-      model.rotateAngleZ = z;
+
+    private void setRotation(ModelRenderer model, float x, float y, float z) {
+        model.rotateAngleX = x;
+        model.rotateAngleY = y;
+        model.rotateAngleZ = z;
     }
 
 }

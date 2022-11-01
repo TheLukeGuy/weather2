@@ -1,11 +1,7 @@
 package weather2.client.tornado;
 
-import CoroUtil.util.Vec3;
 import extendedrenderer.particle.ParticleRegistry;
-import extendedrenderer.particle.entity.EntityRotFX;
 import extendedrenderer.particle.entity.ParticleCustomMatrix;
-import extendedrenderer.particle.entity.ParticleTexExtraRender;
-import extendedrenderer.particle.entity.ParticleTexFX;
 import extendedrenderer.shader.Matrix4fe;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,7 +12,6 @@ import net.minecraft.world.World;
 import org.lwjgl.util.vector.Quaternion;
 import org.lwjgl.util.vector.Vector4f;
 
-import javax.vecmath.Vector3f;
 import java.util.*;
 
 /**
@@ -60,7 +55,6 @@ public class TornadoFunnel {
         funnelPieces = 2;
 
 
-
         tickGameTestCreate();
         tickUpdateFunnel();
     }
@@ -91,7 +85,7 @@ public class TornadoFunnel {
                     //piece.posEnd = new Vec3d(entP.posX, entP.posY + entP.getEyeHeight(), entP.posZ);
 
                 } else {
-                    Vec3d prev = listFunnel.get(i-1).posEnd;
+                    Vec3d prev = listFunnel.get(i - 1).posEnd;
                     piece.posStart = new Vec3d(prev.x, prev.y, prev.z);
                     piece.posEnd = new Vec3d(piece.posStart.x, piece.posStart.y + height, piece.posStart.z);
                 }
@@ -237,7 +231,7 @@ public class TornadoFunnel {
             //piece.posEnd = piece.posEnd.addVector(rate * rand.nextFloat() * piece.vecDirX, 0, rate * rand.nextFloat() * piece.vecDirZ);
 
             int offset = 360 / listFunnel.size();
-            long timeC = (world.getTotalWorldTime() * (ii+1) + (offset * ii)) * 1;
+            long timeC = (world.getTotalWorldTime() * (ii + 1) + (offset * ii)) * 1;
             float range = 35F;
 
             //piece.posEnd = new Vec3d(piece.posStart.x + Math.sin(Math.toRadians(timeC % 360)) * range, piece.posStart.y + 3, piece.posStart.z + Math.cos(Math.toRadians(timeC % 360)) * range);
@@ -248,7 +242,7 @@ public class TornadoFunnel {
 
             double xx = piece.posEnd.x - piece.posStart.x;
             double zz = piece.posEnd.z - piece.posStart.z;
-            double xzDist2 = (double)MathHelper.sqrt(xx * xx + zz * zz);
+            double xzDist2 = (double) MathHelper.sqrt(xx * xx + zz * zz);
 
             if (xzDist2 > distMax) {
                 if (piece.posEnd.x - piece.posStart.x > 0) {
@@ -277,7 +271,7 @@ public class TornadoFunnel {
             }*/
 
             if (ii > 0) {
-                Vec3d prev = listFunnel.get(ii-1).posEnd;
+                Vec3d prev = listFunnel.get(ii - 1).posEnd;
                 piece.posStart = new Vec3d(prev.x, prev.y, prev.z);
             }
 
@@ -329,10 +323,10 @@ public class TornadoFunnel {
                     float angleY = (float)Math.atan2(piece.posEnd.y, piece.posStart.y);
                     float angleZ = (float)Math.atan2(piece.posEnd.z, piece.posStart.z);*/
 
-                    float angleY = -(float)(Math.atan2(vec.z, vec.x) - Math.toRadians(90));
+                    float angleY = -(float) (Math.atan2(vec.z, vec.x) - Math.toRadians(90));
 
                     //all sorts of wrong, ignore this
-                    float angleX = (float)Math.atan2(vec.z, vec.y);
+                    float angleX = (float) Math.atan2(vec.z, vec.y);
                     float angleZ = 0;//(float)Math.atan2(vec.x, vec.y);
 
                     //we need to get the pitch (X) from the 3d vectors
@@ -344,9 +338,9 @@ public class TornadoFunnel {
                     angleX = (float) Math.toRadians(90);
                     angleX = (float) Math.toRadians(time3 % 360);
 
-                    double xzDist = (double)MathHelper.sqrt(vec.x * vec.x + vec.z * vec.z);
+                    double xzDist = (double) MathHelper.sqrt(vec.x * vec.x + vec.z * vec.z);
 
-                    angleX = (float)(-Math.atan2(vec.y, xzDist) + Math.toRadians(90));
+                    angleX = (float) (-Math.atan2(vec.y, xzDist) + Math.toRadians(90));
 
                     //double dp = piece.posStart.dotProduct(piece.posEnd);
                     //dp = (new Vec3d(0, 0, 0)).dotProduct(vec);
@@ -415,10 +409,9 @@ public class TornadoFunnel {
                     //TODO: need angle for center of cylinder, not using funnel vec
                     //HOW TO ANGLE CORRECTLY FOR ALL THINGS AND ORDERS?!?!?!
 
-                    angleY = (float)(Math.atan2(vec.z, vec.x)/* - Math.toRadians(90)*/);
+                    angleY = (float) (Math.atan2(vec.z, vec.x)/* - Math.toRadians(90)*/);
 
                     //angleX = (float) Math.toRadians(45F);
-
 
 
                     //matrixSelf.rotateX(angleX);
@@ -456,10 +449,9 @@ public class TornadoFunnel {
                     Quaternion.mul(qY, qZ, part.rotation);
 
                     //rotate on y axis again, ok
-                    angleZ = (float)Math.toRadians(90F + spinAngle);
+                    angleZ = (float) Math.toRadians(90F + spinAngle);
                     qX.setFromAxisAngle(new Vector4f(0, 1, 0, angleZ));
                     Quaternion.mul(part.rotation, qX, part.rotation);
-
 
 
                     //part.rotation = new Quaternion();
@@ -473,9 +465,9 @@ public class TornadoFunnel {
 
                     float stages = 100;
 
-                    r = ((time + i*1) % stages) * (1F / stages);
-                    g = ((time2 + i*1) % stages) * (1F / stages);
-                    b = ((time3 + i*1) % stages) * (1F / stages);
+                    r = ((time + i * 1) % stages) * (1F / stages);
+                    g = ((time2 + i * 1) % stages) * (1F / stages);
+                    b = ((time3 + i * 1) % stages) * (1F / stages);
 
                     part.setRBGColorF(0F, 0F, 0F);
                     part.setRBGColorF(r, g, b);
@@ -494,38 +486,45 @@ public class TornadoFunnel {
         listFunnel.addLast(piece);
     }
 
-    public static Vec3d rotateVectorCC(Vec3d vec, Vec3d axis, double theta){
+    public static Vec3d rotateVectorCC(Vec3d vec, Vec3d axis, double theta) {
         double x, y, z;
         double u, v, w;
-        x=vec.x;y=vec.y;z=vec.z;
-        u=axis.x;v=axis.y;w=axis.z;
-        double xPrime = u*(u*x + v*y + w*z)*(1d - Math.cos(theta))
-                + x*Math.cos(theta)
-                + (-w*y + v*z)*Math.sin(theta);
-        double yPrime = v*(u*x + v*y + w*z)*(1d - Math.cos(theta))
-                + y*Math.cos(theta)
-                + (w*x - u*z)*Math.sin(theta);
-        double zPrime = w*(u*x + v*y + w*z)*(1d - Math.cos(theta))
-                + z*Math.cos(theta)
-                + (-v*x + u*y)*Math.sin(theta);
+        x = vec.x;
+        y = vec.y;
+        z = vec.z;
+        u = axis.x;
+        v = axis.y;
+        w = axis.z;
+        double xPrime = u * (u * x + v * y + w * z) * (1d - Math.cos(theta))
+                + x * Math.cos(theta)
+                + (-w * y + v * z) * Math.sin(theta);
+        double yPrime = v * (u * x + v * y + w * z) * (1d - Math.cos(theta))
+                + y * Math.cos(theta)
+                + (w * x - u * z) * Math.sin(theta);
+        double zPrime = w * (u * x + v * y + w * z) * (1d - Math.cos(theta))
+                + z * Math.cos(theta)
+                + (-v * x + u * y) * Math.sin(theta);
         return new Vec3d(xPrime, yPrime, zPrime);
     }
 
-    /** Sets the quaternion to the given euler angles in radians.
-     * @param yaw the rotation around the y axis in radians
+    /**
+     * Sets the quaternion to the given euler angles in radians.
+     *
+     * @param yaw   the rotation around the y axis in radians
      * @param pitch the rotation around the x axis in radians
-     * @param roll the rotation around the z axis in radians
-     * @return this quaternion */
-    public Quaternion setEulerAnglesRad (float yaw, float pitch, float roll) {
+     * @param roll  the rotation around the z axis in radians
+     * @return this quaternion
+     */
+    public Quaternion setEulerAnglesRad(float yaw, float pitch, float roll) {
         final float hr = roll * 0.5f;
-        final float shr = (float)Math.sin(hr);
-        final float chr = (float)Math.cos(hr);
+        final float shr = (float) Math.sin(hr);
+        final float chr = (float) Math.cos(hr);
         final float hp = pitch * 0.5f;
-        final float shp = (float)Math.sin(hp);
-        final float chp = (float)Math.cos(hp);
+        final float shp = (float) Math.sin(hp);
+        final float chp = (float) Math.cos(hp);
         final float hy = yaw * 0.5f;
-        final float shy = (float)Math.sin(hy);
-        final float chy = (float)Math.cos(hy);
+        final float shy = (float) Math.sin(hy);
+        final float chy = (float) Math.cos(hy);
         final float chy_shp = chy * shp;
         final float shy_chp = shy * chp;
         final float chy_chp = chy * chp;

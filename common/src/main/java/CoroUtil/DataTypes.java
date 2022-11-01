@@ -1,5 +1,5 @@
 package CoroUtil;
 
 public enum DataTypes {
-	noMoveTicks, noSeeTicks, followTarg, shouldDespawn;
+    noMoveTicks, noSeeTicks, followTarg, shouldDespawn;
 }

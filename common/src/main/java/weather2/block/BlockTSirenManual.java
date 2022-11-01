@@ -9,8 +9,7 @@ import net.minecraft.world.World;
 
 public class BlockTSirenManual extends BlockTSiren {
 
-    public BlockTSirenManual()
-    {
+    public BlockTSirenManual() {
         super();
     }
 
@@ -20,19 +19,16 @@ public class BlockTSirenManual extends BlockTSiren {
     }
 
     @Override
-    public void updateState(World worldIn, BlockPos pos, IBlockState state)
-    {
+    public void updateState(World worldIn, BlockPos pos, IBlockState state) {
         boolean flag = worldIn.isBlockPowered(pos);
 
-        if (flag != ((Boolean)state.getValue(ENABLED)).booleanValue())
-        {
+        if (flag != ((Boolean) state.getValue(ENABLED)).booleanValue()) {
             worldIn.setBlockState(pos, state.withProperty(ENABLED, Boolean.valueOf(flag)), 3);
         }
     }
 
     @Override
-    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
-    {
+    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         return this.getDefaultState().withProperty(ENABLED, Boolean.valueOf(false));
     }
 }

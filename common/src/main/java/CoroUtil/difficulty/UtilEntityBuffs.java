@@ -1,7 +1,7 @@
 package CoroUtil.difficulty;
 
 import CoroUtil.ai.ITaskInitializer;
-import CoroUtil.difficulty.buffs.*;
+import CoroUtil.difficulty.buffs.BuffBase;
 import CoroUtil.difficulty.data.DataCmod;
 import CoroUtil.difficulty.data.DeserializerAllJson;
 import CoroUtil.difficulty.data.cmods.CmodInventory;
@@ -207,7 +207,6 @@ public class UtilEntityBuffs {
     }
 
     /**
-     *
      * @param buffName
      * @param ent
      * @param difficulty
@@ -335,7 +334,9 @@ public class UtilEntityBuffs {
         return foundTask;
     }
 
-    /** example sexier version of hasTask **/
+    /**
+     * example sexier version of hasTask
+     **/
     public static boolean hasAi(EntityLiving entity, Class<? extends EntityAIBase> clazz) {
         return entity.tasks.taskEntries.stream().anyMatch(task -> clazz.isAssignableFrom(task.action.getClass()));
     }
@@ -365,15 +366,13 @@ public class UtilEntityBuffs {
     }
 
     public static void processLootTableOnEntity(EntityCreature ent, LootTable loottable, LivingDeathEvent event) {
-        LootContext.Builder lootcontext$builder = (new LootContext.Builder((WorldServer)ent.world)).withLootedEntity(ent).withDamageSource(event.getSource());
+        LootContext.Builder lootcontext$builder = (new LootContext.Builder((WorldServer) ent.world)).withLootedEntity(ent).withDamageSource(event.getSource());
 
-        if (ent.recentlyHit > 0 && ent.attackingPlayer != null)
-        {
+        if (ent.recentlyHit > 0 && ent.attackingPlayer != null) {
             lootcontext$builder = lootcontext$builder.withPlayer(ent.attackingPlayer).withLuck(ent.attackingPlayer.getLuck());
         }
 
-        for (ItemStack itemstack : loottable.generateLootForPools(ent.world.rand, lootcontext$builder.build()))
-        {
+        for (ItemStack itemstack : loottable.generateLootForPools(ent.world.rand, lootcontext$builder.build())) {
             ent.entityDropItem(itemstack, 0.0F);
         }
     }
@@ -461,7 +460,7 @@ public class UtilEntityBuffs {
     public static void onDeath(LivingDeathEvent event) {
 
         if (event.getEntityLiving() instanceof EntityCreature) {
-            EntityCreature ent = (EntityCreature)event.getEntityLiving();
+            EntityCreature ent = (EntityCreature) event.getEntityLiving();
             if (/*ent.canDropLoot() && */ent.world.getGameRules().getBoolean("doMobLoot")) {
 
                 if (ent.getEntityData().getBoolean(UtilEntityBuffs.dataEntityBuffed)) {

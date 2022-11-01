@@ -3,6 +3,6 @@ package CoroUtil.ability;
 
 public interface IAbilityUsageCallback {
 
-	public void abilityFinished(Ability parAbility);
-	
+    public void abilityFinished(Ability parAbility);
+
 }

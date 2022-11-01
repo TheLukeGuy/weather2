@@ -1,11 +1,9 @@
 package CoroUtil.packet;
 
 import CoroUtil.config.ConfigBlockDestruction;
+import CoroUtil.forge.CoroUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-
-import java.io.IOException;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
@@ -18,22 +16,23 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import CoroUtil.forge.CoroUtil;
+
+import java.io.IOException;
 
 public class PacketHelper {
-	
-	//1.7 plan, for the existing packets, we add the old 'channel' as a command string, so we can use 1 event channel, then just convert existing code to buffer way
-	
-	//in handler, WE MUST MODIFY TO READ THE STRING FOR COMMAND!
-	
-	//dont forget to test tile datawatchers
-	
-	//modify to be fully nbt! less headache!
 
-	@SideOnly(Side.CLIENT)
-	public static void sendClientPacket(Packet packet) {
-		FMLClientHandler.instance().getClient().player.connection.sendPacket(packet);
-	}
+    //1.7 plan, for the existing packets, we add the old 'channel' as a command string, so we can use 1 event channel, then just convert existing code to buffer way
+
+    //in handler, WE MUST MODIFY TO READ THE STRING FOR COMMAND!
+
+    //dont forget to test tile datawatchers
+
+    //modify to be fully nbt! less headache!
+
+    @SideOnly(Side.CLIENT)
+    public static void sendClientPacket(Packet packet) {
+        FMLClientHandler.instance().getClient().player.connection.sendPacket(packet);
+    }
 	
 	/*public static void writeNBTTagCompound(NBTTagCompound par0NBTTagCompound, DataOutputStream par1DataOutputStream) throws IOException
     {
@@ -49,49 +48,49 @@ public class PacketHelper {
         }
     }*/
 
-	public static void writeTEntToPacket(TileEntity tEnt, NBTTagCompound nbt) {
-		try {
-			nbt.setInteger("dimID", tEnt.getWorld().provider.getDimension());
-			nbt.setInteger("x", tEnt.getPos().getX());
-			nbt.setInteger("y", tEnt.getPos().getY());
-			nbt.setInteger("z", tEnt.getPos().getZ());
+    public static void writeTEntToPacket(TileEntity tEnt, NBTTagCompound nbt) {
+        try {
+            nbt.setInteger("dimID", tEnt.getWorld().provider.getDimension());
+            nbt.setInteger("x", tEnt.getPos().getX());
+            nbt.setInteger("y", tEnt.getPos().getY());
+            nbt.setInteger("z", tEnt.getPos().getZ());
 			/*buff.writeInt(tEnt.getWorldObj().provider.dimensionId);
 			buff.writeInt(tEnt.xCoord);
 	    	buff.writeInt(tEnt.yCoord);
 	    	buff.writeInt(tEnt.zCoord);*/
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public static FMLProxyPacket createPacketForNBTHandler(String parChannel, String packetChannel, NBTTagCompound parNBT) {
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static FMLProxyPacket createPacketForNBTHandler(String parChannel, String packetChannel, NBTTagCompound parNBT) {
 		/*ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		DataOutputStream dos = new DataOutputStream(bos);*/
-		
-		ByteBuf byteBuf = Unpooled.buffer();
-		
-		try {
-			ByteBufUtils.writeUTF8String(byteBuf, parChannel);
-			//writeNBTTagCompound(parNBT, dos);
-			ByteBufUtils.writeTag(byteBuf, parNBT);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+
+        ByteBuf byteBuf = Unpooled.buffer();
+
+        try {
+            ByteBufUtils.writeUTF8String(byteBuf, parChannel);
+            //writeNBTTagCompound(parNBT, dos);
+            ByteBufUtils.writeTag(byteBuf, parNBT);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 		
 		/*Packet250CustomPayload pkt = new Packet250CustomPayload();
 		pkt.channel = parChannel;
 		pkt.data = bos.toByteArray();
 		pkt.length = bos.size();
 		pkt.isChunkDataPacket = false;*/
-		return new FMLProxyPacket(new PacketBuffer(byteBuf), packetChannel/*CoroAI.eventChannelName*/);
-	}
-	
-	public static FMLProxyPacket createPacketForTEntDWClient(TileEntity tEnt, String name, Object val) {
+        return new FMLProxyPacket(new PacketBuffer(byteBuf), packetChannel/*CoroAI.eventChannelName*/);
+    }
+
+    public static FMLProxyPacket createPacketForTEntDWClient(TileEntity tEnt, String name, Object val) {
 		/*ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		DataOutputStream dos = new DataOutputStream(bos);*/
-		
-		CoroUtil.dbg("createPacketForTEntDWClient incomplete");
-		ByteBuf byteBuf = Unpooled.buffer();
+
+        CoroUtil.dbg("createPacketForTEntDWClient incomplete");
+        ByteBuf byteBuf = Unpooled.buffer();
 		
 		/*TileHandler tileHandler = ((ITilePacket)tEnt).getTileHandler();
 		
@@ -113,15 +112,15 @@ public class PacketHelper {
 		pkt.data = bos.toByteArray();
 		pkt.length = bos.size();
 		pkt.isChunkDataPacket = false;*/
-		return new FMLProxyPacket(new PacketBuffer(byteBuf), CoroUtil.eventChannelName);
-	}
-	
-	public static FMLProxyPacket createPacketForTEntDWServer(TileEntity tEnt) {
+        return new FMLProxyPacket(new PacketBuffer(byteBuf), CoroUtil.eventChannelName);
+    }
+
+    public static FMLProxyPacket createPacketForTEntDWServer(TileEntity tEnt) {
 		/*ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		DataOutputStream dos = new DataOutputStream(bos);*/
-		
-		CoroUtil.dbg("createPacketForTEntDWServer incomplete");
-		ByteBuf byteBuf = Unpooled.buffer();
+
+        CoroUtil.dbg("createPacketForTEntDWServer incomplete");
+        ByteBuf byteBuf = Unpooled.buffer();
 		
 		/*TileDataWatcher tileDataWatcher = ((ITilePacket)tEnt).getTileHandler().tileDataWatcher;
 		
@@ -138,35 +137,32 @@ public class PacketHelper {
 		pkt.data = bos.toByteArray();
 		pkt.length = bos.size();
 		pkt.isChunkDataPacket = false;*/
-		return new FMLProxyPacket(new PacketBuffer(byteBuf), CoroUtil.eventChannelName);
-	}
-	
-	public static FMLProxyPacket createPacketForTEntCommand(TileEntity tEnt, NBTTagCompound data) {
+        return new FMLProxyPacket(new PacketBuffer(byteBuf), CoroUtil.eventChannelName);
+    }
+
+    public static FMLProxyPacket createPacketForTEntCommand(TileEntity tEnt, NBTTagCompound data) {
 		/*ByteArrayOutputStream bos = new ByteArrayOutputStream(); //was ...(140);
         DataOutputStream dos = new DataOutputStream(bos);*/
 
         ByteBuf byteBuf = Unpooled.buffer();
         NBTTagCompound nbtSendData = new NBTTagCompound();
-        
-        try
-        {
-        	nbtSendData.setString("command", "CoroAI_TEntCmd");
-        	nbtSendData.setInteger("dimID", tEnt.getWorld().provider.getDimension());
-        	nbtSendData.setInteger("x", tEnt.getPos().getX());
-        	nbtSendData.setInteger("y", tEnt.getPos().getY());
-        	nbtSendData.setInteger("z", tEnt.getPos().getZ());
-        	nbtSendData.setTag("data", data);
-        	//ByteBufUtils.writeUTF8String(byteBuf, "CoroAI_TEntCmd");
+
+        try {
+            nbtSendData.setString("command", "CoroAI_TEntCmd");
+            nbtSendData.setInteger("dimID", tEnt.getWorld().provider.getDimension());
+            nbtSendData.setInteger("x", tEnt.getPos().getX());
+            nbtSendData.setInteger("y", tEnt.getPos().getY());
+            nbtSendData.setInteger("z", tEnt.getPos().getZ());
+            nbtSendData.setTag("data", data);
+            //ByteBufUtils.writeUTF8String(byteBuf, "CoroAI_TEntCmd");
         	/*byteBuf.writeInt(tEnt.getWorldObj().provider.dimensionId);
         	byteBuf.writeInt(tEnt.xCoord);
         	byteBuf.writeInt(tEnt.yCoord);
         	byteBuf.writeInt(tEnt.zCoord);*/
-        	ByteBufUtils.writeTag(byteBuf, nbtSendData);
-        	//writeNBTTagCompound(data, dos);
-            
-        }
-        catch (Exception ex)
-        {
+            ByteBufUtils.writeTag(byteBuf, nbtSendData);
+            //writeNBTTagCompound(data, dos);
+
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
 
@@ -174,13 +170,12 @@ public class PacketHelper {
         pkt.channel = "CoroAI_TEntCmd";
         pkt.data = bos.toByteArray();
         pkt.length = bos.size();*/
-        
+
         return new FMLProxyPacket(new PacketBuffer(byteBuf), CoroUtil.eventChannelName);
-	}
-	
-	public static NBTTagCompound readNBTTagCompound(ByteBuf fullBuffer) throws IOException
-    {
-		return ByteBufUtils.readTag(fullBuffer);
+    }
+
+    public static NBTTagCompound readNBTTagCompound(ByteBuf fullBuffer) throws IOException {
+        return ByteBufUtils.readTag(fullBuffer);
         /*short short1 = fullBuffer.readShort();//par0DataInput.readShort();
 
         if (short1 < 0)
@@ -195,49 +190,49 @@ public class PacketHelper {
             //return CompressedStreamTools.decompress(abyte);
         }*/
     }
-	
-	public static FMLProxyPacket getNBTPacket(NBTTagCompound parNBT, String parChannel) {
+
+    public static FMLProxyPacket getNBTPacket(NBTTagCompound parNBT, String parChannel) {
         ByteBuf byteBuf = Unpooled.buffer();
-        
+
         try {
-        	//byteBuf.writeBytes(CompressedStreamTools.compress(parNBT));
-        	ByteBufUtils.writeTag(byteBuf, parNBT);
+            //byteBuf.writeBytes(CompressedStreamTools.compress(parNBT));
+            ByteBufUtils.writeTag(byteBuf, parNBT);
         } catch (Exception ex) {
-        	ex.printStackTrace();
+            ex.printStackTrace();
         }
 
         return new FMLProxyPacket(new PacketBuffer(byteBuf), parChannel);
     }
-	
-	public static FMLProxyPacket getPacketForRelativeMotion(Entity ent, double motionX, double motionY, double motionZ) {
-		NBTTagCompound data = new NBTTagCompound();
-		data.setString("command", "Ent_Motion");
-		data.setInteger("entityID", ent.getEntityId());
-		data.setDouble("motionX", motionX);
-		data.setDouble("motionY", motionY);
-		data.setDouble("motionZ", motionZ);
-		return getNBTPacket(data, CoroUtil.eventChannelName);
-	}
 
-	public static FMLProxyPacket getPacketForUpdateBlockList() {
-		NBTTagCompound data = new NBTTagCompound();
-		data.setString("command", "UpdateBlockList");
-		data.setString("blacklistRepairable_RegularBlocks", ConfigBlockDestruction.blacklistRepairable_RegularBlocks);
-		data.setString("whitelistMineable_TileEntities", ConfigBlockDestruction.whitelistMineable_TileEntities);
-		return getNBTPacket(data, CoroUtil.eventChannelName);
-	}
+    public static FMLProxyPacket getPacketForRelativeMotion(Entity ent, double motionX, double motionY, double motionZ) {
+        NBTTagCompound data = new NBTTagCompound();
+        data.setString("command", "Ent_Motion");
+        data.setInteger("entityID", ent.getEntityId());
+        data.setDouble("motionX", motionX);
+        data.setDouble("motionY", motionY);
+        data.setDouble("motionZ", motionZ);
+        return getNBTPacket(data, CoroUtil.eventChannelName);
+    }
 
-	public static FMLProxyPacket getPacketForDebugRender(BlockPos pos, int time, int color, int type) {
-		NBTTagCompound data = new NBTTagCompound();
-		data.setString("command", "DebugRender");
-		data.setDouble("posX", pos.getX());
-		data.setDouble("posY", pos.getY());
-		data.setDouble("posZ", pos.getZ());
-		data.setInteger("color", color);
-		data.setInteger("type", type);
-		data.setInteger("time", time);
-		return getNBTPacket(data, CoroUtil.eventChannelName);
-	}
+    public static FMLProxyPacket getPacketForUpdateBlockList() {
+        NBTTagCompound data = new NBTTagCompound();
+        data.setString("command", "UpdateBlockList");
+        data.setString("blacklistRepairable_RegularBlocks", ConfigBlockDestruction.blacklistRepairable_RegularBlocks);
+        data.setString("whitelistMineable_TileEntities", ConfigBlockDestruction.whitelistMineable_TileEntities);
+        return getNBTPacket(data, CoroUtil.eventChannelName);
+    }
+
+    public static FMLProxyPacket getPacketForDebugRender(BlockPos pos, int time, int color, int type) {
+        NBTTagCompound data = new NBTTagCompound();
+        data.setString("command", "DebugRender");
+        data.setDouble("posX", pos.getX());
+        data.setDouble("posY", pos.getY());
+        data.setDouble("posZ", pos.getZ());
+        data.setInteger("color", color);
+        data.setInteger("type", type);
+        data.setInteger("time", time);
+        return getNBTPacket(data, CoroUtil.eventChannelName);
+    }
 
     public static FMLProxyPacket getPacketForDebugRenderClear() {
         NBTTagCompound data = new NBTTagCompound();
@@ -245,23 +240,23 @@ public class PacketHelper {
         return getNBTPacket(data, CoroUtil.eventChannelName);
     }
 
-	public static void spawnDebugRender(int dimID, BlockPos pos, int time, int color, int type) {
-		CoroUtil.eventChannel.sendToDimension(PacketHelper.getPacketForDebugRender(pos, time, color, type), dimID);
-	}
+    public static void spawnDebugRender(int dimID, BlockPos pos, int time, int color, int type) {
+        CoroUtil.eventChannel.sendToDimension(PacketHelper.getPacketForDebugRender(pos, time, color, type), dimID);
+    }
 
     public static void clearDebugRender(int dimID) {
         CoroUtil.eventChannel.sendToDimension(PacketHelper.getPacketForDebugRenderClear(), dimID);
     }
 
-	public static void syncBlockLists() {
-		if (getServerPlayerCount() <= 0) return;
-		CoroUtil.eventChannel.sendToAll(PacketHelper.getPacketForUpdateBlockList());
-	}
+    public static void syncBlockLists() {
+        if (getServerPlayerCount() <= 0) return;
+        CoroUtil.eventChannel.sendToAll(PacketHelper.getPacketForUpdateBlockList());
+    }
 
-	public static int getServerPlayerCount() {
-		if (FMLCommonHandler.instance().getMinecraftServerInstance() == null) return 0;
-		if (FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList() == null) return 0;
-		return FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getCurrentPlayerCount();
-	}
-	
+    public static int getServerPlayerCount() {
+        if (FMLCommonHandler.instance().getMinecraftServerInstance() == null) return 0;
+        if (FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList() == null) return 0;
+        return FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getCurrentPlayerCount();
+    }
+
 }

@@ -18,8 +18,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class TileEntityRepairingBlock extends TileEntity
-{
+public class TileEntityRepairingBlock extends TileEntity {
 
     private IBlockState orig_blockState;
     private float orig_hardness = 1;
@@ -29,9 +28,8 @@ public class TileEntityRepairingBlock extends TileEntity
     private int ticksRepairMax = 20*60*5;*/
     private long timeToRepairAt = 0;
 
-    public void updateScheduledTick()
-    {
-    	if (!world.isRemote) {
+    public void updateScheduledTick() {
+        if (!world.isRemote) {
 
             //if for some reason data is invalid, remove block
             if (orig_blockState == null || orig_blockState == this.getBlockType().getDefaultState()) {
@@ -55,14 +53,13 @@ public class TileEntityRepairingBlock extends TileEntity
                     aabb = Block.FULL_BLOCK_AABB;
                     aabb = aabb.offset(this.getPos());
                     List<EntityLivingBase> listTest = this.getWorld().getEntitiesWithinAABB(EntityLivingBase.class, aabb);
-                    if (listTest.size() == 0)
-                    {
+                    if (listTest.size() == 0) {
                         //System.out.println("restoring: " + orig_blockState);
                         restoreBlock();
                     }
                 }
             }
-    	}
+        }
     }
 
     @Override
@@ -120,8 +117,7 @@ public class TileEntityRepairingBlock extends TileEntity
     }*/
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound var1)
-    {
+    public NBTTagCompound writeToNBT(NBTTagCompound var1) {
         if (orig_blockState != null) {
             String str = Block.REGISTRY.getNameForObject(this.orig_blockState.getBlock()).toString();
             var1.setString("orig_blockName", str);
@@ -136,8 +132,7 @@ public class TileEntityRepairingBlock extends TileEntity
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound var1)
-    {
+    public void readFromNBT(NBTTagCompound var1) {
         super.readFromNBT(var1);
         timeToRepairAt = var1.getLong("timeToRepairAt");
         try {
@@ -167,7 +162,6 @@ public class TileEntityRepairingBlock extends TileEntity
     }
 
     /**
-     *
      * Some mod blocks might require getting data only while their block is still around, so we get it here and save it rather than on the fly later
      *
      * @param world

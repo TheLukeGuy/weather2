@@ -8,31 +8,34 @@ import CoroUtil.util.CoroUtilEntity;
 import CoroUtil.util.CoroUtilPath;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityLookHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.Path;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
 /**
  * For making use of long distance partial pathing
  * TODO: test it more to make sure it doesnt double up pathfinding work too much
  */
-public class EntityAIChaseFromFar extends EntityAIBase implements ITaskInitializer, IInvasionControlledTask
-{
+public class EntityAIChaseFromFar extends EntityAIBase implements ITaskInitializer, IInvasionControlledTask {
     World world;
     protected EntityCreature attacker;
-    /** An amount of decrementing ticks that allows the entity to attack once the tick reaches 0. */
+    /**
+     * An amount of decrementing ticks that allows the entity to attack once the tick reaches 0.
+     */
     protected int attackTick;
-    /** The speed with which the mob will approach the target */
+    /**
+     * The speed with which the mob will approach the target
+     */
     double speedTowardsTarget;
-    /** When true, the mob will continue chasing its target, even if it can't find a path to them right now. */
+    /**
+     * When true, the mob will continue chasing its target, even if it can't find a path to them right now.
+     */
     boolean longMemory;
-    /** The PathEntity of our entity. */
+    /**
+     * The PathEntity of our entity.
+     */
     Path entityPathEntity;
     private int delayCounter;
     private double targetX;
@@ -54,22 +57,15 @@ public class EntityAIChaseFromFar extends EntityAIBase implements ITaskInitializ
      * Returns whether the EntityAIBase should begin execution.
      */
     @Override
-    public boolean shouldExecute()
-    {
+    public boolean shouldExecute() {
 
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
 
-        if (entitylivingbase == null)
-        {
+        if (entitylivingbase == null) {
             return false;
-        }
-        else if (!entitylivingbase.isEntityAlive())
-        {
+        } else if (!entitylivingbase.isEntityAlive()) {
             return false;
-        }
-        else
-        {
-
+        } else {
 
 
             //this.entityPathEntity = this.attacker.getNavigator().getPathToEntityLiving(entitylivingbase);
@@ -85,12 +81,9 @@ public class EntityAIChaseFromFar extends EntityAIBase implements ITaskInitializ
 
                 this.entityPathEntity = attacker.getNavigator().getPath();
 
-                if (this.entityPathEntity != null)
-                {
+                if (this.entityPathEntity != null) {
                     return true;
-                }
-                else
-                {
+                } else {
                     return this.getAttackReachSqr(entitylivingbase) >= this.attacker.getDistanceSq(entitylivingbase.posX, entitylivingbase.getEntityBoundingBox().minY, entitylivingbase.posZ);
                 }
             } else {
@@ -103,29 +96,19 @@ public class EntityAIChaseFromFar extends EntityAIBase implements ITaskInitializ
      * Returns whether an in-progress EntityAIBase should continue executing
      */
     @Override
-    public boolean shouldContinueExecuting()
-    {
+    public boolean shouldContinueExecuting() {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
 
-        if (entitylivingbase == null)
-        {
+        if (entitylivingbase == null) {
             return false;
-        }
-        else if (!entitylivingbase.isEntityAlive())
-        {
+        } else if (!entitylivingbase.isEntityAlive()) {
             return false;
-        }
-        else if (!this.longMemory)
-        {
+        } else if (!this.longMemory) {
             return !this.attacker.getNavigator().noPath();
-        }
-        else if (!this.attacker.isWithinHomeDistanceFromPosition(new BlockPos(entitylivingbase)))
-        {
+        } else if (!this.attacker.isWithinHomeDistanceFromPosition(new BlockPos(entitylivingbase))) {
             return false;
-        }
-        else
-        {
-            return !(entitylivingbase instanceof EntityPlayer) || !((EntityPlayer)entitylivingbase).isSpectator() && !((EntityPlayer)entitylivingbase).isCreative();
+        } else {
+            return !(entitylivingbase instanceof EntityPlayer) || !((EntityPlayer) entitylivingbase).isSpectator() && !((EntityPlayer) entitylivingbase).isCreative();
         }
     }
 
@@ -133,8 +116,7 @@ public class EntityAIChaseFromFar extends EntityAIBase implements ITaskInitializ
      * Execute a one shot task or start executing a continuous task
      */
     @Override
-    public void startExecuting()
-    {
+    public void startExecuting() {
         this.attacker.getNavigator().setPath(this.entityPathEntity, this.speedTowardsTarget);
         this.delayCounter = 0;
     }
@@ -143,18 +125,16 @@ public class EntityAIChaseFromFar extends EntityAIBase implements ITaskInitializ
      * Reset the task's internal state. Called when this task is interrupted by another one
      */
     @Override
-    public void resetTask()
-    {
+    public void resetTask() {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
 
-        if (entitylivingbase instanceof EntityPlayer && (((EntityPlayer)entitylivingbase).isSpectator() || ((EntityPlayer)entitylivingbase).isCreative()))
-        {
+        if (entitylivingbase instanceof EntityPlayer && (((EntityPlayer) entitylivingbase).isSpectator() || ((EntityPlayer) entitylivingbase).isCreative())) {
             /** DO NOT SET NULL TARGET UNLESS ITS A TARGET TASK, will crash vanilla with this otherwise:
-            Caused by: java.lang.NullPointerException
-            at net.minecraft.entity.ai.EntityLookHelper.setLookPositionWithEntity(EntityLookHelper.java:31) ~[EntityLookHelper.class:?]
-            at net.minecraft.entity.ai.EntityAIAttackMelee.updateTask(EntityAIAttackMelee.java:142) ~[EntityAIAttackMelee.class:?]
-            vanilla can get away with this because its own only task this one was based on is the only one that does it in the task list, 2 doing it = crash
-            */
+             Caused by: java.lang.NullPointerException
+             at net.minecraft.entity.ai.EntityLookHelper.setLookPositionWithEntity(EntityLookHelper.java:31) ~[EntityLookHelper.class:?]
+             at net.minecraft.entity.ai.EntityAIAttackMelee.updateTask(EntityAIAttackMelee.java:142) ~[EntityAIAttackMelee.class:?]
+             vanilla can get away with this because its own only task this one was based on is the only one that does it in the task list, 2 doing it = crash
+             */
 
             //this.attacker.setAttackTarget((EntityLivingBase)null);
         }
@@ -166,8 +146,7 @@ public class EntityAIChaseFromFar extends EntityAIBase implements ITaskInitializ
      * Keep ticking a continuous task that has already been started
      */
     @Override
-    public void updateTask()
-    {
+    public void updateTask() {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
         //fix edge case where other code was causing this situation
         if (entitylivingbase == null) {
@@ -182,8 +161,7 @@ public class EntityAIChaseFromFar extends EntityAIBase implements ITaskInitializ
                 this.delayCounter <= 0 && this.attacker.getEntitySenses().canSee(entitylivingbase)) &&
                 (this.targetX == 0.0D && this.targetY == 0.0D && this.targetZ == 0.0D ||
                         entitylivingbase.getDistanceSq(this.targetX, this.targetY, this.targetZ) >= 1.0D ||
-                        this.attacker.getRNG().nextFloat() < 0.05F))
-        {
+                        this.attacker.getRNG().nextFloat() < 0.05F)) {
             this.targetX = entitylivingbase.posX;
             this.targetY = entitylivingbase.getEntityBoundingBox().minY;
             this.targetZ = entitylivingbase.posZ;
@@ -201,8 +179,7 @@ public class EntityAIChaseFromFar extends EntityAIBase implements ITaskInitializ
 
             if (CoroUtilEntity.canPathfindLongDist(attacker)) {
                 CoroUtilEntity.updateLastTimeLongDistPathfinded(attacker);
-                if (!CoroUtilPath.tryMoveToEntityLivingLongDist(attacker, entitylivingbase, 1))
-                {
+                if (!CoroUtilPath.tryMoveToEntityLivingLongDist(attacker, entitylivingbase, 1)) {
                     this.delayCounter += 15;
                 }
             }
@@ -218,9 +195,8 @@ public class EntityAIChaseFromFar extends EntityAIBase implements ITaskInitializ
         //this.checkAndPerformAttack(entitylivingbase, d0);
     }
 
-    protected double getAttackReachSqr(EntityLivingBase attackTarget)
-    {
-        return (double)(this.attacker.width * 2.0F * this.attacker.width * 2.0F + attackTarget.width);
+    protected double getAttackReachSqr(EntityLivingBase attackTarget) {
+        return (double) (this.attacker.width * 2.0F * this.attacker.width * 2.0F + attackTarget.width);
     }
 
     @Override

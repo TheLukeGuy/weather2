@@ -1,6 +1,5 @@
 package CoroUtil.client.debug;
 
-import CoroUtil.forge.CULog;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -10,7 +9,6 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.pathfinding.PathPoint;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -109,12 +107,9 @@ public class DebugRenderer {
         GlStateManager.disableTexture2D();
         //GlStateManager.disableDepth();
 
-        if (Minecraft.isAmbientOcclusionEnabled())
-        {
+        if (Minecraft.isAmbientOcclusionEnabled()) {
             GlStateManager.shadeModel(org.lwjgl.opengl.GL11.GL_SMOOTH);
-        }
-        else
-        {
+        } else {
             GlStateManager.shadeModel(org.lwjgl.opengl.GL11.GL_FLAT);
         }
 
@@ -144,8 +139,7 @@ public class DebugRenderer {
     public static void debugPathfinding(EntityCreature ent) {
         if (!ent.world.isRemote) {
             if (!ent.getNavigator().noPath()) {
-                for (int k = 0; k < ent.getNavigator().getPath().getCurrentPathLength(); ++k)
-                {
+                for (int k = 0; k < ent.getNavigator().getPath().getCurrentPathLength(); ++k) {
                     PathPoint pathpoint2 = ent.getNavigator().getPath().getPathPointFromIndex(k);
 
                     CoroUtil.client.debug.DebugRenderer.addRenderable(new DebugRenderEntry(new BlockPos(pathpoint2.x, pathpoint2.y, pathpoint2.z), ent.world.getTotalWorldTime() + 100, 0x00FF00));

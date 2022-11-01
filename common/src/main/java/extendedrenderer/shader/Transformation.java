@@ -2,7 +2,6 @@ package extendedrenderer.shader;
 
 
 import CoroUtil.util.CoroUtilMath;
-import extendedrenderer.particle.entity.EntityRotFX;
 import org.lwjgl.util.vector.Quaternion;
 
 import javax.vecmath.Vector3f;
@@ -12,7 +11,7 @@ public class Transformation {
     private Matrix4fe modelViewMatrix;
 
     public Matrix4fe modelMatrix;
-    
+
     public Transformation() {
         modelViewMatrix = new Matrix4fe();
         modelMatrix = new Matrix4fe();

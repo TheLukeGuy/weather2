@@ -1,36 +1,36 @@
 package CoroUtil.util;
 
-import java.util.Iterator;
-
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 
+import java.util.Iterator;
+
 public class CoroUtilNBT {
 
-	public static NBTTagCompound copyOntoNBT(NBTTagCompound nbtSource, NBTTagCompound nbtDest) {
-		NBTTagCompound newNBT = (NBTTagCompound) nbtDest.copy();
+    public static NBTTagCompound copyOntoNBT(NBTTagCompound nbtSource, NBTTagCompound nbtDest) {
+        NBTTagCompound newNBT = (NBTTagCompound) nbtDest.copy();
 
-		String tagName = "";
-		//do magic
-		try {
-			Iterator it = nbtSource.getKeySet().iterator();
-			while (it.hasNext()) {
-				tagName = (String) it.next();
-				NBTBase data = nbtSource.getTag(tagName);
-				newNBT.setTag(tagName, data);
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		
-		return newNBT;
-	}
+        String tagName = "";
+        //do magic
+        try {
+            Iterator it = nbtSource.getKeySet().iterator();
+            while (it.hasNext()) {
+                tagName = (String) it.next();
+                NBTBase data = nbtSource.getTag(tagName);
+                newNBT.setTag(tagName, data);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return newNBT;
+    }
 	
 	/*private static NBTTagCompound copyOntoNBTTagCompound nbtSource, NBTTagCompound nbtDest) {
 		NBTTagCompound
 	}*/
-	
-	//this should probably be recursive
+
+    //this should probably be recursive
 	/*private static NBTTagCompound copyOntoRecursive(NBTTagCompound nbtSource, NBTTagCompound nbttagcompound)
     {
 		try {
@@ -69,18 +69,18 @@ public class CoroUtilNBT {
 
         return nbttagcompound;
     }*/
-	
-	public static void writeCoords(String name, BlockCoord coords, NBTTagCompound nbt) {
-    	nbt.setInteger(name + "X", coords.posX);
-    	nbt.setInteger(name + "Y", coords.posY);
-    	nbt.setInteger(name + "Z", coords.posZ);
+
+    public static void writeCoords(String name, BlockCoord coords, NBTTagCompound nbt) {
+        nbt.setInteger(name + "X", coords.posX);
+        nbt.setInteger(name + "Y", coords.posY);
+        nbt.setInteger(name + "Z", coords.posZ);
     }
-    
+
     public static BlockCoord readCoords(String name, NBTTagCompound nbt) {
-    	if (nbt.hasKey(name + "X")) {
-    		return new BlockCoord(nbt.getInteger(name + "X"), nbt.getInteger(name + "Y"), nbt.getInteger(name + "Z"));
-    	} else {
-    		return null;
-    	}
+        if (nbt.hasKey(name + "X")) {
+            return new BlockCoord(nbt.getInteger(name + "X"), nbt.getInteger(name + "Y"), nbt.getInteger(name + "Z"));
+        } else {
+            return null;
+        }
     }
 }

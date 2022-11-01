@@ -1,10 +1,6 @@
 package CoroUtil.difficulty.data.conditions;
 
 import CoroUtil.difficulty.data.DataCondition;
-import CoroUtil.difficulty.data.DifficultyDataReader;
-import CoroUtil.util.CoroUtilCrossMod;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fml.common.Loader;
 
 import java.util.List;
 

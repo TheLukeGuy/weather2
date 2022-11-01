@@ -1,7 +1,5 @@
 package CoroUtil.util;
 
-import java.awt.image.BufferedImage;
-
 import CoroUtil.repack.de.androidpit.colorthief.ColorThief;
 import extendedrenderer.foliage.FoliageData;
 import it.unimi.dsi.fastutil.ints.IntArrays;
@@ -11,8 +9,10 @@ import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraftforge.common.property.IExtendedBlockState;
 
+import java.awt.image.BufferedImage;
+
 public class CoroUtilColor {
-    
+
     @SuppressWarnings("null")
     public static int[] getColors(IBlockState state) {
         if (state instanceof IExtendedBlockState) {
@@ -40,12 +40,12 @@ public class CoroUtilColor {
         int width = sprite.getIconWidth();
         int height = sprite.getIconHeight();
         int frames = sprite.getFrameCount();
-        
+
         BufferedImage img = new BufferedImage(width, height * frames, BufferedImage.TYPE_4BYTE_ABGR);
         for (int i = 0; i < frames; i++) {
             img.setRGB(0, i * height, width, height, sprite.getFrameTextureData(0)[0], 0, width);
         }
-        
+
         int[][] colorData = ColorThief.getPalette(img, 6, 5, true);
         if (colorData != null) {
             int[] ret = new int[colorData.length];
@@ -56,7 +56,7 @@ public class CoroUtilColor {
         }
         return IntArrays.EMPTY_ARRAY;
     }
-    
+
     private static int getColor(int[] colorData) {
         float mr = 1F;//((multiplier >>> 16) & 0xFF) / 255f;
         float mg = 1F;//((multiplier >>> 8) & 0xFF) / 255f;

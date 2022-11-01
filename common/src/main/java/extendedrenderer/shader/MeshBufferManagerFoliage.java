@@ -38,7 +38,7 @@ public class MeshBufferManagerFoliage {
         };
 
 
-        int[] indices = new int[] {
+        int[] indices = new int[]{
                 0, 1, 3, 3, 1, 2
         };
 

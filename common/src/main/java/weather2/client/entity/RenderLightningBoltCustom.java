@@ -1,14 +1,10 @@
 package weather2.client.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import CoroUtil.util.Vec3;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -22,11 +18,11 @@ import weather2.ClientTickHandler;
 import weather2.entity.EntityLightningBoltCustom;
 import weather2.weathersystem.storm.WeatherObjectSandstorm;
 
+import java.util.List;
+
 @SideOnly(Side.CLIENT)
-public class RenderLightningBoltCustom extends Render<EntityLightningBoltCustom>
-{
-    public RenderLightningBoltCustom(RenderManager renderManagerIn)
-    {
+public class RenderLightningBoltCustom extends Render<EntityLightningBoltCustom> {
+    public RenderLightningBoltCustom(RenderManager renderManagerIn) {
         super(renderManagerIn);
     }
 
@@ -37,8 +33,7 @@ public class RenderLightningBoltCustom extends Render<EntityLightningBoltCustom>
      * double d2, float f, float f1). But JAD is pre 1.5 so doe
      */
     @Override
-    public void doRender(EntityLightningBoltCustom entity, double x, double y, double z, float entityYaw, float partialTicks)
-    {
+    public void doRender(EntityLightningBoltCustom entity, double x, double y, double z, float entityYaw, float partialTicks) {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder worldrenderer = tessellator.getBuffer();
         GlStateManager.disableTexture2D();
@@ -46,39 +41,34 @@ public class RenderLightningBoltCustom extends Render<EntityLightningBoltCustom>
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(770, 1);
         GlStateManager.disableCull();
-        
+
         //Random random = new Random(entity.boltVertex);
-        
+
         worldrenderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-        
+
         double xx = x;
         double yy = y;
         double zz = z;
-        
+
         float r = 1F;
         float g = 1F;
         float b = 1F;
         float alpha = 0.4F;
-        
-        
-        
-        
-        
-        
-        
+
+
         //listVec.add(new Vec3d(0, 0, 0));
         //listVec.add(new Vec3d(13, 13, 13));
         /*worldrenderer.pos(xx+0, yy+0, zz+0).color(0.45F, 0.45F, 0.5F, 0.3F).endVertex();
         worldrenderer.pos(xx+1, yy+1, zz+1).color(0.45F, 0.45F, 0.5F, 0.3F).endVertex();
         worldrenderer.pos(xx+2, yy+2, zz+2).color(0.45F, 0.45F, 0.5F, 0.3F).endVertex();
         worldrenderer.pos(xx+3, yy+3, zz+3).color(0.45F, 0.45F, 0.5F, 0.3F).endVertex();*/
-        
+
         //worldrenderer.pos(xx+0, yy+0, zz+0).color(0.45F, 0.45F, 0.5F, 1F).endVertex();
-        
+
         //worldrenderer.pos(xx+1, yy+0, zz+1).color(0.45F, 0.45F, 0.5F, 1F).endVertex();
         //worldrenderer.pos(xx+2, yy+0, zz+2).color(0.45F, 0.45F, 0.5F, 1F).endVertex();
         //worldrenderer.pos(xx+3, yy+0, zz+3).color(0.45F, 0.45F, 0.5F, 1F).endVertex();
-        
+
         double sizeRadius = 0.3D;
 
         //temp - visualize sandstorm
@@ -107,8 +97,8 @@ public class RenderLightningBoltCustom extends Render<EntityLightningBoltCustom>
         }
 
         for (int i = 0; i < entity.listVec.size() - 1; i++) {
-        	Vec3d vec = entity.listVec.get(i);
-        	Vec3d vec2 = entity.listVec.get(i+1);
+            Vec3d vec = entity.listVec.get(i);
+            Vec3d vec2 = entity.listVec.get(i + 1);
 
             if (world.getTotalWorldTime() % 20 == 0) {
                 //System.out.println("wat: " + vec + " --- " + vec2);
@@ -119,7 +109,7 @@ public class RenderLightningBoltCustom extends Render<EntityLightningBoltCustom>
             worldrenderer.pos(vec2.x + sizeRadius + x, vec2.y + y, vec2.z + sizeRadius + z).color(r, g, b, alpha).endVertex();
             worldrenderer.pos(vec2.x - sizeRadius + x, vec2.y + y, vec2.z + sizeRadius + z).color(r, g, b, alpha).endVertex();*/
 
-        	//temp - visualize sandstorm
+            //temp - visualize sandstorm
             worldrenderer.pos(vec.x - sizeRadius, vec.y, vec.z - sizeRadius).color(r, g, b, alpha).endVertex();
             worldrenderer.pos(vec.x + sizeRadius, vec.y, vec.z - sizeRadius).color(r, g, b, alpha).endVertex();
             worldrenderer.pos(vec2.x + sizeRadius, vec2.y, vec2.z + sizeRadius).color(r, g, b, alpha).endVertex();
@@ -128,14 +118,14 @@ public class RenderLightningBoltCustom extends Render<EntityLightningBoltCustom>
 
         //temp - visualize sandstorm
         Vec3d vec = entity.listVec.get(0);
-        Vec3d vec2 = entity.listVec.get(entity.listVec.size()-1);
+        Vec3d vec2 = entity.listVec.get(entity.listVec.size() - 1);
         worldrenderer.pos(vec.x - sizeRadius, vec.y, vec.z - sizeRadius).color(r, g, b, alpha).endVertex();
         worldrenderer.pos(vec.x + sizeRadius, vec.y, vec.z - sizeRadius).color(r, g, b, alpha).endVertex();
         worldrenderer.pos(vec2.x + sizeRadius, vec2.y, vec2.z + sizeRadius).color(r, g, b, alpha).endVertex();
         worldrenderer.pos(vec2.x - sizeRadius, vec2.y, vec2.z + sizeRadius).color(r, g, b, alpha).endVertex();
-        
+
         //worldrenderer.pos(-1, 0, -1).color(0.45F, 0.45F, 0.5F, 1F).endVertex();
-        
+
         tessellator.draw();
         
         /*double d6 = 0;
@@ -177,7 +167,7 @@ public class RenderLightningBoltCustom extends Render<EntityLightningBoltCustom>
             worldrenderer.pos(d10 + d2, y + (double)(i1 * 16), d11 + d3).color(0.45F, 0.45F, 0.5F, 0.3F).endVertex();
             worldrenderer.pos(d8 + d4, y + (double)((i1 + 1) * 16), d9 + d5).color(0.45F, 0.45F, 0.5F, 0.3F).endVertex();
         }*/
-        
+
         //tessellator.draw();
         
         /*double[] adouble = new double[8];
@@ -297,8 +287,7 @@ public class RenderLightningBoltCustom extends Render<EntityLightningBoltCustom>
     /**
      * Returns the location of an entity's texture. Doesn't seem to be called unless you call Render.bindEntityTexture.
      */
-    protected ResourceLocation getEntityTexture(EntityLightningBoltCustom entity)
-    {
+    protected ResourceLocation getEntityTexture(EntityLightningBoltCustom entity) {
         return null;
     }
 }

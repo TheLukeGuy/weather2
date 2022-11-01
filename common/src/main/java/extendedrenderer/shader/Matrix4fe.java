@@ -206,23 +206,23 @@ public class Matrix4fe extends Matrix4f {
 
     public Matrix4fe setPerspective(float fovy, float aspect, float zNear, float zFar, boolean zZeroToOne) {
         //MemUtil.INSTANCE.zero(this);
-        float h = (float)Math.tan((double)(fovy * 0.5F));
+        float h = (float) Math.tan((double) (fovy * 0.5F));
         this._m00(1.0F / (h * aspect));
         this._m11(1.0F / h);
         boolean farInf = zFar > 0.0F && Float.isInfinite(zFar);
         boolean nearInf = zNear > 0.0F && Float.isInfinite(zNear);
         float e;
-        if(farInf) {
+        if (farInf) {
             e = 1.0E-6F;
             this._m22(e - 1.0F);
-            this._m32((e - (zZeroToOne?1.0F:2.0F)) * zNear);
-        } else if(nearInf) {
+            this._m32((e - (zZeroToOne ? 1.0F : 2.0F)) * zNear);
+        } else if (nearInf) {
             e = 1.0E-6F;
-            this._m22((zZeroToOne?0.0F:1.0F) - e);
-            this._m32(((zZeroToOne?1.0F:2.0F) - e) * zFar);
+            this._m22((zZeroToOne ? 0.0F : 1.0F) - e);
+            this._m32(((zZeroToOne ? 1.0F : 2.0F) - e) * zFar);
         } else {
-            this._m22((zZeroToOne?zFar:zFar + zNear) / (zNear - zFar));
-            this._m32((zZeroToOne?zFar:zFar + zFar) * zNear / (zNear - zFar));
+            this._m22((zZeroToOne ? zFar : zFar + zNear) / (zNear - zFar));
+            this._m32((zZeroToOne ? zFar : zFar + zFar) * zNear / (zNear - zFar));
         }
 
         this._m23(-1.0F);
@@ -231,9 +231,9 @@ public class Matrix4fe extends Matrix4f {
     }
 
     public Matrix4fe rotate(float ang, float x, float y, float z, Matrix4fe dest) {
-        return (this.properties & 4) != 0?dest.rotation(ang, x, y, z):
-                ((this.properties & 8) != 0?this.rotateTranslation(ang, x, y, z, dest):
-                        ((this.properties & 2) != 0?this.rotateAffine(ang, x, y, z, dest):
+        return (this.properties & 4) != 0 ? dest.rotation(ang, x, y, z) :
+                ((this.properties & 8) != 0 ? this.rotateTranslation(ang, x, y, z, dest) :
+                        ((this.properties & 2) != 0 ? this.rotateAffine(ang, x, y, z, dest) :
                                 this.rotateGeneric(ang, x, y, z, dest)));
     }
 
@@ -242,8 +242,8 @@ public class Matrix4fe extends Matrix4f {
     }
 
     private Matrix4fe rotateGeneric(float ang, float x, float y, float z, Matrix4fe dest) {
-        float s = (float)Math.sin((double)ang);
-        float c = (float)cosFromSin((double)s, (double)ang);
+        float s = (float) Math.sin((double) ang);
+        float c = (float) cosFromSin((double) s, (double) ang);
         float C = 1.0F - c;
         float xx = x * x;
         float xy = x * y;
@@ -284,7 +284,7 @@ public class Matrix4fe extends Matrix4f {
         dest._m31(this.m31);
         dest._m32(this.m32);
         dest._m33(this.m33);
-        dest._properties((byte)(this.properties & -14));
+        dest._properties((byte) (this.properties & -14));
         return dest;
     }
 
@@ -293,8 +293,8 @@ public class Matrix4fe extends Matrix4f {
     }
 
     public Matrix4fe rotation(float angle, float x, float y, float z) {
-        float sin = (float)Math.sin((double)angle);
-        float cos = (float)cosFromSin((double)sin, (double)angle);
+        float sin = (float) Math.sin((double) angle);
+        float cos = (float) cosFromSin((double) sin, (double) angle);
         float C = 1.0F - cos;
         float xy = x * y;
         float xz = x * z;
@@ -320,8 +320,8 @@ public class Matrix4fe extends Matrix4f {
     }
 
     public Matrix4fe rotateTranslation(float ang, float x, float y, float z, Matrix4fe dest) {
-        float s = (float)Math.sin((double)ang);
-        float c = (float)cosFromSin((double)s, (double)ang);
+        float s = (float) Math.sin((double) ang);
+        float c = (float) cosFromSin((double) s, (double) ang);
         float C = 1.0F - c;
         float xx = x * x;
         float xy = x * y;
@@ -353,13 +353,13 @@ public class Matrix4fe extends Matrix4f {
         dest._m31(this.m31);
         dest._m32(this.m32);
         dest._m33(this.m33);
-        dest._properties((byte)(this.properties & -14));
+        dest._properties((byte) (this.properties & -14));
         return dest;
     }
 
     public Matrix4fe rotateAffine(float ang, float x, float y, float z, Matrix4fe dest) {
-        float s = (float)Math.sin((double)ang);
-        float c = (float)cosFromSin((double)s, (double)ang);
+        float s = (float) Math.sin((double) ang);
+        float c = (float) cosFromSin((double) s, (double) ang);
         float C = 1.0F - c;
         float xx = x * x;
         float xy = x * y;
@@ -398,7 +398,7 @@ public class Matrix4fe extends Matrix4f {
         dest._m31(this.m31);
         dest._m32(this.m32);
         dest._m33(this.m33);
-        dest._properties((byte)(this.properties & -14));
+        dest._properties((byte) (this.properties & -14));
         return dest;
     }
 
@@ -407,11 +407,11 @@ public class Matrix4fe extends Matrix4f {
     }
 
     public Matrix4fe rotateX(float ang, Matrix4fe dest) {
-        if((this.properties & 4) != 0) {
+        if ((this.properties & 4) != 0) {
             return this;//dest.rotationX(ang);
         } else {
-            float sin = (float)Math.sin((double)ang);
-            float cos = (float)cosFromSin((double)sin, (double)ang);
+            float sin = (float) Math.sin((double) ang);
+            float cos = (float) cosFromSin((double) sin, (double) ang);
             float rm21 = -sin;
             float nm10 = this.m10 * cos + this.m20 * sin;
             float nm11 = this.m11 * cos + this.m21 * sin;
@@ -433,7 +433,7 @@ public class Matrix4fe extends Matrix4f {
             dest._m31(this.m31);
             dest._m32(this.m32);
             dest._m33(this.m33);
-            dest._properties((byte)(this.properties & -14));
+            dest._properties((byte) (this.properties & -14));
             return dest;
         }
     }
@@ -443,11 +443,11 @@ public class Matrix4fe extends Matrix4f {
     }
 
     public Matrix4fe rotateY(float ang, Matrix4fe dest) {
-        if((this.properties & 4) != 0) {
+        if ((this.properties & 4) != 0) {
             return this;//dest.rotationY(ang);
         } else {
-            float sin = (float)Math.sin((double)ang);
-            float cos = (float)cosFromSin((double)sin, (double)ang);
+            float sin = (float) Math.sin((double) ang);
+            float cos = (float) cosFromSin((double) sin, (double) ang);
             float rm02 = -sin;
             float nm00 = this.m00 * cos + this.m20 * rm02;
             float nm01 = this.m01 * cos + this.m21 * rm02;
@@ -469,7 +469,7 @@ public class Matrix4fe extends Matrix4f {
             dest._m31(this.m31);
             dest._m32(this.m32);
             dest._m33(this.m33);
-            dest._properties((byte)(this.properties & -14));
+            dest._properties((byte) (this.properties & -14));
             return dest;
         }
     }
@@ -479,11 +479,11 @@ public class Matrix4fe extends Matrix4f {
     }
 
     public Matrix4fe rotateZ(float ang, Matrix4fe dest) {
-        if((this.properties & 4) != 0) {
+        if ((this.properties & 4) != 0) {
             return this;//dest.rotationZ(ang);
         } else {
-            float sin = (float)Math.sin((double)ang);
-            float cos = (float)cosFromSin((double)sin, (double)ang);
+            float sin = (float) Math.sin((double) ang);
+            float cos = (float) cosFromSin((double) sin, (double) ang);
             float rm10 = -sin;
             float nm00 = this.m00 * cos + this.m10 * sin;
             float nm01 = this.m01 * cos + this.m11 * sin;
@@ -505,7 +505,7 @@ public class Matrix4fe extends Matrix4f {
             dest._m31(this.m31);
             dest._m32(this.m32);
             dest._m33(this.m33);
-            dest._properties((byte)(this.properties & -14));
+            dest._properties((byte) (this.properties & -14));
             return dest;
         }
     }
@@ -517,12 +517,12 @@ public class Matrix4fe extends Matrix4f {
     public static double cosFromSin(double sin, double angle) {
         double cos = Math.sqrt(1.0D - sin * sin);
         double a = angle + 1.5707963267948966D;
-        double b = a - (double)((int)(a / 6.283185307179586D)) * 6.283185307179586D;
-        if(b < 0.0D) {
+        double b = a - (double) ((int) (a / 6.283185307179586D)) * 6.283185307179586D;
+        if (b < 0.0D) {
             b += 6.283185307179586D;
         }
 
-        return b >= 3.141592653589793D?-cos:cos;
+        return b >= 3.141592653589793D ? -cos : cos;
     }
 
     public Matrix4fe scale(float xyz) {
@@ -534,7 +534,7 @@ public class Matrix4fe extends Matrix4f {
     }
 
     public Matrix4fe scale(float x, float y, float z, Matrix4fe dest) {
-        return (this.properties & 4) != 0?dest.scaling(x, y, z):this.scaleGeneric(x, y, z, dest);
+        return (this.properties & 4) != 0 ? dest.scaling(x, y, z) : this.scaleGeneric(x, y, z, dest);
     }
 
     public Matrix4fe scaling(float x, float y, float z) {
@@ -564,7 +564,7 @@ public class Matrix4fe extends Matrix4f {
         dest._m31(this.m31);
         dest._m32(this.m32);
         dest._m33(this.m33);
-        dest._properties((byte)(this.properties & -14));
+        dest._properties((byte) (this.properties & -14));
         return dest;
     }
 
@@ -619,7 +619,7 @@ public class Matrix4fe extends Matrix4f {
     public FloatBuffer get(int index, FloatBuffer buffer) {
         //MemUtil.INSTANCE.put(this, index, buffer);
         //put0(this, buffer);
-        if(index == 0) {
+        if (index == 0) {
             this.put0(this, buffer);
         } else {
             this.putN(this, index, buffer);
@@ -670,7 +670,7 @@ public class Matrix4fe extends Matrix4f {
     }
 
     public Matrix4fe translate(float x, float y, float z) {
-        if((this.properties & 4) != 0) {
+        if ((this.properties & 4) != 0) {
             return this.translation(x, y, z);
         } else {
             this._m30(this.m00 * x + this.m10 * y + this.m20 * z + this.m30);

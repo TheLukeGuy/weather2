@@ -5,20 +5,20 @@ import CoroUtil.difficulty.data.DifficultyDataReader;
 
 /**
  * Created by Corosus on 2/26/2017.
- *
+ * <p>
  * keeping it simple for now, will expand with full attribute power later if needed
- *
+ * <p>
  * old design:
- *
+ * <p>
  * {
- "cmod": "attribute_health",
- "operator": 0,
- "value": 1.5,
- "basevalue?": 0,
- "use_difficulty": false,
-
- "comment": "//need some way to multiply from difficulty, same for speed, xp, also a cap!"
- },
+ * "cmod": "attribute_health",
+ * "operator": 0,
+ * "value": 1.5,
+ * "basevalue?": 0,
+ * "use_difficulty": false,
+ * <p>
+ * "comment": "//need some way to multiply from difficulty, same for speed, xp, also a cap!"
+ * },
  */
 public class CmodAttributeBaseSimple extends DataCmod {
     public double base_value = -1;

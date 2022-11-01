@@ -1,25 +1,19 @@
 package extendedrenderer.render;
 
-import java.nio.FloatBuffer;
-import java.util.*;
-
-import javax.annotation.Nullable;
-
 import CoroUtil.config.ConfigCoroUtil;
-import extendedrenderer.shader.MeshBufferManagerParticle;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Queues;
 import extendedrenderer.particle.ParticleRegistry;
 import extendedrenderer.particle.ShaderManager;
 import extendedrenderer.particle.entity.EntityRotFX;
 import extendedrenderer.shader.*;
-import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.IParticleFactory;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleEmitter;
+import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -34,20 +28,24 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Queues;
+import javax.annotation.Nullable;
+import java.nio.FloatBuffer;
+import java.util.*;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
+import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
 import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.GL_DYNAMIC_DRAW;
 
 @SideOnly(Side.CLIENT)
-public class RotatingParticleManager
-{
+public class RotatingParticleManager {
     private static final ResourceLocation PARTICLE_TEXTURES = new ResourceLocation("textures/particle/particles.png");
-    /** Reference to the World object. */
+    /**
+     * Reference to the World object.
+     */
     protected World world;
     /**
      * Second dimension: 0 = GlStateManager.depthMask false aka transparent textures, 1 = true
@@ -57,7 +55,7 @@ public class RotatingParticleManager
     private final TextureManager renderer;
     private final Map<Integer, IParticleFactory> particleTypes = Maps.<Integer, IParticleFactory>newHashMap();
     private final Queue<Particle> queueEntityFX = Queues.<Particle>newArrayDeque();
-    
+
     //ExtendedRenderer Additions
 
     public static int debugParticleRenderCount;
@@ -78,8 +76,7 @@ public class RotatingParticleManager
         forceVBO2Update = true;
     }
 
-    public RotatingParticleManager(World worldIn, TextureManager rendererIn)
-    {
+    public RotatingParticleManager(World worldIn, TextureManager rendererIn) {
         this.world = worldIn;
         this.renderer = rendererIn;
 
@@ -109,12 +106,10 @@ public class RotatingParticleManager
         list.add(2, new ArrayDeque[4][]);
 
         for (ArrayDeque<Particle>[][] entry : list) {
-            for (int i = 0; i < 4; ++i)
-            {
+            for (int i = 0; i < 4; ++i) {
                 entry[i] = new ArrayDeque[2];
 
-                for (int j = 0; j < 2; ++j)
-                {
+                for (int j = 0; j < 2; ++j) {
                     entry[i][j] = Queues.newArrayDeque();
                 }
             }
@@ -123,13 +118,11 @@ public class RotatingParticleManager
         fxLayers.put(sprite, list);
     }
 
-    public void registerParticle(int id, IParticleFactory particleFactory)
-    {
+    public void registerParticle(int id, IParticleFactory particleFactory) {
         this.particleTypes.put(Integer.valueOf(id), particleFactory);
     }
 
-    public void emitParticleAtEntity(Entity entityIn, EnumParticleTypes particleTypes)
-    {
+    public void emitParticleAtEntity(Entity entityIn, EnumParticleTypes particleTypes) {
         this.particleEmitters.add(new ParticleEmitter(this.world, entityIn, particleTypes));
     }
 
@@ -137,16 +130,13 @@ public class RotatingParticleManager
      * Spawns the relevant particle according to the particle id.
      */
     @Nullable
-    public Particle spawnEffectParticle(int particleId, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed, int... parameters)
-    {
-        IParticleFactory iparticlefactory = (IParticleFactory)this.particleTypes.get(Integer.valueOf(particleId));
+    public Particle spawnEffectParticle(int particleId, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed, int... parameters) {
+        IParticleFactory iparticlefactory = (IParticleFactory) this.particleTypes.get(Integer.valueOf(particleId));
 
-        if (iparticlefactory != null)
-        {
+        if (iparticlefactory != null) {
             Particle particle = iparticlefactory.createParticle(particleId, this.world, xCoord, yCoord, zCoord, xSpeed, ySpeed, zSpeed, parameters);
 
-            if (particle != null)
-            {
+            if (particle != null) {
                 this.addEffect(particle);
                 return particle;
             }
@@ -155,29 +145,23 @@ public class RotatingParticleManager
         return null;
     }
 
-    public void addEffect(Particle effect)
-    {
+    public void addEffect(Particle effect) {
         if (effect == null) return; //Forge: Prevent modders from being bad and adding nulls causing untraceable NPEs.
         this.queueEntityFX.add(effect);
     }
 
-    public void updateEffects()
-    {
-        for (int i = 0; i < 4; ++i)
-        {
+    public void updateEffects() {
+        for (int i = 0; i < 4; ++i) {
             this.updateEffectLayer(i);
         }
 
-        if (!this.particleEmitters.isEmpty())
-        {
+        if (!this.particleEmitters.isEmpty()) {
             List<ParticleEmitter> list = Lists.<ParticleEmitter>newArrayList();
 
-            for (ParticleEmitter particleemitter : this.particleEmitters)
-            {
+            for (ParticleEmitter particleemitter : this.particleEmitters) {
                 particleemitter.onUpdate();
 
-                if (!particleemitter.isAlive())
-                {
+                if (!particleemitter.isAlive()) {
                     list.add(particleemitter);
                 }
             }
@@ -185,12 +169,10 @@ public class RotatingParticleManager
             this.particleEmitters.removeAll(list);
         }
 
-        if (!this.queueEntityFX.isEmpty())
-        {
+        if (!this.queueEntityFX.isEmpty()) {
 
             RotatingParticleManager.markDirtyVBO2();
-            for (Particle particle = (Particle)this.queueEntityFX.poll(); particle != null; particle = (Particle)this.queueEntityFX.poll())
-            {
+            for (Particle particle = (Particle) this.queueEntityFX.poll(); particle != null; particle = (Particle) this.queueEntityFX.poll()) {
                 int j = particle.getFXLayer();
                 int k = particle.shouldDisableDepth() ? 0 : 1;
 
@@ -220,12 +202,10 @@ public class RotatingParticleManager
         }
     }
 
-    private void updateEffectLayer(int layer)
-    {
+    private void updateEffectLayer(int layer) {
         //this.world.theProfiler.startSection(layer + "");
 
-        for (int i = 0; i < 2; ++i)
-        {
+        for (int i = 0; i < 2; ++i) {
             //this.worldObj.theProfiler.startSection(i + "");
             for (Map.Entry<TextureAtlasSprite, List<ArrayDeque<Particle>[][]>> entry1 : fxLayers.entrySet()) {
                 for (ArrayDeque<Particle>[][] entry2 : entry1.getValue()) {
@@ -239,19 +219,15 @@ public class RotatingParticleManager
         //this.world.theProfiler.endSection();
     }
 
-    private void tickParticleList(Queue<Particle> p_187240_1_)
-    {
-        if (!p_187240_1_.isEmpty())
-        {
+    private void tickParticleList(Queue<Particle> p_187240_1_) {
+        if (!p_187240_1_.isEmpty()) {
             Iterator<Particle> iterator = p_187240_1_.iterator();
 
-            while (iterator.hasNext())
-            {
+            while (iterator.hasNext()) {
                 Particle particle = iterator.next();
                 this.tickParticle(particle);
 
-                if (!particle.isAlive())
-                {
+                if (!particle.isAlive()) {
                     iterator.remove();
 
                     RotatingParticleManager.markDirtyVBO2();
@@ -260,28 +236,20 @@ public class RotatingParticleManager
         }
     }
 
-    private void tickParticle(final Particle particle)
-    {
-        try
-        {
+    private void tickParticle(final Particle particle) {
+        try {
             particle.onUpdate();
-        }
-        catch (Throwable throwable)
-        {
+        } catch (Throwable throwable) {
             CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Ticking Rotating Particle");
             CrashReportCategory crashreportcategory = crashreport.makeCategory("Particle being ticked");
             final int i = particle.getFXLayer();
-            crashreportcategory.addDetail("Rotating Particle", new ICrashReportDetail<String>()
-            {
-                public String call() throws Exception
-                {
+            crashreportcategory.addDetail("Rotating Particle", new ICrashReportDetail<String>() {
+                public String call() throws Exception {
                     return particle.toString();
                 }
             });
-            crashreportcategory.addDetail("Particle Type", new ICrashReportDetail<String>()
-            {
-                public String call() throws Exception
-                {
+            crashreportcategory.addDetail("Particle Type", new ICrashReportDetail<String>() {
+                public String call() throws Exception {
                     return i == 0 ? "MISC_TEXTURE" : (i == 1 ? "TERRAIN_TEXTURE" : (i == 3 ? "ENTITY_PARTICLE_TEXTURE" : "Unknown - " + i));
                 }
             });
@@ -292,8 +260,7 @@ public class RotatingParticleManager
     /**
      * Renders all current particles. Args player, partialTickTime
      */
-    public void renderParticles(Entity entityIn, float partialTicks)
-    {
+    public void renderParticles(Entity entityIn, float partialTicks) {
 
         boolean useParticleShaders = useShaders && ConfigCoroUtil.particleShaders;
 
@@ -302,9 +269,9 @@ public class RotatingParticleManager
         float f2 = ActiveRenderInfo.getRotationYZ();
         float f3 = ActiveRenderInfo.getRotationXY();
         float f4 = ActiveRenderInfo.getRotationXZ();
-        Particle.interpPosX = entityIn.lastTickPosX + (entityIn.posX - entityIn.lastTickPosX) * (double)partialTicks;
-        Particle.interpPosY = entityIn.lastTickPosY + (entityIn.posY - entityIn.lastTickPosY) * (double)partialTicks;
-        Particle.interpPosZ = entityIn.lastTickPosZ + (entityIn.posZ - entityIn.lastTickPosZ) * (double)partialTicks;
+        Particle.interpPosX = entityIn.lastTickPosX + (entityIn.posX - entityIn.lastTickPosX) * (double) partialTicks;
+        Particle.interpPosY = entityIn.lastTickPosY + (entityIn.posY - entityIn.lastTickPosY) * (double) partialTicks;
+        Particle.interpPosZ = entityIn.lastTickPosZ + (entityIn.posZ - entityIn.lastTickPosZ) * (double) partialTicks;
         Particle.cameraViewDir = entityIn.getLook(partialTicks);
 
         Minecraft mc = Minecraft.getMinecraft();
@@ -492,7 +459,6 @@ public class RotatingParticleManager
                                                     EntityRotFX part = (EntityRotFX) particle;
 
 
-
                                                     //CoroUtilMath.rotation(part.rotation, (float)Math.toRadians(-part.rotationPitch), (float)Math.toRadians(-part.rotationYaw), 0);
                                                     part.renderParticleForShader(mesh, transformation, viewMatrix, entityIn, partialTicks, f, f4, f1, f2, f3);
 
@@ -515,7 +481,6 @@ public class RotatingParticleManager
                                             /*OpenGlHelper.glBindBuffer(GL_ARRAY_BUFFER, mesh.instanceDataVBOTest);
                                             ShaderManager.glBufferData(GL_ARRAY_BUFFER, mesh.instanceDataBufferTest, GL_DYNAMIC_DRAW);*/
                                         }
-
 
 
                                         //not working right yet, something not flagging it correctly, only like 10% fps gain atm anyways
@@ -542,8 +507,6 @@ public class RotatingParticleManager
                                         } else {
                                             //System.out.println("skipped render");
                                         }*/
-
-
 
 
                                     }
@@ -597,8 +560,6 @@ public class RotatingParticleManager
                                 }
 
 
-
-
                             }
                         }
                     }
@@ -626,8 +587,7 @@ public class RotatingParticleManager
         }
     }
 
-    public void renderLitParticles(Entity entityIn, float partialTick)
-    {
+    public void renderLitParticles(Entity entityIn, float partialTick) {
         float f = 0.017453292F;
         float f1 = MathHelper.cos(entityIn.rotationYaw * 0.017453292F);
         float f2 = MathHelper.sin(entityIn.rotationYaw * 0.017453292F);
@@ -646,14 +606,13 @@ public class RotatingParticleManager
                         for (Particle particle : queue) {
                             particle.renderParticle(vertexbuffer, entityIn, partialTick, f1, f5, f2, f3, f4);
                         }
-                        }
                     }
+                }
             }
         }
     }
 
-    public void clearEffects(@Nullable World worldIn)
-    {
+    public void clearEffects(@Nullable World worldIn) {
         this.world = worldIn;
 
         //shader way
@@ -685,14 +644,13 @@ public class RotatingParticleManager
 
         this.particleEmitters.clear();
     }
-    
-    public String getStatistics()
-    {
-    	int count = 0;
+
+    public String getStatistics() {
+        int count = 0;
     	/*for (int i = 0; i < layers; i++) {
     		count += fxLayers[i].size();
     	}*/
-    	//item sheet seems only one used now
+        //item sheet seems only one used now
         return "" + count;
     }
 }

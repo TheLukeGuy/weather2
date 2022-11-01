@@ -1,6 +1,5 @@
 package CoroUtil.difficulty.buffs;
 
-import CoroUtil.ai.tasks.TaskDigTowardsTarget;
 import CoroUtil.difficulty.UtilEntityBuffs;
 import CoroUtil.forge.CULog;
 import net.minecraft.entity.EntityCreature;
@@ -24,7 +23,7 @@ public class BuffAI_TaskMining extends BuffAI_TaskBase {
         CULog.dbg("applyBuffPost enhancing with digging: " + ent.getName());
 
         if (ent.getNavigator() instanceof PathNavigateGround) {
-            ((PathNavigateGround)ent.getNavigator()).setBreakDoors(false);
+            ((PathNavigateGround) ent.getNavigator()).setBreakDoors(false);
         }
 
         /**

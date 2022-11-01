@@ -26,13 +26,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class BlockRepairingBlock extends BlockContainer
-{
-	public static final AxisAlignedBB AABB = new AxisAlignedBB(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+public class BlockRepairingBlock extends BlockContainer {
+    public static final AxisAlignedBB AABB = new AxisAlignedBB(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
     public static final AxisAlignedBB NO_COLLIDE_AABB = new AxisAlignedBB(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
-	
-    public BlockRepairingBlock()
-    {
+
+    public BlockRepairingBlock() {
         super(Material.GROUND);
 
         /**
@@ -54,7 +52,7 @@ public class BlockRepairingBlock extends BlockContainer
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT && source instanceof World) {
-            return getSelectedBoundingBox(state, (World)source, pos);
+            return getSelectedBoundingBox(state, (World) source, pos);
         } else {
             return NO_COLLIDE_AABB;
         }
@@ -63,8 +61,7 @@ public class BlockRepairingBlock extends BlockContainer
     @Deprecated
     @SideOnly(Side.CLIENT)
     @Override
-    public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos)
-    {
+    public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
 
         //special behavior to let block only be selectable to repair if correct context
 
@@ -81,20 +78,17 @@ public class BlockRepairingBlock extends BlockContainer
      * Used to determine ambient occlusion and culling when rebuilding chunks for render
      */
     @Override
-    public boolean isOpaqueCube(IBlockState state)
-    {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
     @Override
-    public boolean canCollideCheck(IBlockState state, boolean hitIfLiquid)
-    {
+    public boolean canCollideCheck(IBlockState state, boolean hitIfLiquid) {
         return super.canCollideCheck(state, hitIfLiquid);
     }
 
     @Override
-    public boolean isFullCube(IBlockState state)
-    {
+    public boolean isFullCube(IBlockState state) {
         return false;/*super.isFullCube(state);*/
     }
 
@@ -104,21 +98,18 @@ public class BlockRepairingBlock extends BlockContainer
     }
 
     @Override
-    public TileEntity createNewTileEntity(World var1, int meta)
-    {
+    public TileEntity createNewTileEntity(World var1, int meta) {
         return new TileEntityRepairingBlock();
     }
 
     @Override
-    public EnumBlockRenderType getRenderType(IBlockState state)
-    {
+    public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.MODEL;
     }
 
     @SideOnly(Side.CLIENT)
     @Override
-    public BlockRenderLayer getBlockLayer()
-    {
+    public BlockRenderLayer getBlockLayer() {
         return BlockRenderLayer.CUTOUT;
     }
 
@@ -184,21 +175,20 @@ public class BlockRepairingBlock extends BlockContainer
     }
 
     @Override
-    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand)
-    {
+    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
         if (world.isRemote) return;
 
         TileEntity tEnt = world.getTileEntity(pos);
         if (tEnt instanceof TileEntityRepairingBlock) {
             ((TileEntityRepairingBlock) tEnt).updateScheduledTick();
         }
-        world.scheduleBlockUpdate(pos, this, 20*30, 1);
+        world.scheduleBlockUpdate(pos, this, 20 * 30, 1);
     }
 
     @Override
     public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
         //super.onBlockAdded(worldIn, pos, state);
-        worldIn.scheduleBlockUpdate(pos, this, 20*30, 1);
+        worldIn.scheduleBlockUpdate(pos, this, 20 * 30, 1);
     }
 
     @Override

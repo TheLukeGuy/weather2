@@ -10,9 +10,9 @@ import static org.lwjgl.opengl.GL20.GL_SHADING_LANGUAGE_VERSION;
 
 /**
  * Created by corosus on 25/05/17.
- *
+ * <p>
  * Manages checking support for instanced rendering
- *
+ * <p>
  * Minimum opengl version required for core method use is 3.3 due to use of glVertexAttribDivisor which is part of Instanced Arrays feature
  * Otherwise will attempt to use ARB versions of methods if available
  */
@@ -51,8 +51,8 @@ public class ShaderManager {
 
         if (contextcapabilities.OpenGL21 ||
                 (contextcapabilities.GL_ARB_vertex_shader &&
-                contextcapabilities.GL_ARB_fragment_shader &&
-                contextcapabilities.GL_ARB_shader_objects)) {
+                        contextcapabilities.GL_ARB_fragment_shader &&
+                        contextcapabilities.GL_ARB_shader_objects)) {
             canUseShaders = true;
 
             if (contextcapabilities.OpenGL21) {
@@ -63,8 +63,8 @@ public class ShaderManager {
 
             if (contextcapabilities.OpenGL33 ||
                     (contextcapabilities.GL_ARB_draw_instanced &&
-                    contextcapabilities.GL_ARB_instanced_arrays &&
-                    contextcapabilities.GL_ARB_vertex_array_object)) {
+                            contextcapabilities.GL_ARB_instanced_arrays &&
+                            contextcapabilities.GL_ARB_vertex_array_object)) {
                 canUseShadersInstancedRendering = true;
 
                 if (contextcapabilities.OpenGL33) {

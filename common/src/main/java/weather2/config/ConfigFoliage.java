@@ -1,7 +1,5 @@
 package weather2.config;
 
-import CoroUtil.config.ConfigCoroUtil;
-import extendedrenderer.EventHandler;
 import modconfig.IConfigCategory;
 import weather2.Weather;
 

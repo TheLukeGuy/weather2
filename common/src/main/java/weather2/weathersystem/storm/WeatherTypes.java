@@ -5,14 +5,14 @@ import java.util.List;
 
 public class WeatherTypes {
 
-	public static List<WeatherEntityConfig> weatherEntTypes;
-	
-	static {
-		initWeatherTypes();
-	}
-	
-	public static void initWeatherTypes() {
-    	weatherEntTypes = new ArrayList();
+    public static List<WeatherEntityConfig> weatherEntTypes;
+
+    static {
+        initWeatherTypes();
+    }
+
+    public static void initWeatherTypes() {
+        weatherEntTypes = new ArrayList();
         WeatherEntityConfig sConf = new WeatherEntityConfig();
         //0 = spout
         //1 = F1
@@ -32,7 +32,7 @@ public class WeatherTypes {
         sConf.type = 0;
         sConf.grabsBlocks = false;
         weatherEntTypes.add(sConf);
-        
+
         //F1 tornado
         sConf = new WeatherEntityConfig();
         sConf.tornadoInitialSpeed = 0.2F;
@@ -43,7 +43,7 @@ public class WeatherTypes {
         sConf.tornadoWidthScale = 1.5F;
         //sConf.grabDist = 100D;
         weatherEntTypes.add(sConf);
-        
+
         //F2 tornado
         sConf = new WeatherEntityConfig();
         sConf.tornadoInitialSpeed = 0.2F;
@@ -54,7 +54,7 @@ public class WeatherTypes {
         sConf.tornadoWidthScale = 1.5F;
         //sConf.grabDist = 100D;
         weatherEntTypes.add(sConf);
-        
+
         //F3 tornado
         sConf = new WeatherEntityConfig();
         //sConf.tornadoInitialSpeed = 0.2F;
@@ -64,7 +64,7 @@ public class WeatherTypes {
         //sConf.tornadoBaseSize = 10;
         sConf.tornadoWidthScale = 1.9F;
         weatherEntTypes.add(sConf);
-        
+
         //F4 tornado
         sConf = new WeatherEntityConfig();
         //sConf.tornadoInitialSpeed = 0.2F;
@@ -74,7 +74,7 @@ public class WeatherTypes {
         //sConf.tornadoBaseSize = 10;
         sConf.tornadoWidthScale = 1.9F;
         weatherEntTypes.add(sConf);
-        
+
         //F5 tornado
         sConf = new WeatherEntityConfig();
         //sConf.tornadoInitialSpeed = 0.15F;
@@ -84,7 +84,7 @@ public class WeatherTypes {
         //sConf.tornadoBaseSize = 25;
         sConf.tornadoWidthScale = 2.5F;
         weatherEntTypes.add(sConf);
-        
+
         //F6
         sConf = new WeatherEntityConfig();
         //sConf.tornadoInitialSpeed = 0.15F;
@@ -94,7 +94,7 @@ public class WeatherTypes {
         //sConf.tornadoBaseSize = 95;
         sConf.tornadoWidthScale = 3.5F;
         weatherEntTypes.add(sConf);
-        
+
         //Hurricane
         /*sConf = new WeatherEntityConfig();
         //sConf.tornadoInitialSpeed = 0.15F;
@@ -106,5 +106,5 @@ public class WeatherTypes {
         //sConf.tornadoTime = 4500;
         sConf.type = 2;
         weatherEntTypes.add(sConf);*/
-	}
+    }
 }

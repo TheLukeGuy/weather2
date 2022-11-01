@@ -9,7 +9,7 @@ public class Utils {
     public static String loadResource(String fileName) throws Exception {
         String result;
         try (InputStream in = Utils.class.getClass().getResourceAsStream(fileName);
-                Scanner scanner = new Scanner(in, "UTF-8")) {
+             Scanner scanner = new Scanner(in, "UTF-8")) {
             result = scanner.useDelimiter("\\A").next();
         }
         return result;
@@ -29,23 +29,23 @@ public class Utils {
     public static Matrix4f setPerspective(float fovy, float aspect, float zNear, float zFar, boolean zZeroToOne) {
         Matrix4f mat = new Matrix4f();
         //MemUtil.INSTANCE.zero(this);
-        float h = (float)Math.tan((double)(fovy * 0.5F));
+        float h = (float) Math.tan((double) (fovy * 0.5F));
         mat.m00 = (1.0F / (h * aspect));
         mat.m11 = (1.0F / h);
         boolean farInf = zFar > 0.0F && Float.isInfinite(zFar);
         boolean nearInf = zNear > 0.0F && Float.isInfinite(zNear);
         float e;
-        if(farInf) {
+        if (farInf) {
             e = 1.0E-6F;
             mat.m22 = (e - 1.0F);
-            mat.m32 = ((e - (zZeroToOne?1.0F:2.0F)) * zNear);
-        } else if(nearInf) {
+            mat.m32 = ((e - (zZeroToOne ? 1.0F : 2.0F)) * zNear);
+        } else if (nearInf) {
             e = 1.0E-6F;
-            mat.m22 = ((zZeroToOne?0.0F:1.0F) - e);
-            mat.m32 = (((zZeroToOne?1.0F:2.0F) - e) * zFar);
+            mat.m22 = ((zZeroToOne ? 0.0F : 1.0F) - e);
+            mat.m32 = (((zZeroToOne ? 1.0F : 2.0F) - e) * zFar);
         } else {
-            mat.m22 = ((zZeroToOne?zFar:zFar + zNear) / (zNear - zFar));
-            mat.m32 = ((zZeroToOne?zFar:zFar + zFar) * zNear / (zNear - zFar));
+            mat.m22 = ((zZeroToOne ? zFar : zFar + zNear) / (zNear - zFar));
+            mat.m32 = ((zZeroToOne ? zFar : zFar + zFar) * zNear / (zNear - zFar));
         }
 
         mat.m23 = (-1.0F);

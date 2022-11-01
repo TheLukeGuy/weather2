@@ -13,10 +13,18 @@ import java.util.Map;
  * then executes all Operation 1 modifiers, and finally executes all Operation 2 modifiers.
  */
 public enum EnumAttribModifierType {
-	
-	INCREMENT, INCREMENT_MULTIPLY_BASE, MULTIPLY_ALL;
-	
-	private static final Map<Integer, EnumAttribModifierType> lookup = new HashMap<Integer, EnumAttribModifierType>();
-    static { for(EnumAttribModifierType e : EnumSet.allOf(EnumAttribModifierType.class)) { lookup.put(e.ordinal(), e); } }
-    public static EnumAttribModifierType get(int intValue) { return lookup.get(intValue); }
+
+    INCREMENT, INCREMENT_MULTIPLY_BASE, MULTIPLY_ALL;
+
+    private static final Map<Integer, EnumAttribModifierType> lookup = new HashMap<Integer, EnumAttribModifierType>();
+
+    static {
+        for (EnumAttribModifierType e : EnumSet.allOf(EnumAttribModifierType.class)) {
+            lookup.put(e.ordinal(), e);
+        }
+    }
+
+    public static EnumAttribModifierType get(int intValue) {
+        return lookup.get(intValue);
+    }
 }

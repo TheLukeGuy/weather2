@@ -1,10 +1,10 @@
 package extendedrenderer.particle.entity;
 
-import java.util.List;
-
 import CoroUtil.api.weather.IWindHandler;
 import CoroUtil.util.CoroUtilBlockLightCache;
 import CoroUtil.util.Vec3;
+import extendedrenderer.ExtendedRenderer;
+import extendedrenderer.particle.behavior.ParticleBehaviors;
 import extendedrenderer.render.RotatingParticleManager;
 import extendedrenderer.shader.IShaderRenderedEntity;
 import extendedrenderer.shader.InstancedMeshParticle;
@@ -21,55 +21,53 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import extendedrenderer.ExtendedRenderer;
-import extendedrenderer.particle.behavior.ParticleBehaviors;
 import org.lwjgl.util.vector.Quaternion;
 import org.lwjgl.util.vector.Vector4f;
 
 import javax.vecmath.Vector3f;
+import java.util.List;
 
 @SideOnly(Side.CLIENT)
-public class EntityRotFX extends Particle implements IWindHandler, IShaderRenderedEntity
-{
+public class EntityRotFX extends Particle implements IWindHandler, IShaderRenderedEntity {
     public boolean weatherEffect = false;
 
     public float spawnY = -1;
-    
+
     //this field and 2 methods below are for backwards compatibility with old particle system from the new icon based system
     public int particleTextureIndexInt = 0;
-    
+
     public float brightness = 0.7F;
-    
+
     public ParticleBehaviors pb = null; //designed to be a reference to the central objects particle behavior
-    
+
     public boolean callUpdateSuper = true;
     public boolean callUpdatePB = true;
-    
+
     public float renderRange = 128F;
-    
+
     //used in RotatingEffectRenderer to assist in solving some transparency ordering issues, eg, tornado funnel before clouds
     public int renderOrder = 0;
-    
+
     //not a real entity ID now, just used for making rendering of entities slightly unique
     private int entityID = 0;
-    
+
     public int debugID = 0;
-    
+
     public float rotationYaw;
     public float rotationPitch;
-    
+
     public float windWeight = 5;
     public int particleDecayExtra = 0;
     public boolean isTransparent = true;
-    
-    public boolean killOnCollide = false;
-	
-	public boolean facePlayer = false;
 
-	//facePlayer will override this
+    public boolean killOnCollide = false;
+
+    public boolean facePlayer = false;
+
+    //facePlayer will override this
     public boolean facePlayerYaw = false;
-	
-	public boolean vanillaMotionDampen = true;
+
+    public boolean vanillaMotionDampen = true;
 
     //for particle behaviors
     public double aboveGroundHeight = 4.5D;
@@ -131,18 +129,17 @@ public class EntityRotFX extends Particle implements IWindHandler, IShaderRender
     //used for translational rotation around a point
     public Vector3f rotationAround = new Vector3f();
 
-    public EntityRotFX(World par1World, double par2, double par4, double par6, double par8, double par10, double par12)
-    {
+    public EntityRotFX(World par1World, double par2, double par4, double par6, double par8, double par10, double par12) {
         super(par1World, par2, par4, par6, par8, par10, par12);
         setSize(0.3F, 0.3F);
         //this.isImmuneToFire = true;
         //this.setMaxAge(100);
-        
+
         this.entityID = par1World.rand.nextInt(100000);
 
         rotation = new Quaternion();
 
-        brightnessCache = CoroUtilBlockLightCache.getBrightnessCached(world, (float)posX, (float)posY, (float)posZ);
+        brightnessCache = CoroUtilBlockLightCache.getBrightnessCached(world, (float) posX, (float) posY, (float) posZ);
     }
 
     public boolean isSlantParticleToWind() {
@@ -192,44 +189,42 @@ public class EntityRotFX extends Particle implements IWindHandler, IShaderRender
     public void setTicksFadeOutMax(float ticksFadeOutMax) {
         this.ticksFadeOutMax = ticksFadeOutMax;
     }
-    
-    public int getParticleTextureIndex()
-    {
+
+    public int getParticleTextureIndex() {
         return this.particleTextureIndexInt;
     }
-    
+
     public void setMaxAge(int par) {
-    	particleMaxAge = par;
+        particleMaxAge = par;
     }
-    
-    public float getAlphaF()
-    {
+
+    public float getAlphaF() {
         return this.particleAlpha;
     }
-    
+
     @Override
     public void setExpired() {
-    	if (pb != null) pb.particles.remove(this);
-    	super.setExpired();
+        if (pb != null) pb.particles.remove(this);
+        super.setExpired();
     }
-    
+
     @Override
     public void onUpdate() {
-    	super.onUpdate();
+        super.onUpdate();
 
         Entity ent = Minecraft.getMinecraft().getRenderViewEntity();
 
         //if (this.entityID % 400 == 0) System.out.println("onUpdate time: " + this.worldObj.getTotalWorldTime());
-    	
-    	if (!isVanillaMotionDampen()) {
-    		//cancel motion dampening (which is basically air resistance)
-    		//keep this up to date with the inverse of whatever Particle.onUpdate uses
-        	this.motionX /= 0.9800000190734863D;
+
+        if (!isVanillaMotionDampen()) {
+            //cancel motion dampening (which is basically air resistance)
+            //keep this up to date with the inverse of whatever Particle.onUpdate uses
+            this.motionX /= 0.9800000190734863D;
             this.motionY /= 0.9800000190734863D;
             this.motionZ /= 0.9800000190734863D;
-    	}
+        }
 
-    	if (!this.isExpired && !fadingOut) {
+        if (!this.isExpired && !fadingOut) {
             if (killOnCollide) {
                 if (this.isCollided()) {
                     startDeath();
@@ -262,7 +257,7 @@ public class EntityRotFX extends Particle implements IWindHandler, IShaderRender
             }
         }
 
-    	if (!collisionSpeedDampen) {
+        if (!collisionSpeedDampen) {
             //if (this.isCollided()) {
             if (this.onGround) {
                 this.motionX /= 0.699999988079071D;
@@ -278,7 +273,7 @@ public class EntityRotFX extends Particle implements IWindHandler, IShaderRender
         if (!fadingOut) {
             if (ticksFadeInMax > 0 && this.getAge() < ticksFadeInMax) {
                 //System.out.println("particle.getAge(): " + particle.getAge());
-                this.setAlphaF((float)this.getAge() / ticksFadeInMax);
+                this.setAlphaF((float) this.getAge() / ticksFadeInMax);
                 //particle.setAlphaF(1);
             } else if (ticksFadeOutMax > 0 && this.getAge() > this.getMaxAge() - ticksFadeOutMax) {
                 float count = this.getAge() - (this.getMaxAge() - ticksFadeOutMax);
@@ -290,10 +285,10 @@ public class EntityRotFX extends Particle implements IWindHandler, IShaderRender
                 this.setAlphaF(1F);
             }
         } else {
-    	    if (ticksFadeOutCurOnDeath < ticksFadeOutMaxOnDeath) {
+            if (ticksFadeOutCurOnDeath < ticksFadeOutMaxOnDeath) {
                 ticksFadeOutCurOnDeath++;
             } else {
-    	        this.setExpired();
+                this.setExpired();
             }
             float val = 1F - (ticksFadeOutCurOnDeath / ticksFadeOutMaxOnDeath);
             //System.out.println(val);
@@ -301,7 +296,7 @@ public class EntityRotFX extends Particle implements IWindHandler, IShaderRender
         }
 
         if (world.getTotalWorldTime() % 5 == 0) {
-            brightnessCache = CoroUtilBlockLightCache.getBrightnessCached(world, (float)posX, (float)posY, (float)posZ);
+            brightnessCache = CoroUtilBlockLightCache.getBrightnessCached(world, (float) posX, (float) posY, (float) posZ);
         }
 
         rotationAroundCenter += rotationSpeedAroundCenter;
@@ -317,7 +312,7 @@ public class EntityRotFX extends Particle implements IWindHandler, IShaderRender
     public void tickExtraRotations() {
         if (slantParticleToWind) {
             double motionXZ = Math.sqrt(motionX * motionX + motionZ * motionZ);
-            rotationPitch = (float)Math.atan2(motionY, motionXZ);
+            rotationPitch = (float) Math.atan2(motionY, motionXZ);
         }
 
         if (!quatControl) {
@@ -335,64 +330,57 @@ public class EntityRotFX extends Particle implements IWindHandler, IShaderRender
             this.setExpired();
         }
     }
-    
-    public void setParticleTextureIndex(int par1)
-    {
+
+    public void setParticleTextureIndex(int par1) {
         this.particleTextureIndexInt = par1;
         if (this.getFXLayer() == 0) super.setParticleTextureIndex(par1);
     }
 
     @Override
-    public int getFXLayer()
-    {
+    public int getFXLayer() {
         return 5;
     }
 
-    public void spawnAsWeatherEffect()
-    {
+    public void spawnAsWeatherEffect() {
         weatherEffect = true;
         ExtendedRenderer.rotEffRenderer.addEffect(this);
         //RELOCATED TO CODE AFTER CALLING spawnAsWeatherEffect(), also uses list in WeatherManagerClient
         //this.world.addWeatherEffect(this);
     }
 
-    public int getAge()
-    {
+    public int getAge() {
         return particleAge;
     }
 
-    public void setAge(int age)
-    {
+    public void setAge(int age) {
         particleAge = age;
     }
 
-    public int getMaxAge()
-    {
+    public int getMaxAge() {
         return particleMaxAge;
     }
 
-    public void setSize(float par1, float par2)
-    {
+    public void setSize(float par1, float par2) {
         super.setSize(par1, par2);
         // MC-12269 - fix particle being offset to the NW
         this.setPosition(posX, posY, posZ);
     }
-    
+
     public void setGravity(float par) {
-    	particleGravity = par;
+        particleGravity = par;
     }
-    
+
     public float maxRenderRange() {
-    	return renderRange;
+        return renderRange;
     }
 
     public void setScale(float parScale) {
-    	particleScale = parScale;
+        particleScale = parScale;
     }
 
     @Override
     public Vector3f getPosition() {
-        return new Vector3f((float)posX, (float)posY, (float)posZ);
+        return new Vector3f((float) posX, (float) posY, (float) posZ);
     }
 
     @Override
@@ -407,137 +395,136 @@ public class EntityRotFX extends Particle implements IWindHandler, IShaderRender
 
     @Override
     public float getScale() {
-    	return particleScale;
+        return particleScale;
     }
 
     public Vec3 getPos() {
         return new Vec3(posX, posY, posZ);
     }
 
-	public double getPosX() {
-		return posX;
-	}
+    public double getPosX() {
+        return posX;
+    }
 
-	public void setPosX(double posX) {
-		this.posX = posX;
-	}
+    public void setPosX(double posX) {
+        this.posX = posX;
+    }
 
-	public double getPosY() {
-		return posY;
-	}
+    public double getPosY() {
+        return posY;
+    }
 
-	public void setPosY(double posY) {
-		this.posY = posY;
-	}
+    public void setPosY(double posY) {
+        this.posY = posY;
+    }
 
-	public double getPosZ() {
-		return posZ;
-	}
+    public double getPosZ() {
+        return posZ;
+    }
 
-	public void setPosZ(double posZ) {
-		this.posZ = posZ;
-	}
+    public void setPosZ(double posZ) {
+        this.posZ = posZ;
+    }
 
-	public double getMotionX() {
-		return motionX;
-	}
+    public double getMotionX() {
+        return motionX;
+    }
 
-	public void setMotionX(double motionX) {
-		this.motionX = motionX;
-	}
+    public void setMotionX(double motionX) {
+        this.motionX = motionX;
+    }
 
-	public double getMotionY() {
-		return motionY;
-	}
+    public double getMotionY() {
+        return motionY;
+    }
 
-	public void setMotionY(double motionY) {
-		this.motionY = motionY;
-	}
+    public void setMotionY(double motionY) {
+        this.motionY = motionY;
+    }
 
-	public double getMotionZ() {
-		return motionZ;
-	}
+    public double getMotionZ() {
+        return motionZ;
+    }
 
-	public void setMotionZ(double motionZ) {
-		this.motionZ = motionZ;
-	}
+    public void setMotionZ(double motionZ) {
+        this.motionZ = motionZ;
+    }
 
-	public double getPrevPosX() {
-		return prevPosX;
-	}
+    public double getPrevPosX() {
+        return prevPosX;
+    }
 
-	public void setPrevPosX(double prevPosX) {
-		this.prevPosX = prevPosX;
-	}
+    public void setPrevPosX(double prevPosX) {
+        this.prevPosX = prevPosX;
+    }
 
-	public double getPrevPosY() {
-		return prevPosY;
-	}
+    public double getPrevPosY() {
+        return prevPosY;
+    }
 
-	public void setPrevPosY(double prevPosY) {
-		this.prevPosY = prevPosY;
-	}
+    public void setPrevPosY(double prevPosY) {
+        this.prevPosY = prevPosY;
+    }
 
-	public double getPrevPosZ() {
-		return prevPosZ;
-	}
+    public double getPrevPosZ() {
+        return prevPosZ;
+    }
 
-	public void setPrevPosZ(double prevPosZ) {
-		this.prevPosZ = prevPosZ;
-	}
+    public void setPrevPosZ(double prevPosZ) {
+        this.prevPosZ = prevPosZ;
+    }
 
-	public int getEntityId() {
-		return entityID;
-	}
-	
-	public World getWorld() {
-		return this.world;
-	}
-	
-	public void setCanCollide(boolean val) {
-		this.canCollide = val;
-	}
-	
-	public boolean getCanCollide() {
-		return this.canCollide;
-	}
-	
-	public boolean isCollided() {
-		return this.onGround;
-	}
-	
-	public double getDistance(double x, double y, double z)
-    {
+    public int getEntityId() {
+        return entityID;
+    }
+
+    public World getWorld() {
+        return this.world;
+    }
+
+    public void setCanCollide(boolean val) {
+        this.canCollide = val;
+    }
+
+    public boolean getCanCollide() {
+        return this.canCollide;
+    }
+
+    public boolean isCollided() {
+        return this.onGround;
+    }
+
+    public double getDistance(double x, double y, double z) {
         double d0 = this.posX - x;
         double d1 = this.posY - y;
         double d2 = this.posZ - z;
-        return (double)MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
+        return (double) MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
     }
-	
-	@Override
-	public void renderParticle(BufferBuilder worldRendererIn, Entity entityIn,
-			float partialTicks, float rotationX, float rotationZ,
-			float rotationYZ, float rotationXY, float rotationXZ) {
-		
-		//override rotations
-		if (!facePlayer) {
-			rotationX = MathHelper.cos(this.rotationYaw * (float)Math.PI / 180.0F);
-			rotationYZ = MathHelper.sin(this.rotationYaw * (float)Math.PI / 180.0F);
-	        rotationXY = -rotationYZ * MathHelper.sin(this.rotationPitch * (float)Math.PI / 180.0F);
-	        rotationXZ = rotationX * MathHelper.sin(this.rotationPitch * (float)Math.PI / 180.0F);
-	        rotationZ = MathHelper.cos(this.rotationPitch * (float)Math.PI / 180.0F);
-		}
+
+    @Override
+    public void renderParticle(BufferBuilder worldRendererIn, Entity entityIn,
+                               float partialTicks, float rotationX, float rotationZ,
+                               float rotationYZ, float rotationXY, float rotationXZ) {
+
+        //override rotations
+        if (!facePlayer) {
+            rotationX = MathHelper.cos(this.rotationYaw * (float) Math.PI / 180.0F);
+            rotationYZ = MathHelper.sin(this.rotationYaw * (float) Math.PI / 180.0F);
+            rotationXY = -rotationYZ * MathHelper.sin(this.rotationPitch * (float) Math.PI / 180.0F);
+            rotationXZ = rotationX * MathHelper.sin(this.rotationPitch * (float) Math.PI / 180.0F);
+            rotationZ = MathHelper.cos(this.rotationPitch * (float) Math.PI / 180.0F);
+        }
 		
 		/*IBlockState state = this.getWorld().getBlockState(new BlockPos(posX, posY, posZ));
 		if (state.getBlock() != Blocks.AIR) {
 			System.out.println("particle in: " + state);
 		}*/
-		
-		super.renderParticle(worldRendererIn, entityIn, partialTicks, rotationX,
-				rotationZ, rotationYZ, rotationXY, rotationXZ);
-	}
 
-	public void renderParticleForShader(InstancedMeshParticle mesh, Transformation transformation, Matrix4fe viewMatrix, Entity entityIn,
+        super.renderParticle(worldRendererIn, entityIn, partialTicks, rotationX,
+                rotationZ, rotationYZ, rotationXY, rotationXZ);
+    }
+
+    public void renderParticleForShader(InstancedMeshParticle mesh, Transformation transformation, Matrix4fe viewMatrix, Entity entityIn,
                                         float partialTicks, float rotationX, float rotationZ,
                                         float rotationYZ, float rotationXY, float rotationXZ) {
 
@@ -576,7 +563,7 @@ public class EntityRotFX extends Particle implements IWindHandler, IShaderRender
                 + mesh.MATRIX_SIZE_FLOATS + 1 + (rgbaIndex++), this.getAlphaF());
 
         mesh.curBufferPos++;
-        
+
     }
 
     /*public void renderParticleForShaderTest(InstancedMeshParticle mesh, Transformation transformation, Matrix4fe viewMatrix, Entity entityIn,
@@ -598,60 +585,53 @@ public class EntityRotFX extends Particle implements IWindHandler, IShaderRender
         mesh.curBufferPos++;
     }*/
 
-	@Override
-	public float getWindWeight() {
-		return windWeight;
-	}
+    @Override
+    public float getWindWeight() {
+        return windWeight;
+    }
 
-	@Override
-	public int getParticleDecayExtra() {
-		return particleDecayExtra;
-	}
-    
+    @Override
+    public int getParticleDecayExtra() {
+        return particleDecayExtra;
+    }
+
     @Override
     public boolean shouldDisableDepth() {
-    	return isTransparent;
+        return isTransparent;
     }
-    
+
     public void setKillOnCollide(boolean val) {
-    	this.killOnCollide = val;
+        this.killOnCollide = val;
     }
-    
+
     //override to fix isCollided check
     @Override
-    public void move(double x, double y, double z)
-    {
+    public void move(double x, double y, double z) {
         double yy = y;
         double xx = x;
         double zz = z;
 
-        if (this.canCollide)
-        {
-            List<AxisAlignedBB> list = this.world.getCollisionBoxes((Entity)null, this.getBoundingBox().expand(x, y, z));
+        if (this.canCollide) {
+            List<AxisAlignedBB> list = this.world.getCollisionBoxes((Entity) null, this.getBoundingBox().expand(x, y, z));
 
-            for (AxisAlignedBB axisalignedbb : list)
-            {
+            for (AxisAlignedBB axisalignedbb : list) {
                 y = axisalignedbb.calculateYOffset(this.getBoundingBox(), y);
             }
 
             this.setBoundingBox(this.getBoundingBox().offset(0.0D, y, 0.0D));
 
-            for (AxisAlignedBB axisalignedbb1 : list)
-            {
+            for (AxisAlignedBB axisalignedbb1 : list) {
                 x = axisalignedbb1.calculateXOffset(this.getBoundingBox(), x);
             }
 
             this.setBoundingBox(this.getBoundingBox().offset(x, 0.0D, 0.0D));
 
-            for (AxisAlignedBB axisalignedbb2 : list)
-            {
+            for (AxisAlignedBB axisalignedbb2 : list) {
                 z = axisalignedbb2.calculateZOffset(this.getBoundingBox(), z);
             }
 
             this.setBoundingBox(this.getBoundingBox().offset(0.0D, 0.0D, z));
-        }
-        else
-        {
+        } else {
             this.setBoundingBox(this.getBoundingBox().offset(x, y, z));
         }
 
@@ -663,32 +643,30 @@ public class EntityRotFX extends Particle implements IWindHandler, IShaderRender
         this.isCollidedVerticallyDownwards = yy < y;
         this.isCollidedVerticallyUpwards = yy > y;
 
-        if (xx != x)
-        {
+        if (xx != x) {
             this.motionX = 0.0D;
         }
 
-        if (zz != z)
-        {
+        if (zz != z) {
             this.motionZ = 0.0D;
         }
     }
-    
-    public void setFacePlayer(boolean val) {
-    	this.facePlayer = val;
-    }
-    
-    public TextureAtlasSprite getParticleTexture() {
-    	return this.particleTexture;
-    }
-    
-    public boolean isVanillaMotionDampen() {
-		return vanillaMotionDampen;
-	}
 
-	public void setVanillaMotionDampen(boolean motionDampen) {
-		this.vanillaMotionDampen = motionDampen;
-	}
+    public void setFacePlayer(boolean val) {
+        this.facePlayer = val;
+    }
+
+    public TextureAtlasSprite getParticleTexture() {
+        return this.particleTexture;
+    }
+
+    public boolean isVanillaMotionDampen() {
+        return vanillaMotionDampen;
+    }
+
+    public void setVanillaMotionDampen(boolean motionDampen) {
+        this.vanillaMotionDampen = motionDampen;
+    }
 
     @Override
     public int getBrightnessForRender(float p_189214_1_) {
@@ -708,8 +686,8 @@ public class EntityRotFX extends Particle implements IWindHandler, IShaderRender
 
         Quaternion qY = new Quaternion();
         Quaternion qX = new Quaternion();
-        qY.setFromAxisAngle(new Vector4f(0, 1, 0, (float)Math.toRadians(-this.rotationYaw - 180F)));
-        qX.setFromAxisAngle(new Vector4f(1, 0, 0, (float)Math.toRadians(-this.rotationPitch)));
+        qY.setFromAxisAngle(new Vector4f(0, 1, 0, (float) Math.toRadians(-this.rotationYaw - 180F)));
+        qX.setFromAxisAngle(new Vector4f(1, 0, 0, (float) Math.toRadians(-this.rotationPitch)));
         if (this.rotateOrderXY) {
             Quaternion.mul(qX, qY, this.rotation);
         } else {
@@ -738,6 +716,6 @@ public class EntityRotFX extends Particle implements IWindHandler, IShaderRender
     }
 
     public boolean isCollidedVertically() {
-	    return isCollidedVerticallyDownwards || isCollidedVerticallyUpwards;
+        return isCollidedVerticallyDownwards || isCollidedVerticallyUpwards;
     }
 }

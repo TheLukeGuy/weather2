@@ -1,9 +1,7 @@
 package CoroUtil.difficulty.buffs;
 
-import CoroUtil.ai.BehaviorModifier;
 import CoroUtil.ai.tasks.EntityAIChaseFromFar;
 import CoroUtil.ai.tasks.EntityAINearestAttackablePlayerOmniscience;
-import CoroUtil.ai.tasks.TaskDigTowardsTarget;
 import CoroUtil.difficulty.UtilEntityBuffs;
 import CoroUtil.forge.CULog;
 import net.minecraft.entity.EntityCreature;

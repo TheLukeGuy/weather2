@@ -26,6 +26,6 @@ public class ParticleTallGrassTemp extends ParticleTexLeafColor {
         super.onUpdate();
         float windSpeed = 1F;//ClientTickHandler.weatherManager.getWindManager().getWindSpeedForPriority();
         this.rotationPitch = windSpeed * 60F;
-        this.rotationPitch = (float)Math.toDegrees(Math.sin(this.getAge() * 0.1F) * 0.2F);
+        this.rotationPitch = (float) Math.toDegrees(Math.sin(this.getAge() * 0.1F) * 0.2F);
     }
 }

@@ -22,7 +22,10 @@ import net.minecraftforge.fml.common.ModContainer;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -32,7 +35,6 @@ import java.util.List;
 
 /**
  * Created by Corosus on 2/1/2017.
- *
  */
 public class DifficultyDataReader {
 
@@ -157,7 +159,6 @@ public class DifficultyDataReader {
 
     public static void loadFiles() {
         data.reset();
-
 
 
         if (CoroUtilCompatibility.isHWInvasionsInstalled()) {
@@ -294,18 +295,18 @@ public class DifficultyDataReader {
             String pathRoot = path.substring(path.indexOf("assets/coroutil/"));
 
             if (path.contains(lootTablesFolder)) {
-                CULog.dbg("processing, detected as loot table: " + path.substring(path.lastIndexOf("/")+1).toString());
+                CULog.dbg("processing, detected as loot table: " + path.substring(path.lastIndexOf("/") + 1).toString());
 
                 String temp = pathRoot.replace("assets/" + CoroUtil.modID + "/", "");
                 String fileContents = UtilClasspath.getContentsFromResourceLocation(new ResourceLocation(CoroUtil.modID, temp));
                 CULog.dbg("file contents size: " + fileContents.length());
 
-                String fileName = path.substring(path.lastIndexOf("/")+1).replace(".json", "");
+                String fileName = path.substring(path.lastIndexOf("/") + 1).replace(".json", "");
                 ResourceLocation resName = new ResourceLocation(CoroUtil.modID + ":loot_tables." + fileName);
                 LootTable lootTable = net.minecraftforge.common.ForgeHooks.loadLootTable(LootTableManager.GSON_INSTANCE, resName, fileContents, true, null);
                 data.lookupLootTables.put(fileName, lootTable);
             } else {
-                CULog.dbg("processing, detected as DifficultyData: " + path.substring(path.lastIndexOf("/")+1).toString());
+                CULog.dbg("processing, detected as DifficultyData: " + path.substring(path.lastIndexOf("/") + 1).toString());
                 String temp = pathRoot.replace("assets/" + CoroUtil.modID + "/", "");
                 String fileContents = UtilClasspath.getContentsFromResourceLocation(new ResourceLocation(CoroUtil.modID, temp));
                 CULog.dbg("file contents size: " + fileContents.length());
@@ -341,7 +342,7 @@ public class DifficultyDataReader {
 
             if (!fileContents.equals("")) {
                 File fileOut = new File(dataFolder + pathRoot2);
-                CULog.dbg("copying " + path.substring(path.lastIndexOf("/")+1).toString() + " to " + fileOut.toString());
+                CULog.dbg("copying " + path.substring(path.lastIndexOf("/") + 1).toString() + " to " + fileOut.toString());
                 FileUtils.writeStringToFile(fileOut, fileContents, StandardCharsets.UTF_8);
                 md5 = getMD5(fileOut);
             } else {

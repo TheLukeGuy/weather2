@@ -4,8 +4,6 @@ import CoroUtil.difficulty.UtilEntityBuffs;
 import CoroUtil.difficulty.data.DataCmod;
 import CoroUtil.difficulty.data.DifficultyDataReader;
 import com.google.gson.*;
-import net.minecraft.item.Item;
-import net.minecraft.util.text.TextFormatting;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;

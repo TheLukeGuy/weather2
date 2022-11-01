@@ -1,8 +1,6 @@
 package CoroUtil.difficulty.buffs;
 
-import CoroUtil.config.ConfigHWMonsters;
 import CoroUtil.difficulty.UtilEntityBuffs;
-import CoroUtil.difficulty.data.cmods.CmodAttributeHealth;
 import CoroUtil.difficulty.data.cmods.CmodAttributeSpeed;
 import CoroUtil.forge.CULog;
 import CoroUtil.util.CoroUtilAttributes;
@@ -38,7 +36,7 @@ public class BuffSpeed extends BuffBase {
          * - monsters
          */
 
-        CmodAttributeSpeed cmod = (CmodAttributeSpeed)UtilEntityBuffs.getCmodData(ent, getTagName());
+        CmodAttributeSpeed cmod = (CmodAttributeSpeed) UtilEntityBuffs.getCmodData(ent, getTagName());
 
         if (cmod != null) {
             /**
@@ -89,8 +87,6 @@ public class BuffSpeed extends BuffBase {
 
                 CULog.dbg("mob speed went from " + oldVal + " to " + ent.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
             }
-
-
 
 
         }

@@ -59,9 +59,15 @@ public abstract class BuffBase {
      * @param ent
      * @param difficulty
      */
-    public void applyBuffFromReload(EntityCreature ent, float difficulty) {};
+    public void applyBuffFromReload(EntityCreature ent, float difficulty) {
+    }
 
-    public void applyBuffOnDeath(EntityCreature ent, float difficulty, LivingDeathEvent event) {};
+    ;
+
+    public void applyBuffOnDeath(EntityCreature ent, float difficulty, LivingDeathEvent event) {
+    }
+
+    ;
 
     public float getMinRequiredDifficulty() {
         return 0;

@@ -1,6 +1,5 @@
 package weather2.api;
 
-import CoroUtil.util.Vec3;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -19,22 +18,22 @@ public class WeatherDataHelper {
      * @param position
      * @return
      */
-	public static boolean isPrecipitatingAt(World world, BlockPos position) {
-	    WeatherManager weatherManager;
-	    if (world.isRemote) {
-	        weatherManager = getWeatherManagerForClient();
+    public static boolean isPrecipitatingAt(World world, BlockPos position) {
+        WeatherManager weatherManager;
+        if (world.isRemote) {
+            weatherManager = getWeatherManagerForClient();
         } else {
-	        weatherManager = ServerTickHandler.getWeatherSystemForDim(world.provider.getDimension());
+            weatherManager = ServerTickHandler.getWeatherSystemForDim(world.provider.getDimension());
         }
         if (weatherManager != null) {
-	        return weatherManager.isPrecipitatingAt(position);
+            return weatherManager.isPrecipitatingAt(position);
         }
-	    return false;
+        return false;
     }
 
     @SideOnly(Side.CLIENT)
     public static WeatherManager getWeatherManagerForClient() {
-	    return ClientTickHandler.weatherManager;
+        return ClientTickHandler.weatherManager;
     }
 
 }

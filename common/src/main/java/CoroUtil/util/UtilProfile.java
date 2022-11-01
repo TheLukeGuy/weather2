@@ -125,7 +125,7 @@ public class UtilProfile implements Runnable {
                 Minecraft minecraft = Minecraft.getMinecraft();
                 Map<MinecraftProfileTexture.Type, MinecraftProfileTexture> map = minecraft.getSkinManager().loadSkinFromCache(profile);
                 MinecraftProfileTexture.Type type = MinecraftProfileTexture.Type.SKIN;
-                if (map.containsKey(type)){
+                if (map.containsKey(type)) {
                     CULog.dbg("set temp data to load from gl context");
                     data.setTemp(map.get(type));
                 } else {

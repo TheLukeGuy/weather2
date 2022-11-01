@@ -1,43 +1,43 @@
 package CoroUtil.bt.nodes;
 
-import net.minecraft.entity.EntityLiving;
 import CoroUtil.bt.Behavior;
 import CoroUtil.bt.BlackboardBase;
 import CoroUtil.bt.EnumBehaviorState;
 import CoroUtil.bt.IBTAgent;
 import CoroUtil.bt.selector.Selector;
+import net.minecraft.entity.EntityLiving;
 
 public class SelectorMoveToPathClose extends Selector {
 
-	public IBTAgent entInt;
-	public EntityLiving ent;
-	public BlackboardBase blackboard;
-	
-	//public int pathfindRange = 12;
-	public int repathDelay = 20*5;
-	public int repathDelayFailAdd = 60;
-	public long lastPathTime = 0;
-	public int closeDist;
-	public boolean partialPathing = false;
-	public boolean lastAttemptFailed = false;
-	
-	public int retryStage = 0;
-	public int retryStageMax = 15;
-	
-	public SelectorMoveToPathClose(Behavior parParent, IBTAgent parEnt, BlackboardBase parBB, int parCloseDist, boolean parPartialPathing) {
-		super(parParent);
-		blackboard = parBB;
-		entInt = parEnt;
-		ent = (EntityLiving)parEnt;
-		closeDist = parCloseDist;
-		partialPathing = parPartialPathing;
-	}
-	
-	@Override
-	public EnumBehaviorState tick() {
+    public IBTAgent entInt;
+    public EntityLiving ent;
+    public BlackboardBase blackboard;
 
-		
-		//TODO: 1.8, CARE ABOUT FIXING THIS 
+    //public int pathfindRange = 12;
+    public int repathDelay = 20 * 5;
+    public int repathDelayFailAdd = 60;
+    public long lastPathTime = 0;
+    public int closeDist;
+    public boolean partialPathing = false;
+    public boolean lastAttemptFailed = false;
+
+    public int retryStage = 0;
+    public int retryStageMax = 15;
+
+    public SelectorMoveToPathClose(Behavior parParent, IBTAgent parEnt, BlackboardBase parBB, int parCloseDist, boolean parPartialPathing) {
+        super(parParent);
+        blackboard = parBB;
+        entInt = parEnt;
+        ent = (EntityLiving) parEnt;
+        closeDist = parCloseDist;
+        partialPathing = parPartialPathing;
+    }
+
+    @Override
+    public EnumBehaviorState tick() {
+
+
+        //TODO: 1.8, CARE ABOUT FIXING THIS
 		
 		/*int pathfindRange = blackboard.distMed.getValue() + 8;
 		
@@ -107,9 +107,9 @@ public class SelectorMoveToPathClose extends Selector {
 				entInt.getAIBTAgent().pathNav.onUpdateNavigation();
 			}
 		}*/
-		
-		return EnumBehaviorState.SUCCESS;
-		
-	}
-	
+
+        return EnumBehaviorState.SUCCESS;
+
+    }
+
 }

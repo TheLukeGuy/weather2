@@ -11,33 +11,28 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class BlockWeatherDeflector extends BlockContainer
-{
-    public BlockWeatherDeflector()
-    {
+public class BlockWeatherDeflector extends BlockContainer {
+    public BlockWeatherDeflector() {
         super(Material.CLAY);
         setHardness(0.6F);
         setResistance(10.0F);
     }
 
     @Override
-    public TileEntity createNewTileEntity(World var1, int meta)
-    {
+    public TileEntity createNewTileEntity(World var1, int meta) {
         return new TileEntityWeatherDeflector();
     }
-    
+
     @Override
-    public boolean isOpaqueCube(IBlockState state)
-    {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
-    
+
     /**
      * The type of render function called. 3 for standard block models, 2 for TESR's, 1 for liquids, -1 is no render
      */
     @Override
-    public EnumBlockRenderType getRenderType(IBlockState state)
-    {
+    public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.MODEL;
     }
 

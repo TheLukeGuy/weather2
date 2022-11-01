@@ -6,7 +6,7 @@ package extendedrenderer.shader;
 public class Timer {
 
     private double lastLoopTime;
-    
+
     public void init() {
         lastLoopTime = getTime();
     }

@@ -4,8 +4,8 @@ import CoroUtil.bt.Behavior;
 
 public class LeafAction extends Leaf {
 
-	public LeafAction(Behavior parParent) {
-		super(parParent);
-	}
+    public LeafAction(Behavior parParent) {
+        super(parParent);
+    }
 
 }

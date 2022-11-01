@@ -8,10 +8,10 @@ import net.minecraftforge.common.DimensionManager;
 /**
  * Base class for ticking locations (threaded ticking optional)
  * Implements the basic requirements for the system eg origin and classname for serialization
- *
+ * <p>
  * Created by Corosus on 1/13/2017.
  */
-    public abstract class TickableLocationBase implements ISimulationTickable {
+public abstract class TickableLocationBase implements ISimulationTickable {
 
     //public World world;
     public int dimensionID;

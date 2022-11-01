@@ -57,7 +57,7 @@ public class DifficultyInfoPlayer {
         if (skipCount == 0) {
             itemsNeeded = countNeededBase;
         } else {
-            itemsNeeded = (int) ((double) countNeededBase * multiplier * (double)skipCount);
+            itemsNeeded = (int) ((double) countNeededBase * multiplier * (double) skipCount);
         }
 
 

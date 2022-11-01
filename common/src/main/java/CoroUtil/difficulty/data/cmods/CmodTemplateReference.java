@@ -1,6 +1,8 @@
 package CoroUtil.difficulty.data.cmods;
 
-import CoroUtil.difficulty.data.*;
+import CoroUtil.difficulty.data.DataCmod;
+import CoroUtil.difficulty.data.DeserializerAllJson;
+import CoroUtil.difficulty.data.DifficultyDataReader;
 import net.minecraft.util.text.TextFormatting;
 
 import java.util.List;

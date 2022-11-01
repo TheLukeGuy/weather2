@@ -1,8 +1,6 @@
 package CoroUtil.util;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.init.MobEffects;
-import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
@@ -82,7 +80,7 @@ public class CoroUtilBlockLightCache {
             //hash = PathPoint.makeHash(xx, yy, zz);
             //slightly less slow
             //BlockPos.toLong, more accurate
-            hash = ((long)xx & X_MASK) << X_SHIFT | ((long)yy & Y_MASK) << Y_SHIFT | ((long)zz & Z_MASK) << 0;
+            hash = ((long) xx & X_MASK) << X_SHIFT | ((long) yy & Y_MASK) << Y_SHIFT | ((long) zz & Z_MASK) << 0;
             //hash = (xx + zz * 31) * 31 + yy;
             //hmm, issues
             //hash = xx + (15 * yy) + (30 * zz);

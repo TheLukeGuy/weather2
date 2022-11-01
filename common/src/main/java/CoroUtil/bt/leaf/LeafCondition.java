@@ -4,8 +4,8 @@ import CoroUtil.bt.Behavior;
 
 public class LeafCondition extends Leaf {
 
-	public LeafCondition(Behavior parParent) {
-		super(parParent);
-	}
+    public LeafCondition(Behavior parParent) {
+        super(parParent);
+    }
 
 }

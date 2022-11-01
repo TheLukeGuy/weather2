@@ -6,7 +6,6 @@ import CoroUtil.difficulty.data.cmods.CmodInventory;
 import CoroUtil.forge.CULog;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.monster.AbstractSkeleton;
-import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -24,7 +23,7 @@ public class BuffInventory extends BuffBase {
     @Override
     public boolean applyBuff(EntityCreature ent, float difficulty) {
 
-        CmodInventory cmod = (CmodInventory)UtilEntityBuffs.getCmodData(ent, getTagName());
+        CmodInventory cmod = (CmodInventory) UtilEntityBuffs.getCmodData(ent, getTagName());
 
         if (cmod != null) {
             EquipmentForDifficulty equipment = UtilEntityBuffs.getEquipmentItemsFromData(cmod);

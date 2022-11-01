@@ -1,13 +1,10 @@
 package CoroUtil.difficulty;
 
-import CoroUtil.util.BlockCoord;
 import CoroUtil.world.WorldDirector;
 import CoroUtil.world.WorldDirectorManager;
-import CoroUtil.world.location.ISimulationTickable;
 import CoroUtil.world.location.TickableLocationBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraftforge.common.DimensionManager;
 
 /**
  * Created by Corosus on 1/13/2017.
@@ -22,7 +19,7 @@ public class BuffedLocation extends TickableLocationBase {
 
     private boolean tickDecay = false;
     private int age = 0;
-    private int maxAge = 20*60*10;
+    private int maxAge = 20 * 60 * 10;
 
     public BuffedLocation() {
         super();
