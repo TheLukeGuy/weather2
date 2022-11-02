@@ -3,10 +3,10 @@ package weather2.weathersystem.storm;
 import CoroUtil.util.Vec3;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
-import weather2.util.CachedNBTTagCompound;
+import weather2.util.CachedNbtCompound;
 import weather2.weathersystem.WeatherManager;
 
-public class WeatherObject {
+public class Storm {
     public static long lastUsedStormID = 0; //ID starts from 0 for each game start, no storm nbt disk reload for now
     public long ID; //loosely accurate ID for tracking, but we wanted to persist between world reloads..... need proper UUID??? I guess add in UUID later and dont persist, start from 0 per game run
     public boolean isDead = false;
@@ -28,15 +28,15 @@ public class WeatherObject {
     public int size = 50;
     public int maxSize = 0;
 
-    public WeatherObjectType weatherObjectType = WeatherObjectType.CLOUD;
+    public StormType weatherObjectType = StormType.CLOUD;
 
-    private CachedNBTTagCompound nbtCache;
+    private CachedNbtCompound nbtCache;
 
     //private NBTTagCompound cachedClientNBTState;
 
-    public WeatherObject(WeatherManager parManager) {
+    public Storm(WeatherManager parManager) {
         manager = parManager;
-        nbtCache = new CachedNBTTagCompound();
+        nbtCache = new CachedNbtCompound();
     }
 
     public void initFirstTime() {
@@ -89,42 +89,42 @@ public class WeatherObject {
     }
 
     public void nbtSyncFromServer() {
-        CachedNBTTagCompound parNBT = this.getNbtCache();
+        CachedNbtCompound parNBT = this.getNbtCache();
         ID = parNBT.getLong("ID");
         //Weather.dbg("StormObject " + ID + " receiving sync");
 
         pos = new Vec3(parNBT.getDouble("posX"), parNBT.getDouble("posY"), parNBT.getDouble("posZ"));
         //motion = new Vec3(parNBT.getDouble("motionX"), parNBT.getDouble("motionY"), parNBT.getDouble("motionZ"));
         motion = new Vec3(parNBT.getDouble("vecX"), parNBT.getDouble("vecY"), parNBT.getDouble("vecZ"));
-        size = parNBT.getInteger("size");
-        maxSize = parNBT.getInteger("maxSize");
-        this.weatherObjectType = WeatherObjectType.get(parNBT.getInteger("weatherObjectType"));
+        size = parNBT.getInt("size");
+        maxSize = parNBT.getInt("maxSize");
+        this.weatherObjectType = StormType.get(parNBT.getInt("weatherObjectType"));
     }
 
     public void nbtSyncForClient() {
-        CachedNBTTagCompound nbt = this.getNbtCache();
-        nbt.setDouble("posX", pos.xCoord);
-        nbt.setDouble("posY", pos.yCoord);
-        nbt.setDouble("posZ", pos.zCoord);
+        CachedNbtCompound nbt = this.getNbtCache();
+        nbt.putDouble("posX", pos.xCoord);
+        nbt.putDouble("posY", pos.yCoord);
+        nbt.putDouble("posZ", pos.zCoord);
 
-        nbt.setDouble("vecX", motion.xCoord);
-        nbt.setDouble("vecY", motion.yCoord);
-        nbt.setDouble("vecZ", motion.zCoord);
+        nbt.putDouble("vecX", motion.xCoord);
+        nbt.putDouble("vecY", motion.yCoord);
+        nbt.putDouble("vecZ", motion.zCoord);
 
-        nbt.setLong("ID", ID);
+        nbt.putLong("ID", ID);
         //just blind set ID into non cached data so client always has it, no need to check for forced state and restore orig state
-        nbt.getNewNBT().setLong("ID", ID);
+        nbt.getNewNbt().setLong("ID", ID);
 
-        nbt.setInteger("size", size);
-        nbt.setInteger("maxSize", maxSize);
-        nbt.setInteger("weatherObjectType", this.weatherObjectType.ordinal());
+        nbt.setInt("size", size);
+        nbt.setInt("maxSize", maxSize);
+        nbt.setInt("weatherObjectType", this.weatherObjectType.ordinal());
     }
 
-    public CachedNBTTagCompound getNbtCache() {
+    public CachedNbtCompound getNbtCache() {
         return nbtCache;
     }
 
-    public void setNbtCache(CachedNBTTagCompound nbtCache) {
+    public void setNbtCache(CachedNbtCompound nbtCache) {
         this.nbtCache = nbtCache;
     }
 }

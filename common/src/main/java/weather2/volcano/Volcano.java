@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class VolcanoObject {
+public class Volcano {
 
     //used on both server and client side, mark things SideOnly where needed
 
@@ -92,12 +92,12 @@ public class VolcanoObject {
 
     public int growthStage = 0;
 
-    public VolcanoObject(WeatherManager parManager) {
+    public Volcano(WeatherManager parManager) {
         manager = parManager;
     }
 
     public void initFirstTime() {
-        ID = VolcanoObject.lastUsedID++;
+        ID = Volcano.lastUsedID++;
     }
 
     public void initPost() {

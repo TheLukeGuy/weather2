@@ -14,8 +14,8 @@ import net.minecraft.world.World;
 import weather2.ServerTickHandler;
 import weather2.config.ConfigStorm;
 import weather2.weathersystem.ServerWeatherManager;
-import weather2.weathersystem.storm.StormObject;
-import weather2.weathersystem.storm.WeatherObject;
+import weather2.weathersystem.storm.CloudStorm;
+import weather2.weathersystem.storm.Storm;
 
 import java.util.List;
 
@@ -42,13 +42,13 @@ public class TileEntityWeatherDeflector extends TileEntity implements ITickable 
                 if (world.getTotalWorldTime() % 100 == 0) {
                     ServerWeatherManager wm = ServerTickHandler.lookupDimToWeatherMan.get(world.provider.getDimension());
                     if (wm != null) {
-                        List<WeatherObject> storms = wm.getStormsAroundForDeflector(new Vec3(getPos().getX(), StormObject.layers.get(0), getPos().getZ()), ConfigStorm.Storm_Deflector_RadiusOfStormRemoval);
+                        List<Storm> storms = wm.getStormsAround(new Vec3(getPos().getX(), CloudStorm.layers.get(0), getPos().getZ()), ConfigStorm.Storm_Deflector_RadiusOfStormRemoval, true);
 
                         for (int i = 0; i < storms.size(); i++) {
-                            WeatherObject storm = storms.get(i);
+                            Storm storm = storms.get(i);
 
                             if (storm != null) {
-                                wm.removeStormObject(storm.ID);
+                                wm.removeStorm(storm.ID);
                                 wm.syncStormRemove(storm);
                             }
                         }

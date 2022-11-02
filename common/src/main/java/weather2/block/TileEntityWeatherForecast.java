@@ -6,8 +6,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import weather2.ClientTickHandler;
 import weather2.config.ConfigMisc;
-import weather2.weathersystem.storm.StormObject;
-import weather2.weathersystem.storm.WeatherObject;
+import weather2.weathersystem.storm.CloudStorm;
+import weather2.weathersystem.storm.Storm;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +25,9 @@ public class TileEntityWeatherForecast extends TileEntity implements ITickable {
     public float smoothAngleAdj = 0.1F;
     public float smoothSpeedAdj = 0.1F;
 
-    public StormObject lastTickStormObject = null;
+    public CloudStorm lastTickStormObject = null;
 
-    public List<WeatherObject> storms = new ArrayList<>();
+    public List<Storm> storms = new ArrayList<>();
 
     //public MapHandler mapHandler;
 
@@ -40,19 +40,19 @@ public class TileEntityWeatherForecast extends TileEntity implements ITickable {
                 ClientTickHandler.checkClientWeather();
                 if (ClientTickHandler.weatherManager == null) return;
 
-                lastTickStormObject = ClientTickHandler.weatherManager.getClosestStorm(new Vec3(getPos().getX(), StormObject.layers.get(0), getPos().getZ()), 1024, StormObject.STATE_FORMING, true);
+                lastTickStormObject = ClientTickHandler.weatherManager.getClosestCloudStorm(new Vec3(getPos().getX(), CloudStorm.layers.get(0), getPos().getZ()), 1024, CloudStorm.STATE_FORMING, true);
 
                 if (ConfigMisc.radarCloudDebug) {
                     //storms.clear();
-                    List<WeatherObject> listAdd = new ArrayList<>();
-                    for (WeatherObject wo : ClientTickHandler.weatherManager.getStorms()) {
+                    List<Storm> listAdd = new ArrayList<>();
+                    for (Storm wo : ClientTickHandler.weatherManager.getStorms()) {
                         //if (wo instanceof StormObject && !((StormObject) wo).isCloudlessStorm()) {
                         listAdd.add(wo);
                         //}
                     }
                     storms = listAdd;
                 } else {
-                    storms = ClientTickHandler.weatherManager.getStormsAround(new Vec3(getPos().getX(), StormObject.layers.get(0), getPos().getZ()), 1024);
+                    storms = ClientTickHandler.weatherManager.getStormsAround(new Vec3(getPos().getX(), CloudStorm.layers.get(0), getPos().getZ()), 1024);
                 }
             }
         } else {

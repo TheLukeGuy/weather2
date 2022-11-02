@@ -9,7 +9,7 @@ import weather2.Weather;
 import weather2.config.ConfigMisc;
 import weather2.config.ConfigTornado;
 import weather2.weathersystem.ServerWeatherManager;
-import weather2.weathersystem.storm.StormObject;
+import weather2.weathersystem.storm.CloudStorm;
 
 import java.util.Random;
 
@@ -34,7 +34,7 @@ public class TileEntityWeatherMachine extends TileEntity implements ITickable {
     public boolean lockStormHere = true;
 
     //TODO: replace with ID and just lookup each time, for better serialization
-    public StormObject lastTickStormObject = null;
+    public CloudStorm lastTickStormObject = null;
 
     //for tracking between world reloads
     public long lastTickStormObjectID = -1;
@@ -78,7 +78,7 @@ public class TileEntityWeatherMachine extends TileEntity implements ITickable {
 
             if (lastTickStormObject != null) {
 
-                wm.removeStormObject(lastTickStormObject.ID);
+                wm.removeStorm(lastTickStormObject.ID);
                 wm.syncStormRemove(lastTickStormObject);
                 lastTickStormObject = null;
             }
@@ -112,7 +112,7 @@ public class TileEntityWeatherMachine extends TileEntity implements ITickable {
                     ServerWeatherManager manager = ServerTickHandler.lookupDimToWeatherMan.get(world.provider.getDimension());
 
                     if (manager != null) {
-                        StormObject obj = manager.getStormById(lastTickStormObjectID);
+                        CloudStorm obj = manager.getCloudStormById(lastTickStormObjectID);
                         if (obj != null) {
                             lastTickStormObject = obj;
                             Weather.dbg("regrabbed old storm instance by ID " + obj.ID + " for weather machine");
@@ -124,16 +124,16 @@ public class TileEntityWeatherMachine extends TileEntity implements ITickable {
                     ServerWeatherManager manager = ServerTickHandler.lookupDimToWeatherMan.get(world.provider.getDimension());
 
                     if (manager != null) {
-                        StormObject so = new StormObject(manager);
+                        CloudStorm so = new CloudStorm(manager);
                         so.initFirstTime();
-                        so.pos = new Vec3(getPos().getX(), StormObject.layers.get(0), getPos().getZ());
+                        so.pos = new Vec3(getPos().getX(), CloudStorm.layers.get(0), getPos().getZ());
                         so.layer = 0;
                         so.userSpawnedFor = "" + getPos().getX() + getPos().getY() + getPos().getZ();
                         //so.canSnowFromCloudTemperature = true;
                         so.naturallySpawned = false;
 
 
-                        manager.addStormObject(so);
+                        manager.addStorm(so);
                         manager.syncStormNew(so);
                         lastTickStormObject = so;
                         lastTickStormObjectID = so.ID;
@@ -147,7 +147,7 @@ public class TileEntityWeatherMachine extends TileEntity implements ITickable {
 
                 if (lockStormHere) {
                     //lastTickStormObject.pos = new Vec3(xCoord + rand.nextFloat() - rand.nextFloat(), StormObject.layers.get(0), zCoord + rand.nextFloat() - rand.nextFloat());
-                    lastTickStormObject.pos = new Vec3(getPos().getX(), StormObject.layers.get(0), getPos().getZ());
+                    lastTickStormObject.pos = new Vec3(getPos().getX(), CloudStorm.layers.get(0), getPos().getZ());
                     lastTickStormObject.motion = new Vec3(0, 0, 0);
                 }
 
@@ -162,28 +162,28 @@ public class TileEntityWeatherMachine extends TileEntity implements ITickable {
                 lastTickStormObject.levelCurStagesIntensity = 0.9F;
 
                 //defaults
-                lastTickStormObject.levelCurIntensityStage = StormObject.STATE_NORMAL;
-                lastTickStormObject.stormType = StormObject.TYPE_LAND;
+                lastTickStormObject.levelCurIntensityStage = CloudStorm.STATE_NORMAL;
+                lastTickStormObject.stormType = CloudStorm.TYPE_LAND;
                 lastTickStormObject.levelTemperature = 40;
 
                 if (weatherType == 0) {
                     lastTickStormObject.levelTemperature = -40;
                 } else if (weatherType == 1) {
                 } else if (weatherType == 2) {
-                    lastTickStormObject.stormType = StormObject.TYPE_LAND;
-                    lastTickStormObject.levelCurIntensityStage = StormObject.STATE_THUNDER;
+                    lastTickStormObject.stormType = CloudStorm.TYPE_LAND;
+                    lastTickStormObject.levelCurIntensityStage = CloudStorm.STATE_THUNDER;
                 } else if (weatherType == 3) {
-                    lastTickStormObject.stormType = StormObject.TYPE_LAND;
-                    lastTickStormObject.levelCurIntensityStage = StormObject.STATE_HIGHWIND;
+                    lastTickStormObject.stormType = CloudStorm.TYPE_LAND;
+                    lastTickStormObject.levelCurIntensityStage = CloudStorm.STATE_HIGHWIND;
                 } else if (weatherType == 4) {
-                    lastTickStormObject.stormType = StormObject.TYPE_LAND;
-                    lastTickStormObject.levelCurIntensityStage = StormObject.STATE_HAIL;
+                    lastTickStormObject.stormType = CloudStorm.TYPE_LAND;
+                    lastTickStormObject.levelCurIntensityStage = CloudStorm.STATE_HAIL;
                 } else if (weatherType == 5) {
-                    lastTickStormObject.stormType = StormObject.TYPE_LAND;
-                    lastTickStormObject.levelCurIntensityStage = StormObject.STATE_STAGE1;
+                    lastTickStormObject.stormType = CloudStorm.TYPE_LAND;
+                    lastTickStormObject.levelCurIntensityStage = CloudStorm.STATE_STAGE1;
                 } else if (weatherType == 6) {
-                    lastTickStormObject.stormType = StormObject.TYPE_WATER;
-                    lastTickStormObject.levelCurIntensityStage = StormObject.STATE_STAGE1;
+                    lastTickStormObject.stormType = CloudStorm.TYPE_WATER;
+                    lastTickStormObject.levelCurIntensityStage = CloudStorm.STATE_STAGE1;
                 }
             }
         }

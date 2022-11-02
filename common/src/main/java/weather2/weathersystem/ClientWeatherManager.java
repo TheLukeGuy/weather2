@@ -11,11 +11,11 @@ import weather2.ClientTickHandler;
 import weather2.Weather;
 import weather2.entity.EntityLightningBolt;
 import weather2.entity.EntityLightningBoltCustom;
-import weather2.volcano.VolcanoObject;
-import weather2.weathersystem.storm.WeatherObjectType;
-import weather2.weathersystem.storm.StormObject;
-import weather2.weathersystem.storm.WeatherObject;
-import weather2.weathersystem.storm.SandstormObject;
+import weather2.volcano.Volcano;
+import weather2.weathersystem.storm.StormType;
+import weather2.weathersystem.storm.CloudStorm;
+import weather2.weathersystem.storm.Storm;
+import weather2.weathersystem.storm.SandStorm;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ public class ClientWeatherManager extends WeatherManager {
     //new for 1.10.2, replaces world.weatherEffects use
     public List<Particle> listWeatherEffectedParticles = new ArrayList<Particle>();
 
-    public static StormObject closestStormCached;
+    public static CloudStorm closestStormCached;
 
 
     public ClientWeatherManager(int parDim) {
@@ -64,29 +64,29 @@ public class ClientWeatherManager extends WeatherManager {
             long ID = stormNBT.getLong("ID");
             Weather.dbg("syncStormNew, ID: " + ID);
 
-            WeatherObjectType weatherObjectType = WeatherObjectType.get(stormNBT.getInteger("weatherObjectType"));
+            StormType weatherObjectType = StormType.get(stormNBT.getInteger("weatherObjectType"));
 
-            WeatherObject wo = null;
-            if (weatherObjectType == WeatherObjectType.CLOUD) {
-                wo = new StormObject(ClientTickHandler.weatherManager);
-            } else if (weatherObjectType == WeatherObjectType.SAND) {
-                wo = new SandstormObject(ClientTickHandler.weatherManager);
+            Storm wo = null;
+            if (weatherObjectType == StormType.CLOUD) {
+                wo = new CloudStorm(ClientTickHandler.weatherManager);
+            } else if (weatherObjectType == StormType.SAND) {
+                wo = new SandStorm(ClientTickHandler.weatherManager);
             }
 
             //StormObject so
-            wo.getNbtCache().setNewNBT(stormNBT);
+            wo.getNbtCache().setNewNbt(stormNBT);
             wo.nbtSyncFromServer();
             wo.getNbtCache().updateCacheFromNew();
 
-            addStormObject(wo);
+            addStorm(wo);
         } else if (command.equals("syncStormRemove")) {
             //Weather.dbg("removing client side storm");
             NBTTagCompound stormNBT = parNBT.getCompoundTag("data");
             long ID = stormNBT.getLong("ID");
 
-            WeatherObject so = stormsById.get(ID);
+            Storm so = stormsById.get(ID);
             if (so != null) {
-                removeStormObject(ID);
+                removeStorm(ID);
             } else {
                 Weather.dbg("error removing storm, cant find by ID: " + ID);
             }
@@ -95,9 +95,9 @@ public class ClientWeatherManager extends WeatherManager {
             NBTTagCompound stormNBT = parNBT.getCompoundTag("data");
             long ID = stormNBT.getLong("ID");
 
-            WeatherObject so = stormsById.get(ID);
+            Storm so = stormsById.get(ID);
             if (so != null) {
-                so.getNbtCache().setNewNBT(stormNBT);
+                so.getNbtCache().setNewNbt(stormNBT);
                 so.nbtSyncFromServer();
                 so.getNbtCache().updateCacheFromNew();
             } else {
@@ -109,25 +109,25 @@ public class ClientWeatherManager extends WeatherManager {
             NBTTagCompound stormNBT = parNBT.getCompoundTag("data");
             //long ID = stormNBT.getLong("ID");
 
-            VolcanoObject so = new VolcanoObject(ClientTickHandler.weatherManager);
+            Volcano so = new Volcano(ClientTickHandler.weatherManager);
             so.nbtSyncFromServer(stormNBT);
 
-            addVolcanoObject(so);
+            addVolcano(so);
         } else if (command.equals("syncVolcanoRemove")) {
             Weather.dbg("removing client side volcano");
             NBTTagCompound stormNBT = parNBT.getCompoundTag("data");
             long ID = stormNBT.getLong("ID");
 
-            VolcanoObject so = volcanoesById.get(ID);
+            Volcano so = volcanoesById.get(ID);
             if (so != null) {
-                removeVolcanoObject(ID);
+                removeVolcano(ID);
             }
         } else if (command.equals("syncVolcanoUpdate")) {
             Weather.dbg("updating client side volcano");
             NBTTagCompound stormNBT = parNBT.getCompoundTag("data");
             long ID = stormNBT.getLong("ID");
 
-            VolcanoObject so = volcanoesById.get(ID);
+            Volcano so = volcanoesById.get(ID);
             if (so != null) {
                 so.nbtSyncFromServer(stormNBT);
             } else {

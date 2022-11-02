@@ -5,7 +5,7 @@ import modconfig.IConfigCategory;
 import weather2.Weather;
 import weather2.util.WeatherUtil;
 import weather2.util.WeatherUtilConfig;
-import weather2.weathersystem.storm.StormObject;
+import weather2.weathersystem.storm.CloudStorm;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -132,10 +132,10 @@ public class ConfigMisc implements IConfigCategory {
         WeatherUtil.doBlockList();
         WeatherUtilConfig.processLists();
 
-        StormObject.static_YPos_layer0 = Cloud_Layer0_Height;
-        StormObject.static_YPos_layer1 = Cloud_Layer1_Height;
-        StormObject.static_YPos_layer2 = Cloud_Layer2_Height;
-        StormObject.layers = new ArrayList<>(Arrays.asList(StormObject.static_YPos_layer0, StormObject.static_YPos_layer1, StormObject.static_YPos_layer2));
+        CloudStorm.static_YPos_layer0 = Cloud_Layer0_Height;
+        CloudStorm.static_YPos_layer1 = Cloud_Layer1_Height;
+        CloudStorm.static_YPos_layer2 = Cloud_Layer2_Height;
+        CloudStorm.layers = new ArrayList<>(Arrays.asList(CloudStorm.static_YPos_layer0, CloudStorm.static_YPos_layer1, CloudStorm.static_YPos_layer2));
     }
 
 }

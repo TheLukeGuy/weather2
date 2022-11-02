@@ -7,11 +7,11 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.client.FMLClientHandler;
-import weather2.weathersystem.storm.StormObject;
+import weather2.weathersystem.storm.CloudStorm;
 
 public class MovingSoundStreamingSource extends MovingSound {
 
-    private StormObject storm = null;
+    private CloudStorm storm = null;
     public float cutOffRange = 128;
     public Vec3 realSource = null;
     public boolean lockToPlayer = false;
@@ -42,7 +42,7 @@ public class MovingSoundStreamingSource extends MovingSound {
     }
 
     //constructor for moving sounds
-    public MovingSoundStreamingSource(StormObject parStorm, SoundEvent event, SoundCategory category, float parVolume, float parPitch, float parCutOffRange) {
+    public MovingSoundStreamingSource(CloudStorm parStorm, SoundEvent event, SoundCategory category, float parVolume, float parPitch, float parCutOffRange) {
         super(event, category);
         this.storm = parStorm;
         this.repeat = false;

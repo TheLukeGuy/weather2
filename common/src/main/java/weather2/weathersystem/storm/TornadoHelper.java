@@ -48,7 +48,7 @@ import java.util.*;
 
 public class TornadoHelper {
 
-    public StormObject storm;
+    public CloudStorm storm;
 
     //public int blockCount = 0;
 
@@ -144,23 +144,23 @@ public class TornadoHelper {
 
     }
 
-    public TornadoHelper(StormObject parStorm) {
+    public TornadoHelper(CloudStorm parStorm) {
         storm = parStorm;
     }
 
     public int getTornadoBaseSize() {
         int sizeChange = 10;
-        if (storm.levelCurIntensityStage >= StormObject.STATE_STAGE5) {
+        if (storm.levelCurIntensityStage >= CloudStorm.STATE_STAGE5) {
             return sizeChange * 9;
-        } else if (storm.levelCurIntensityStage >= StormObject.STATE_STAGE4) {
+        } else if (storm.levelCurIntensityStage >= CloudStorm.STATE_STAGE4) {
             return sizeChange * 7;
-        } else if (storm.levelCurIntensityStage >= StormObject.STATE_STAGE3) {
+        } else if (storm.levelCurIntensityStage >= CloudStorm.STATE_STAGE3) {
             return sizeChange * 5;
-        } else if (storm.levelCurIntensityStage >= StormObject.STATE_STAGE2) {
+        } else if (storm.levelCurIntensityStage >= CloudStorm.STATE_STAGE2) {
             return sizeChange * 4;
-        } else if (storm.levelCurIntensityStage >= StormObject.STATE_STAGE1) {
+        } else if (storm.levelCurIntensityStage >= CloudStorm.STATE_STAGE1) {
             return sizeChange * 3;
-        } else if (storm.levelCurIntensityStage >= StormObject.STATE_FORMING) {
+        } else if (storm.levelCurIntensityStage >= CloudStorm.STATE_FORMING) {
             return sizeChange * 1;
         } else {
             return 5;
@@ -276,7 +276,7 @@ public class TornadoHelper {
                     int extraTry = (int) ((storm.levelCurIntensityStage + 1 - storm.levelStormIntensityFormingStartVal) * 5);
                     int loopAmount = 5 + ii + extraTry;
 
-                    if (storm.stormType == StormObject.TYPE_WATER) {
+                    if (storm.stormType == CloudStorm.TYPE_WATER) {
                         loopAmount = 1 + ii / 2;
                     }
 

@@ -44,7 +44,7 @@ import weather2.weathersystem.wind.WindManager;
 
 import java.util.*;
 
-public class StormObject extends WeatherObject {
+public class CloudStorm extends Storm {
 
     //used on both server and client side, mark things SideOnly where needed
 
@@ -199,7 +199,7 @@ public class StormObject extends WeatherObject {
 
     public List<EntityLivingBase> listEntitiesUnderClouds = new ArrayList<>();
 
-    public StormObject(WeatherManager parManager) {
+    public CloudStorm(WeatherManager parManager) {
         super(parManager);
 
         pos = new Vec3(0, static_YPos_layer0, 0);
@@ -286,7 +286,7 @@ public class StormObject extends WeatherObject {
         super.readFromNBT();
         nbtSyncFromServer();
 
-        CachedNBTTagCompound var1 = this.getNbtCache();
+        CachedNbtCompound var1 = this.getNbtCache();
 
 
         angleIsOverridden = var1.getBoolean("angleIsOverridden");
@@ -300,13 +300,13 @@ public class StormObject extends WeatherObject {
         super.writeToNBT();
         nbtSyncForClient();
 
-        CachedNBTTagCompound nbt = this.getNbtCache();
+        CachedNbtCompound nbt = this.getNbtCache();
 
 
-        nbt.setBoolean("angleIsOverridden", angleIsOverridden);
-        nbt.setFloat("angleMovementTornadoOverride", angleMovementTornadoOverride);
+        nbt.putBoolean("angleIsOverridden", angleIsOverridden);
+        nbt.putFloat("angleMovementTornadoOverride", angleMovementTornadoOverride);
 
-        nbt.setString("userSpawnedFor", userSpawnedFor);
+        nbt.putString("userSpawnedFor", userSpawnedFor);
 
     }
 
@@ -314,12 +314,12 @@ public class StormObject extends WeatherObject {
     @Override
     public void nbtSyncFromServer() {
 
-        CachedNBTTagCompound parNBT = this.getNbtCache();
+        CachedNbtCompound parNBT = this.getNbtCache();
 
         boolean testNetworkData = false;
         if (testNetworkData) {
-            System.out.println("Received payload from server; length=" + parNBT.getNewNBT().getKeySet().size());
-            Iterator iterator = parNBT.getNewNBT().getKeySet().iterator();
+            System.out.println("Received payload from server; length=" + parNBT.getNewNbt().getKeySet().size());
+            Iterator iterator = parNBT.getNewNbt().getKeySet().iterator();
             String keys = "";
             while (iterator.hasNext()) {
                 keys = keys.concat((String) iterator.next() + "; ");
@@ -339,21 +339,21 @@ public class StormObject extends WeatherObject {
         attrib_precipitation = parNBT.getBoolean("attrib_rain");
         attrib_waterSpout = parNBT.getBoolean("attrib_waterSpout");
 
-        currentTopYBlock = parNBT.getInteger("currentTopYBlock");
+        currentTopYBlock = parNBT.getInt("currentTopYBlock");
 
         levelTemperature = parNBT.getFloat("levelTemperature");
-        levelWater = parNBT.getInteger("levelWater");
+        levelWater = parNBT.getInt("levelWater");
 
-        layer = parNBT.getInteger("layer");
+        layer = parNBT.getInt("layer");
 
         //curWeatherType = parNBT.getInteger("curWeatherType");
 
         //formingStrength = parNBT.getFloat("formingStrength");
 
-        levelCurIntensityStage = parNBT.getInteger("levelCurIntensityStage");
-        levelStormIntensityMax = parNBT.getInteger("levelStormIntensityMax");
+        levelCurIntensityStage = parNBT.getInt("levelCurIntensityStage");
+        levelStormIntensityMax = parNBT.getInt("levelStormIntensityMax");
         levelCurStagesIntensity = parNBT.getFloat("levelCurStagesIntensity");
-        stormType = parNBT.getInteger("stormType");
+        stormType = parNBT.getInt("stormType");
 
         hasStormPeaked = parNBT.getBoolean("hasStormPeaked");
 
@@ -375,7 +375,7 @@ public class StormObject extends WeatherObject {
     public void nbtSyncForClient() {
         super.nbtSyncForClient();
 
-        CachedNBTTagCompound data = this.getNbtCache();
+        CachedNbtCompound data = this.getNbtCache();
 
         //data.setInteger("state", state);
 
@@ -384,44 +384,44 @@ public class StormObject extends WeatherObject {
         //data.setBoolean("attrib_highwind", attrib_highwind);
         //data.setBoolean("attrib_tornado", attrib_tornado);
         //data.setBoolean("attrib_hurricane", attrib_hurricane);
-        data.setBoolean("attrib_rain", attrib_precipitation);
-        data.setBoolean("attrib_waterSpout", attrib_waterSpout);
+        data.putBoolean("attrib_rain", attrib_precipitation);
+        data.putBoolean("attrib_waterSpout", attrib_waterSpout);
 
-        data.setInteger("currentTopYBlock", currentTopYBlock);
+        data.setInt("currentTopYBlock", currentTopYBlock);
 
-        data.setFloat("levelTemperature", levelTemperature);
-        data.setInteger("levelWater", levelWater);
+        data.putFloat("levelTemperature", levelTemperature);
+        data.setInt("levelWater", levelWater);
 
-        data.setInteger("layer", layer);
+        data.setInt("layer", layer);
 
         //data.setInteger("curWeatherType", curWeatherType);
 
         //data.setFloat("formingStrength", formingStrength);
 
-        data.setInteger("levelCurIntensityStage", levelCurIntensityStage);
-        data.setFloat("levelCurStagesIntensity", levelCurStagesIntensity);
-        data.setFloat("levelStormIntensityMax", levelStormIntensityMax);
-        data.setInteger("stormType", stormType);
+        data.setInt("levelCurIntensityStage", levelCurIntensityStage);
+        data.putFloat("levelCurStagesIntensity", levelCurStagesIntensity);
+        data.putFloat("levelStormIntensityMax", levelStormIntensityMax);
+        data.setInt("stormType", stormType);
 
-        data.setBoolean("hasStormPeaked", hasStormPeaked);
+        data.putBoolean("hasStormPeaked", hasStormPeaked);
 
         //data.setBoolean("overCastModeAndRaining", overCastModeAndRaining);
 
-        data.setBoolean("isDead", isDead);
+        data.putBoolean("isDead", isDead);
 
-        data.setBoolean("cloudlessStorm", cloudlessStorm);
+        data.putBoolean("cloudlessStorm", cloudlessStorm);
 
 
-        data.setBoolean("isFirenado", isFirenado);
+        data.putBoolean("isFirenado", isFirenado);
 
-        data.setBoolean("weatherMachineControlled", weatherMachineControlled);
+        data.putBoolean("weatherMachineControlled", weatherMachineControlled);
 
     }
 
     public NBTTagCompound nbtForIMC() {
         //we basically need all the same data minus a few soooo whatever
         nbtSyncForClient();
-        return getNbtCache().getNewNBT();
+        return getNbtCache().getNewNbt();
     }
 
     @SideOnly(Side.CLIENT)
@@ -612,8 +612,8 @@ public class StormObject extends WeatherObject {
             //sync X Y Z, Y gets changed below
             posBaseFormationPos = new Vec3(pos.xCoord, pos.yCoord, pos.zCoord);
 
-            if (levelCurIntensityStage >= StormObject.levelStormIntensityFormingStartVal) {
-                if (levelCurIntensityStage >= StormObject.levelStormIntensityFormingStartVal + 1) {
+            if (levelCurIntensityStage >= CloudStorm.levelStormIntensityFormingStartVal) {
+                if (levelCurIntensityStage >= CloudStorm.levelStormIntensityFormingStartVal + 1) {
                     formingStrength = 1;
                     posBaseFormationPos.yCoord = posGround.yCoord;
                 } else {
@@ -622,7 +622,7 @@ public class StormObject extends WeatherObject {
                     float intensityAdj = Math.min(1F, levelCurStagesIntensity * 2F);
 
                     //shouldnt this just be intensityAdj?
-                    float val = (levelCurIntensityStage + intensityAdj) - StormObject.levelStormIntensityFormingStartVal;
+                    float val = (levelCurIntensityStage + intensityAdj) - CloudStorm.levelStormIntensityFormingStartVal;
                     formingStrength = val;
                     double yDiff = pos.yCoord - posGround.yCoord;
                     posBaseFormationPos.yCoord = pos.yCoord - (yDiff * formingStrength);
@@ -1177,7 +1177,7 @@ public class StormObject extends WeatherObject {
             if (this.canBeDeadly && this.levelCurIntensityStage == STATE_NORMAL) {
                 if (ConfigStorm.Server_Storm_Deadly_UseGlobalRate) {
                     if (ConfigStorm.Server_Storm_Deadly_TimeBetweenInTicks != -1) {
-                        if (wm.lastStormFormed == 0 || wm.lastStormFormed + ConfigStorm.Server_Storm_Deadly_TimeBetweenInTicks < world.getTotalWorldTime()) {
+                        if (wm.lastCloudStormFormed == 0 || wm.lastCloudStormFormed + ConfigStorm.Server_Storm_Deadly_TimeBetweenInTicks < world.getTotalWorldTime()) {
                             tryFormStorm = true;
                         }
                     }
@@ -1212,7 +1212,7 @@ public class StormObject extends WeatherObject {
                     }
 
                     if (ConfigStorm.Server_Storm_Deadly_UseGlobalRate) {
-                        wm.lastStormFormed = world.getTotalWorldTime();
+                        wm.lastCloudStormFormed = world.getTotalWorldTime();
                     } else {
                         playerNBT.setLong("lastStormDeadlyTime", world.getTotalWorldTime());
                     }
@@ -1226,16 +1226,16 @@ public class StormObject extends WeatherObject {
                     }
 
                     if (ConfigStorm.Server_Storm_Deadly_UseGlobalRate) {
-                        wm.lastStormFormed = world.getTotalWorldTime();
+                        wm.lastCloudStormFormed = world.getTotalWorldTime();
                     } else {
                         playerNBT.setLong("lastStormDeadlyTime", world.getTotalWorldTime());
                     }
                 } else if (rand.nextInt(randomChanceOfCollide) == 0) {
                     for (int i = 0; i < manager.getStorms().size(); i++) {
-                        WeatherObject wo = manager.getStorms().get(i);
+                        Storm wo = manager.getStorms().get(i);
 
-                        if (wo instanceof StormObject) {
-                            StormObject so = (StormObject) wo;
+                        if (wo instanceof CloudStorm) {
+                            CloudStorm so = (CloudStorm) wo;
 
 
                             boolean startStorm = false;
@@ -1445,7 +1445,7 @@ public class StormObject extends WeatherObject {
         levelCurStagesIntensity = 1F;
     }
 
-    public void initRealStorm(EntityPlayer entP, StormObject stormToAbsorb) {
+    public void initRealStorm(EntityPlayer entP, CloudStorm stormToAbsorb) {
 
         //new way of storm progression
         levelCurIntensityStage = STATE_THUNDER;
@@ -1471,7 +1471,7 @@ public class StormObject extends WeatherObject {
 
         if (stormToAbsorb != null) {
             Weather.dbg("stormfront collision happened between ID " + this.ID + " and " + stormToAbsorb.ID);
-            manager.removeStormObject(stormToAbsorb.ID);
+            manager.removeStorm(stormToAbsorb.ID);
             ((ServerWeatherManager) manager).syncStormRemove(stormToAbsorb);
         } else {
             Weather.dbg("ocean storm happened, ID " + this.ID);
@@ -2252,8 +2252,8 @@ public class StormObject extends WeatherObject {
 
     public void spinEntity(Object entity1) {
 
-        StormObject entT = this;
-        StormObject entity = this;
+        CloudStorm entT = this;
+        CloudStorm entity = this;
         WeatherEntityConfig conf = getWeatherEntityConfigForStorm();//WeatherTypes.weatherEntTypes.get(curWeatherType);
 
         Random rand = new Random();
@@ -2629,7 +2629,7 @@ public class StormObject extends WeatherObject {
 
     @Override
     public int getUpdateRateForNetwork() {
-        if (levelCurIntensityStage >= StormObject.STATE_HIGHWIND) {
+        if (levelCurIntensityStage >= CloudStorm.STATE_HIGHWIND) {
             return 2;
         } else {
             return super.getUpdateRateForNetwork();

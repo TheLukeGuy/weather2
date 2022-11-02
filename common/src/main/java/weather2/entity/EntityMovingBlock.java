@@ -21,7 +21,7 @@ import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import weather2.config.ConfigStorm;
 import weather2.config.ConfigTornado;
 import weather2.util.WeatherUtil;
-import weather2.weathersystem.storm.StormObject;
+import weather2.weathersystem.storm.CloudStorm;
 
 import java.util.List;
 
@@ -48,7 +48,7 @@ public class EntityMovingBlock extends Entity implements IEntityAdditionalSpawnD
     public double lastPosX;
     public double lastPosZ;
     //public Entity controller;
-    public StormObject owner;
+    public CloudStorm owner;
     public int gravityDelay;
 
     public boolean killNextTick = false;
@@ -64,7 +64,7 @@ public class EntityMovingBlock extends Entity implements IEntityAdditionalSpawnD
         this.gravityDelay = 60;
     }
 
-    public EntityMovingBlock(World var1, int var2, int var3, int var4, IBlockState state, StormObject parOwner) {
+    public EntityMovingBlock(World var1, int var2, int var3, int var4, IBlockState state, CloudStorm parOwner) {
         super(var1);
         this.mode = 1;
         this.age = 0;

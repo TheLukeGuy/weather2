@@ -11,8 +11,8 @@ import weather2.CommonProxy;
 import weather2.config.ConfigMisc;
 import weather2.config.ConfigSand;
 import weather2.util.WeatherUtilSound;
-import weather2.weathersystem.storm.StormObject;
-import weather2.weathersystem.storm.SandstormObject;
+import weather2.weathersystem.storm.CloudStorm;
+import weather2.weathersystem.storm.SandStorm;
 
 import java.util.List;
 
@@ -37,14 +37,14 @@ public class TileEntityTSiren extends TileEntity implements ITickable {
         if (this.lastPlayTime < System.currentTimeMillis()) {
             Vec3 pos = new Vec3(getPos().getX(), getPos().getY(), getPos().getZ());
 
-            StormObject so = ClientTickHandler.weatherManager.getClosestStorm(pos, ConfigMisc.sirenActivateDistance, StormObject.STATE_FORMING);
+            CloudStorm so = ClientTickHandler.weatherManager.getClosestCloudStorm(pos, ConfigMisc.sirenActivateDistance, CloudStorm.STATE_FORMING);
 
             if (so != null) {
                 this.lastPlayTime = System.currentTimeMillis() + 13000L;
                 WeatherUtilSound.playNonMovingSound(pos, "streaming.siren", 1.0F, 1.0F, 120);
             } else {
                 if (!ConfigSand.Sandstorm_Siren_PleaseNoDarude) {
-                    SandstormObject sandstorm = ClientTickHandler.weatherManager.getClosestSandstormByIntensity(pos);
+                    SandStorm sandstorm = ClientTickHandler.weatherManager.getClosestSandStormByIntensity(pos);
 
                     if (sandstorm != null) {
                         List<Vec3> points = sandstorm.getSandstormAsShape();

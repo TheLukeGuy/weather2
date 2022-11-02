@@ -13,8 +13,8 @@ import net.minecraft.village.VillageDoorInfo;
 import weather2.ServerTickHandler;
 import weather2.config.ConfigMisc;
 import weather2.weathersystem.WeatherManager;
-import weather2.weathersystem.storm.StormObject;
-import weather2.weathersystem.storm.SandstormObject;
+import weather2.weathersystem.storm.CloudStorm;
+import weather2.weathersystem.storm.SandStorm;
 
 import java.util.List;
 
@@ -56,13 +56,13 @@ public class EntityAIMoveIndoorsStorm extends EntityAIBase implements ITaskIniti
         if (!this.entityObj.world.isDaytime()) {
             runInside = true;
         } else {
-            StormObject so = weatherManager.getClosestStorm(pos, ConfigMisc.Villager_MoveInsideForStorms_Dist, StormObject.STATE_THUNDER);
+            CloudStorm so = weatherManager.getClosestCloudStorm(pos, ConfigMisc.Villager_MoveInsideForStorms_Dist, CloudStorm.STATE_THUNDER);
 
             if (so != null) {
                 runInside = true;
             } else {
                 //sandstorms check
-                SandstormObject sandstorm = weatherManager.getClosestSandstormByIntensity(pos);
+                SandStorm sandstorm = weatherManager.getClosestSandStormByIntensity(pos);
 
                 if (sandstorm != null) {
                     List<Vec3> points = sandstorm.getSandstormAsShape();

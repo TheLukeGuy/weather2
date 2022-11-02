@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 import weather2.ServerTickHandler;
 import weather2.config.ConfigMisc;
 import weather2.weathersystem.ServerWeatherManager;
-import weather2.weathersystem.storm.StormObject;
+import weather2.weathersystem.storm.CloudStorm;
 
 import java.util.Random;
 
@@ -41,7 +41,7 @@ public class BlockTSensor extends Block {
 
         ServerWeatherManager wms = ServerTickHandler.lookupDimToWeatherMan.get(world.provider.getDimension());
         if (wms != null) {
-            StormObject so = wms.getClosestStorm(new Vec3(pos.getX(), pos.getY(), pos.getZ()), ConfigMisc.sensorActivateDistance, StormObject.STATE_FORMING);
+            CloudStorm so = wms.getClosestCloudStorm(new Vec3(pos.getX(), pos.getY(), pos.getZ()), ConfigMisc.sensorActivateDistance, CloudStorm.STATE_FORMING);
             if (so != null/* && so.attrib_tornado_severity > 0*/) {
                 enable = true;
             }

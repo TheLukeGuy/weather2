@@ -8,7 +8,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import weather2.SoundRegistry;
 import weather2.client.sound.MovingSoundStreamingSource;
-import weather2.weathersystem.storm.StormObject;
+import weather2.weathersystem.storm.CloudStorm;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -91,7 +91,7 @@ public class WeatherUtilSound {
     }
 
     @SideOnly(Side.CLIENT)
-    public static void playMovingSound(StormObject parStorm, String var1, float var5, float var6, float parCutOffRange) {
+    public static void playMovingSound(CloudStorm parStorm, String var1, float var5, float var6, float parCutOffRange) {
         //String prefix = "streaming.";
         String affix = ".ogg";
 

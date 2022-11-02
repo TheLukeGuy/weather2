@@ -22,9 +22,9 @@ import weather2.client.SceneEnhancer;
 import weather2.config.ConfigMisc;
 import weather2.util.WindReader;
 import weather2.weathersystem.ClientWeatherManager;
-import weather2.weathersystem.storm.StormObject;
-import weather2.weathersystem.storm.WeatherObject;
-import weather2.weathersystem.storm.SandstormObject;
+import weather2.weathersystem.storm.CloudStorm;
+import weather2.weathersystem.storm.Storm;
+import weather2.weathersystem.storm.SandStorm;
 
 public class TileEntityWeatherForecastRenderer extends TileEntitySpecialRenderer {
     @Override
@@ -42,7 +42,7 @@ public class TileEntityWeatherForecastRenderer extends TileEntitySpecialRenderer
 
         //GL11.glColor4f(1F, 1F, 1F, 1F);
 
-        StormObject so = tEnt.lastTickStormObject;
+        CloudStorm so = tEnt.lastTickStormObject;
 
         Vec3 pos = new Vec3(tEnt.getPos().getX(), tEnt.getPos().getY(), tEnt.getPos().getZ());
 
@@ -66,31 +66,31 @@ public class TileEntityWeatherForecastRenderer extends TileEntitySpecialRenderer
                 progression = "Dying ";
             }
 
-            if (so.levelCurIntensityStage >= StormObject.STATE_STAGE5 + 1) {
+            if (so.levelCurIntensityStage >= CloudStorm.STATE_STAGE5 + 1) {
                 descSeverity = "????";
-            } else if (so.levelCurIntensityStage >= StormObject.STATE_STAGE5) {
+            } else if (so.levelCurIntensityStage >= CloudStorm.STATE_STAGE5) {
                 descSeverity = "F5 Tornado";
-                if (so.stormType == StormObject.TYPE_WATER) descSeverity = "Hurricane";
-            } else if (so.levelCurIntensityStage >= StormObject.STATE_STAGE4) {
+                if (so.stormType == CloudStorm.TYPE_WATER) descSeverity = "Hurricane";
+            } else if (so.levelCurIntensityStage >= CloudStorm.STATE_STAGE4) {
                 descSeverity = "F4 Tornado";
-                if (so.stormType == StormObject.TYPE_WATER) descSeverity = "Tropical Cyclone Stage 4";
-            } else if (so.levelCurIntensityStage >= StormObject.STATE_STAGE3) {
+                if (so.stormType == CloudStorm.TYPE_WATER) descSeverity = "Tropical Cyclone Stage 4";
+            } else if (so.levelCurIntensityStage >= CloudStorm.STATE_STAGE3) {
                 descSeverity = "F3 Tornado";
-                if (so.stormType == StormObject.TYPE_WATER) descSeverity = "Tropical Cyclone Stage 3";
-            } else if (so.levelCurIntensityStage >= StormObject.STATE_STAGE2) {
+                if (so.stormType == CloudStorm.TYPE_WATER) descSeverity = "Tropical Cyclone Stage 3";
+            } else if (so.levelCurIntensityStage >= CloudStorm.STATE_STAGE2) {
                 descSeverity = "F2 Tornado";
-                if (so.stormType == StormObject.TYPE_WATER) descSeverity = "Tropical Cyclone Stage 2";
-            } else if (so.levelCurIntensityStage >= StormObject.STATE_STAGE1) {
+                if (so.stormType == CloudStorm.TYPE_WATER) descSeverity = "Tropical Cyclone Stage 2";
+            } else if (so.levelCurIntensityStage >= CloudStorm.STATE_STAGE1) {
                 descSeverity = "F1 Tornado";
-                if (so.stormType == StormObject.TYPE_WATER) descSeverity = "Tropical Cyclone Stage 1";
-            } else if (so.levelCurIntensityStage >= StormObject.STATE_FORMING) {
+                if (so.stormType == CloudStorm.TYPE_WATER) descSeverity = "Tropical Cyclone Stage 1";
+            } else if (so.levelCurIntensityStage >= CloudStorm.STATE_FORMING) {
                 descSeverity = "Sign of Tornado";
-                if (so.stormType == StormObject.TYPE_WATER) descSeverity = "Sign of Tropical Cyclone";
-            } else if (so.levelCurIntensityStage >= StormObject.STATE_HAIL) {
+                if (so.stormType == CloudStorm.TYPE_WATER) descSeverity = "Sign of Tropical Cyclone";
+            } else if (so.levelCurIntensityStage >= CloudStorm.STATE_HAIL) {
                 descSeverity = "Hailstorm";
-            } else if (so.levelCurIntensityStage >= StormObject.STATE_HIGHWIND) {
+            } else if (so.levelCurIntensityStage >= CloudStorm.STATE_HIGHWIND) {
                 descSeverity = "High wind";
-            } else if (so.levelCurIntensityStage >= StormObject.STATE_THUNDER) {
+            } else if (so.levelCurIntensityStage >= CloudStorm.STATE_THUNDER) {
                 descSeverity = "Thunderstorm";
             } else if (so.attrib_precipitation) {
                 descSeverity = "Rainstorm";
@@ -174,7 +174,7 @@ public class TileEntityWeatherForecastRenderer extends TileEntitySpecialRenderer
 
         for (int i = 0; i < tEnt.storms.size(); i++) {
 
-            WeatherObject wo = tEnt.storms.get(i);
+            Storm wo = tEnt.storms.get(i);
 
             GlStateManager.pushMatrix();
 
@@ -189,24 +189,24 @@ public class TileEntityWeatherForecastRenderer extends TileEntitySpecialRenderer
 
             GlStateManager.translate(posRenderOffset.xCoord, 0, posRenderOffset.zCoord);
 
-            if (wo instanceof StormObject) {
-                StormObject storm = (StormObject) wo;
+            if (wo instanceof CloudStorm) {
+                CloudStorm storm = (CloudStorm) wo;
 
-                if (storm.levelCurIntensityStage >= StormObject.STATE_FORMING) {
-                    if (storm.stormType == StormObject.TYPE_WATER) {
+                if (storm.levelCurIntensityStage >= CloudStorm.STATE_FORMING) {
+                    if (storm.stormType == CloudStorm.TYPE_WATER) {
                         renderIconNew(x, y + 1.4F, z, 16, 16, playerViewY, ClientProxy.radarIconCyclone);
-                        renderLivingLabel("C" + (int) (storm.levelCurIntensityStage - StormObject.levelStormIntensityFormingStartVal), x, y + 1.5F, z, 1, 15, 5, playerViewY);
+                        renderLivingLabel("C" + (int) (storm.levelCurIntensityStage - CloudStorm.levelStormIntensityFormingStartVal), x, y + 1.5F, z, 1, 15, 5, playerViewY);
                     } else {
                         renderIconNew(x, y + 1.4F, z, 16, 16, playerViewY, ClientProxy.radarIconTornado);
-                        renderLivingLabel("F" + (int) (storm.levelCurIntensityStage - StormObject.levelStormIntensityFormingStartVal), x, y + 1.5F, z, 1, 12, 5, playerViewY);
+                        renderLivingLabel("F" + (int) (storm.levelCurIntensityStage - CloudStorm.levelStormIntensityFormingStartVal), x, y + 1.5F, z, 1, 12, 5, playerViewY);
                     }
-                } else if (storm.levelCurIntensityStage >= StormObject.STATE_HAIL) {
+                } else if (storm.levelCurIntensityStage >= CloudStorm.STATE_HAIL) {
                     renderIconNew(x, y + 1.4F, z, 16, 16, playerViewY, ClientProxy.radarIconHail);
                     renderIconNew(x, y + 1.4F, z, 16, 16, playerViewY, ClientProxy.radarIconWind);
-                } else if (storm.levelCurIntensityStage >= StormObject.STATE_HIGHWIND) {
+                } else if (storm.levelCurIntensityStage >= CloudStorm.STATE_HIGHWIND) {
                     renderIconNew(x, y + 1.4F, z, 16, 16, playerViewY, ClientProxy.radarIconLightning);
                     renderIconNew(x, y + 1.4F, z, 16, 16, playerViewY, ClientProxy.radarIconWind);
-                } else if (storm.levelCurIntensityStage >= StormObject.STATE_THUNDER) {
+                } else if (storm.levelCurIntensityStage >= CloudStorm.STATE_THUNDER) {
                     renderIconNew(x, y + 1.4F, z, 16, 16, playerViewY, ClientProxy.radarIconLightning);
                 } else if (storm.isPrecipitating()) {
                     renderIconNew(x, y + 1.4F, z, 16, 16, playerViewY, ClientProxy.radarIconRain);
@@ -239,9 +239,9 @@ public class TileEntityWeatherForecastRenderer extends TileEntitySpecialRenderer
                         renderLivingLabel(TextFormatting.WHITE + "|", x, y + 1.2F, z, 1, 5, 5, playerViewY);
                     }
                 }
-            } else if (wo instanceof SandstormObject) {
+            } else if (wo instanceof SandStorm) {
                 renderIconNew(x, y + 1.4F, z, 16, 16, playerViewY, ClientProxy.radarIconSandstorm);
-                if (((SandstormObject) wo).isFrontGrowing) {
+                if (((SandStorm) wo).isFrontGrowing) {
                     renderLivingLabel("\u00A7" + '2' + "|", x, y + 1.2F, z, 1, 5, 5, playerViewY);
                 } else {
                     renderLivingLabel("\u00A7" + '4' + "|", x, y + 1.2F, z, 1, 5, 5, playerViewY);

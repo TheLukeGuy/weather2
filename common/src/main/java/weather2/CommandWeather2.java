@@ -12,11 +12,11 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import weather2.entity.EntityLightningBolt;
 import weather2.util.WeatherUtilBlock;
-import weather2.volcano.VolcanoObject;
+import weather2.volcano.Volcano;
 import weather2.weathersystem.ServerWeatherManager;
-import weather2.weathersystem.storm.StormObject;
-import weather2.weathersystem.storm.WeatherObject;
-import weather2.weathersystem.storm.SandstormObject;
+import weather2.weathersystem.storm.CloudStorm;
+import weather2.weathersystem.storm.Storm;
+import weather2.weathersystem.storm.SandStorm;
 
 import java.util.List;
 import java.util.Random;
@@ -51,10 +51,10 @@ public class CommandWeather2 extends CommandBase {
                 if (var2[1].equals("create") && posVec != Vec3d.ZERO) {
                     if (dimension == 0) {
                         ServerWeatherManager wm = ServerTickHandler.lookupDimToWeatherMan.get(0);
-                        VolcanoObject vo = new VolcanoObject(wm);
+                        Volcano vo = new Volcano(wm);
                         vo.pos = new Vec3(posVec);
                         vo.initFirstTime();
-                        wm.addVolcanoObject(vo);
+                        wm.addVolcano(vo);
                         vo.initPost();
 
                         wm.syncVolcanoNew(vo);
@@ -76,11 +76,11 @@ public class CommandWeather2 extends CommandBase {
                 if (var2[1].equalsIgnoreCase("killAll")) {
                     ServerWeatherManager wm = ServerTickHandler.lookupDimToWeatherMan.get(dimension);
                     sendCommandSenderMsg(var1, "killing all storms");
-                    List<WeatherObject> listStorms = wm.getStorms();
+                    List<Storm> listStorms = wm.getStorms();
                     for (int i = 0; i < listStorms.size(); i++) {
-                        WeatherObject wo = listStorms.get(i);
-                        if (wo instanceof WeatherObject) {
-                            WeatherObject so = wo;
+                        Storm wo = listStorms.get(i);
+                        if (wo instanceof Storm) {
+                            Storm so = wo;
                             Weather.dbg("force killing storm ID: " + so.ID);
                             so.setDead();
                         }
@@ -88,12 +88,12 @@ public class CommandWeather2 extends CommandBase {
                 } else if (var2[1].equalsIgnoreCase("killDeadly")) {
                     ServerWeatherManager wm = ServerTickHandler.lookupDimToWeatherMan.get(dimension);
                     sendCommandSenderMsg(var1, "killing all deadly storms");
-                    List<WeatherObject> listStorms = wm.getStorms();
+                    List<Storm> listStorms = wm.getStorms();
                     for (int i = 0; i < listStorms.size(); i++) {
-                        WeatherObject wo = listStorms.get(i);
-                        if (wo instanceof StormObject) {
-                            StormObject so = (StormObject) wo;
-                            if (so.levelCurIntensityStage >= StormObject.STATE_THUNDER) {
+                        Storm wo = listStorms.get(i);
+                        if (wo instanceof CloudStorm) {
+                            CloudStorm so = (CloudStorm) wo;
+                            if (so.levelCurIntensityStage >= CloudStorm.STATE_THUNDER) {
                                 Weather.dbg("force killing storm ID: " + so.ID);
                                 so.setDead();
                             }
@@ -102,12 +102,12 @@ public class CommandWeather2 extends CommandBase {
                 } else if (var2[1].equalsIgnoreCase("killRain") || var2[1].equalsIgnoreCase("killStorm")) {
                     ServerWeatherManager wm = ServerTickHandler.lookupDimToWeatherMan.get(dimension);
                     sendCommandSenderMsg(var1, "killing all raining or deadly storms");
-                    List<WeatherObject> listStorms = wm.getStorms();
+                    List<Storm> listStorms = wm.getStorms();
                     for (int i = 0; i < listStorms.size(); i++) {
-                        WeatherObject wo = listStorms.get(i);
-                        if (wo instanceof StormObject) {
-                            StormObject so = (StormObject) wo;
-                            if (so.levelCurIntensityStage >= StormObject.STATE_THUNDER || so.attrib_precipitation) {
+                        Storm wo = listStorms.get(i);
+                        if (wo instanceof CloudStorm) {
+                            CloudStorm so = (CloudStorm) wo;
+                            if (so.levelCurIntensityStage >= CloudStorm.STATE_THUNDER || so.attrib_precipitation) {
                                 Weather.dbg("force killing storm ID: " + so.ID);
                                 so.setDead();
                             }
@@ -118,12 +118,12 @@ public class CommandWeather2 extends CommandBase {
                         //TODO: make this handle non StormObject types better, currently makes instance and doesnt use that type if its a sandstorm
                         boolean spawnCloudStorm = true;
                         ServerWeatherManager wm = ServerTickHandler.lookupDimToWeatherMan.get(dimension);
-                        StormObject so = new StormObject(wm);
+                        CloudStorm so = new CloudStorm(wm);
                         so.layer = 0;
                         so.userSpawnedFor = CoroUtilEntity.getName(player);
                         so.naturallySpawned = false;
                         so.levelTemperature = 0.1F;
-                        so.pos = new Vec3(posVec.x, StormObject.layers.get(so.layer), posVec.z);
+                        so.pos = new Vec3(posVec.x, CloudStorm.layers.get(so.layer), posVec.z);
 
                         so.levelWater = so.levelWaterStartRaining * 2;
                         so.attrib_precipitation = true;
@@ -135,59 +135,59 @@ public class CommandWeather2 extends CommandBase {
                         if (var2[2].equals("rain")) {
 
                         } else if (var2[2].equalsIgnoreCase("thunder") || var2[2].equalsIgnoreCase("lightning")) {
-                            so.levelCurIntensityStage = StormObject.STATE_THUNDER;
+                            so.levelCurIntensityStage = CloudStorm.STATE_THUNDER;
                         } else if (var2[2].equalsIgnoreCase("wind")) {
-                            so.levelCurIntensityStage = StormObject.STATE_HIGHWIND;
+                            so.levelCurIntensityStage = CloudStorm.STATE_HIGHWIND;
                         } else if (var2[2].equalsIgnoreCase("spout")) {
-                            so.levelCurIntensityStage = StormObject.STATE_HIGHWIND;
+                            so.levelCurIntensityStage = CloudStorm.STATE_HIGHWIND;
                             so.attrib_waterSpout = true;
                         } else if (var2[2].equalsIgnoreCase("hail")) {
-                            so.levelCurIntensityStage = StormObject.STATE_HAIL;
+                            so.levelCurIntensityStage = CloudStorm.STATE_HAIL;
                         } else if (var2[2].equalsIgnoreCase("F5")) {
-                            so.levelCurIntensityStage = StormObject.STATE_STAGE5;
+                            so.levelCurIntensityStage = CloudStorm.STATE_STAGE5;
                         } else if (var2[2].equalsIgnoreCase("F4")) {
-                            so.levelCurIntensityStage = StormObject.STATE_STAGE4;
+                            so.levelCurIntensityStage = CloudStorm.STATE_STAGE4;
                         } else if (var2[2].equalsIgnoreCase("F3")) {
-                            so.levelCurIntensityStage = StormObject.STATE_STAGE3;
+                            so.levelCurIntensityStage = CloudStorm.STATE_STAGE3;
                         } else if (var2[2].equalsIgnoreCase("F2")) {
-                            so.levelCurIntensityStage = StormObject.STATE_STAGE2;
+                            so.levelCurIntensityStage = CloudStorm.STATE_STAGE2;
                         } else if (var2[2].equalsIgnoreCase("F1")) {
-                            so.levelCurIntensityStage = StormObject.STATE_STAGE1;
+                            so.levelCurIntensityStage = CloudStorm.STATE_STAGE1;
                         } else if (var2[2].equalsIgnoreCase("firenado")) {
-                            so.levelCurIntensityStage = StormObject.STATE_STAGE1;
+                            so.levelCurIntensityStage = CloudStorm.STATE_STAGE1;
                             so.isFirenado = true;
                         } else if (var2[2].equalsIgnoreCase("F0")) {
-                            so.levelCurIntensityStage = StormObject.STATE_FORMING;
+                            so.levelCurIntensityStage = CloudStorm.STATE_FORMING;
                         } else if (var2[2].equalsIgnoreCase("C0")) {
-                            so.stormType = StormObject.TYPE_WATER;
-                            so.levelCurIntensityStage = StormObject.STATE_FORMING;
+                            so.stormType = CloudStorm.TYPE_WATER;
+                            so.levelCurIntensityStage = CloudStorm.STATE_FORMING;
                         } else if (var2[2].equalsIgnoreCase("C1")) {
-                            so.stormType = StormObject.TYPE_WATER;
-                            so.levelCurIntensityStage = StormObject.STATE_STAGE1;
+                            so.stormType = CloudStorm.TYPE_WATER;
+                            so.levelCurIntensityStage = CloudStorm.STATE_STAGE1;
                         } else if (var2[2].equalsIgnoreCase("C2")) {
-                            so.stormType = StormObject.TYPE_WATER;
-                            so.levelCurIntensityStage = StormObject.STATE_STAGE2;
+                            so.stormType = CloudStorm.TYPE_WATER;
+                            so.levelCurIntensityStage = CloudStorm.STATE_STAGE2;
                         } else if (var2[2].equalsIgnoreCase("C3")) {
-                            so.stormType = StormObject.TYPE_WATER;
-                            so.levelCurIntensityStage = StormObject.STATE_STAGE3;
+                            so.stormType = CloudStorm.TYPE_WATER;
+                            so.levelCurIntensityStage = CloudStorm.STATE_STAGE3;
                         } else if (var2[2].equalsIgnoreCase("C4")) {
-                            so.stormType = StormObject.TYPE_WATER;
-                            so.levelCurIntensityStage = StormObject.STATE_STAGE4;
+                            so.stormType = CloudStorm.TYPE_WATER;
+                            so.levelCurIntensityStage = CloudStorm.STATE_STAGE4;
                         } else if (var2[2].equalsIgnoreCase("C5") || var2[2].equalsIgnoreCase("hurricane")) {
-                            so.stormType = StormObject.TYPE_WATER;
-                            so.levelCurIntensityStage = StormObject.STATE_STAGE5;
+                            so.stormType = CloudStorm.TYPE_WATER;
+                            so.levelCurIntensityStage = CloudStorm.STATE_STAGE5;
                         } else if (var2[2].equalsIgnoreCase("hurricane")) {
-                            so.stormType = StormObject.TYPE_WATER;
-                            so.levelCurIntensityStage = StormObject.STATE_STAGE5;
+                            so.stormType = CloudStorm.TYPE_WATER;
+                            so.levelCurIntensityStage = CloudStorm.STATE_STAGE5;
                         } else if (var2[2].equalsIgnoreCase("full")) {
                             //needs code to somehow guarantee it will build to max stage
-                            so.levelCurIntensityStage = StormObject.STATE_THUNDER;
+                            so.levelCurIntensityStage = CloudStorm.STATE_THUNDER;
                             so.alwaysProgresses = true;
                         } else if (var2[2].equalsIgnoreCase("test")) {
-                            so.levelCurIntensityStage = StormObject.STATE_THUNDER;
+                            so.levelCurIntensityStage = CloudStorm.STATE_THUNDER;
                         } else if (var2[2].equalsIgnoreCase("sandstormUpwind")) {
 
-                            SandstormObject sandstorm = new SandstormObject(wm);
+                            SandStorm sandstorm = new SandStorm(wm);
 
                             //sandstorm.pos = new Vec3(player.posX, player.world.getHeight(new BlockPos(player.posX, 0, player.posZ)).getY() + 1, player.posZ);
 
@@ -208,7 +208,7 @@ public class CommandWeather2 extends CommandBase {
                             sandstorm.initSandstormSpawn(pos);
 
 
-                            wm.addStormObject(sandstorm);
+                            wm.addStorm(sandstorm);
                             wm.syncStormNew(sandstorm);
                             spawnCloudStorm = false;
 
@@ -239,7 +239,7 @@ public class CommandWeather2 extends CommandBase {
                             //lock it to current stage or less
                             so.levelStormIntensityMax = so.levelCurIntensityStage;
 
-                            wm.addStormObject(so);
+                            wm.addStorm(so);
                             wm.syncStormNew(so);
                         }
 

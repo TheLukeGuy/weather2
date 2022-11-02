@@ -16,7 +16,7 @@ import weather2.CommonProxy;
 import weather2.client.entity.particle.ParticleSandstorm;
 import weather2.config.ConfigParticle;
 import weather2.config.ConfigSand;
-import weather2.util.CachedNBTTagCompound;
+import weather2.util.CachedNbtCompound;
 import weather2.util.WeatherUtil;
 import weather2.util.WeatherUtilBlock;
 import weather2.weathersystem.WeatherManager;
@@ -43,7 +43,7 @@ import java.util.Random;
  *
  * @author Corosus
  */
-public class SandstormObject extends WeatherObject {
+public class SandStorm extends Storm {
 
     public int height = 0;
 
@@ -67,10 +67,10 @@ public class SandstormObject extends WeatherObject {
 
     public Random rand = new Random();
 
-    public SandstormObject(WeatherManager parManager) {
+    public SandStorm(WeatherManager parManager) {
         super(parManager);
 
-        this.weatherObjectType = WeatherObjectType.SAND;
+        this.weatherObjectType = StormType.SAND;
 
         if (parManager.getWorld().isRemote) {
             listParticlesCloud = new ArrayList<EntityRotFX>();
@@ -722,19 +722,19 @@ public class SandstormObject extends WeatherObject {
     public void nbtSyncForClient() {
         super.nbtSyncForClient();
 
-        CachedNBTTagCompound data = this.getNbtCache();
+        CachedNbtCompound data = this.getNbtCache();
 
-        data.setDouble("posSpawnX", posSpawn.xCoord);
-        data.setDouble("posSpawnY", posSpawn.yCoord);
-        data.setDouble("posSpawnZ", posSpawn.zCoord);
+        data.putDouble("posSpawnX", posSpawn.xCoord);
+        data.putDouble("posSpawnY", posSpawn.yCoord);
+        data.putDouble("posSpawnZ", posSpawn.zCoord);
 
-        data.setInteger("ageFadeout", this.ageFadeout);
-        data.setInteger("ageFadeoutMax", this.ageFadeoutMax);
+        data.setInt("ageFadeout", this.ageFadeout);
+        data.setInt("ageFadeoutMax", this.ageFadeoutMax);
 
-        data.setInteger("sizePeak", sizePeak);
-        data.setInteger("age", age);
+        data.setInt("sizePeak", sizePeak);
+        data.setInt("age", age);
 
-        data.setBoolean("isFrontGrowing", isFrontGrowing);
+        data.putBoolean("isFrontGrowing", isFrontGrowing);
 		
 		/*data.setLong("ID", ID);
 		data.setInteger("size", size);
@@ -746,15 +746,15 @@ public class SandstormObject extends WeatherObject {
     public void nbtSyncFromServer() {
         super.nbtSyncFromServer();
 
-        CachedNBTTagCompound parNBT = this.getNbtCache();
+        CachedNbtCompound parNBT = this.getNbtCache();
 
         posSpawn = new Vec3(parNBT.getDouble("posSpawnX"), parNBT.getDouble("posSpawnY"), parNBT.getDouble("posSpawnZ"));
 
-        this.ageFadeout = parNBT.getInteger("ageFadeout");
-        this.ageFadeoutMax = parNBT.getInteger("ageFadeoutMax");
+        this.ageFadeout = parNBT.getInt("ageFadeout");
+        this.ageFadeoutMax = parNBT.getInt("ageFadeoutMax");
 
-        this.sizePeak = parNBT.getInteger("sizePeak");
-        this.age = parNBT.getInteger("age");
+        this.sizePeak = parNBT.getInt("sizePeak");
+        this.age = parNBT.getInt("age");
 
         this.isFrontGrowing = parNBT.getBoolean("isFrontGrowing");
     }
@@ -764,7 +764,7 @@ public class SandstormObject extends WeatherObject {
         super.readFromNBT();
         nbtSyncFromServer();
 
-        CachedNBTTagCompound var1 = this.getNbtCache();
+        CachedNbtCompound var1 = this.getNbtCache();
 
         motion = new Vec3(var1.getDouble("vecX"), var1.getDouble("vecY"), var1.getDouble("vecZ"));
     }
@@ -774,11 +774,11 @@ public class SandstormObject extends WeatherObject {
         super.writeToNBT();
         nbtSyncForClient();
 
-        CachedNBTTagCompound nbt = this.getNbtCache();
+        CachedNbtCompound nbt = this.getNbtCache();
 
-        nbt.setDouble("vecX", motion.xCoord);
-        nbt.setDouble("vecY", motion.yCoord);
-        nbt.setDouble("vecZ", motion.zCoord);
+        nbt.putDouble("vecX", motion.xCoord);
+        nbt.putDouble("vecY", motion.yCoord);
+        nbt.putDouble("vecZ", motion.zCoord);
 
     }
 

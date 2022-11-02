@@ -12,7 +12,7 @@ import weather2.config.ConfigWind;
 import weather2.util.WeatherUtilEntity;
 import weather2.weathersystem.WeatherManager;
 import weather2.weathersystem.ServerWeatherManager;
-import weather2.weathersystem.storm.StormObject;
+import weather2.weathersystem.storm.CloudStorm;
 
 import java.util.Random;
 
@@ -322,7 +322,7 @@ public class WindManager {
         //event data
         if (entP != null) {
             if (manager.getWorld().getTime() % 10 == 0) {
-                StormObject so = manager.getClosestStorm(new Vec3(entP.getX(), StormObject.layers.get(0), entP.getZ()), 256, StormObject.STATE_HIGHWIND);
+                CloudStorm so = manager.getClosestCloudStorm(new Vec3(entP.getX(), CloudStorm.layers.get(0), entP.getZ()), 256, CloudStorm.STATE_HIGHWIND);
 
                 if (so != null) {
                     windOriginEvent = new BlockPos(so.posGround.xCoord, so.posGround.yCoord, so.posGround.zCoord);

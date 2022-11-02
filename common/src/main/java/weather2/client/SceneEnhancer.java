@@ -58,8 +58,8 @@ import weather2.config.ConfigParticle;
 import weather2.config.ConfigStorm;
 import weather2.util.*;
 import weather2.weathersystem.ClientWeatherManager;
-import weather2.weathersystem.storm.StormObject;
-import weather2.weathersystem.storm.SandstormObject;
+import weather2.weathersystem.storm.CloudStorm;
+import weather2.weathersystem.storm.SandStorm;
 import weather2.weathersystem.wind.WindManager;
 
 import java.lang.reflect.Field;
@@ -521,7 +521,7 @@ public class SceneEnhancer implements Runnable {
         if (ConfigParticle.Particle_RainSnow) {
             EntityPlayer entP = FMLClientHandler.instance().getClient().player;
 
-            if (entP.posY >= StormObject.static_YPos_layer0) return;
+            if (entP.posY >= CloudStorm.static_YPos_layer0) return;
 
             ClientWeatherManager weatherMan = ClientTickHandler.weatherManager;
             if (weatherMan == null) return;
@@ -1315,12 +1315,12 @@ public class SceneEnhancer implements Runnable {
         Minecraft mc = FMLClientHandler.instance().getClient();
 
         double maxStormDist = 512 / 4 * 3;
-        Vec3 plPos = new Vec3(entP.posX, StormObject.static_YPos_layer0, entP.posZ);
-        StormObject storm = null;
+        Vec3 plPos = new Vec3(entP.posX, CloudStorm.static_YPos_layer0, entP.posZ);
+        CloudStorm storm = null;
 
         ClientTickHandler.checkClientWeather();
 
-        storm = ClientTickHandler.weatherManager.getClosestStorm(plPos, maxStormDist, StormObject.STATE_FORMING, true);
+        storm = ClientTickHandler.weatherManager.getClosestCloudStorm(plPos, maxStormDist, CloudStorm.STATE_FORMING, true);
 
         if (forOvercast) {
             //storm = ClientTickHandler.weatherManager.getClosestStorm(plPos, maxStormDist, StormObject.STATE_THUNDER, true);
@@ -1368,7 +1368,7 @@ public class SceneEnhancer implements Runnable {
             tempAdj = storm.levelTemperature > 0 ? 1F : -1F;
 
             //limit plain rain clouds to light intensity
-            if (storm.levelCurIntensityStage == StormObject.STATE_NORMAL) {
+            if (storm.levelCurIntensityStage == CloudStorm.STATE_NORMAL) {
                 if (stormIntensity > 0.3) stormIntensity = 0.3;
             }
 
@@ -1457,7 +1457,7 @@ public class SceneEnhancer implements Runnable {
     }
 
     public static float getPrecipStrength(EntityPlayer entP, boolean forOvercast) {
-        StormObject storm = getClosestStormCached(entP);
+        CloudStorm storm = getClosestStormCached(entP);
         if (storm != null) {
             float tempAdj = storm.levelTemperature > 0 ? 1F : -1F;
 
@@ -1475,16 +1475,16 @@ public class SceneEnhancer implements Runnable {
 
     }
 
-    public static StormObject getClosestStormCached(EntityPlayer entP) {
+    public static CloudStorm getClosestStormCached(EntityPlayer entP) {
         if (ClientWeatherManager.closestStormCached == null || entP.world.getTotalWorldTime() % 5 == 0) {
             Minecraft mc = FMLClientHandler.instance().getClient();
 
             double maxStormDist = 512 / 4 * 3;
-            Vec3 plPos = new Vec3(entP.posX, StormObject.static_YPos_layer0, entP.posZ);
+            Vec3 plPos = new Vec3(entP.posX, CloudStorm.static_YPos_layer0, entP.posZ);
 
             ClientTickHandler.checkClientWeather();
 
-            ClientWeatherManager.closestStormCached = ClientTickHandler.weatherManager.getClosestStorm(plPos, maxStormDist, StormObject.STATE_FORMING, true);
+            ClientWeatherManager.closestStormCached = ClientTickHandler.weatherManager.getClosestCloudStorm(plPos, maxStormDist, CloudStorm.STATE_FORMING, true);
         }
 
         return ClientWeatherManager.closestStormCached;
@@ -2210,7 +2210,7 @@ public class SceneEnhancer implements Runnable {
         EntityPlayer player = mc.player;
         World world = mc.world;
         Vec3 posPlayer = new Vec3(mc.player.posX, 0/*mc.player.posY*/, mc.player.posZ);
-        SandstormObject sandstorm = ClientTickHandler.weatherManager.getClosestSandstormByIntensity(posPlayer);
+        SandStorm sandstorm = ClientTickHandler.weatherManager.getClosestSandStormByIntensity(posPlayer);
         WindManager windMan = ClientTickHandler.weatherManager.getWindManager();
         float scaleIntensityTarget = 0F;
         if (sandstorm != null) {
