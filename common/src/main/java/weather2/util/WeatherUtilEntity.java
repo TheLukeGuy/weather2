@@ -22,7 +22,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import weather2.ClientTickHandler;
 import weather2.api.WeatherUtilData;
 import weather2.entity.EntityMovingBlock;
-import weather2.weathersystem.wind.WindManager;
+import weather2.weather.wind.WindManager;
 
 public class WeatherUtilEntity {
 

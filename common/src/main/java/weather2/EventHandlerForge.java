@@ -32,8 +32,8 @@ import weather2.config.ConfigFoliage;
 import weather2.config.ConfigMisc;
 import weather2.entity.AI.EntityAIMoveIndoorsStorm;
 import weather2.util.UtilEntityBuffsMini;
-import weather2.weathersystem.storm.TornadoHelper;
-import weather2.weathersystem.wind.WindManager;
+import weather2.weather.storm.TornadoHelper;
+import weather2.weather.wind.WindManager;
 
 import java.nio.FloatBuffer;
 

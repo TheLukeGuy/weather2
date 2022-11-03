@@ -1,4 +1,4 @@
-package weather2.weathersystem;
+package weather2.weather;
 
 import CoroUtil.packet.PacketHelper;
 import CoroUtil.util.CoroUtilEntity;
@@ -23,10 +23,10 @@ import weather2.util.WeatherUtilBlock;
 import weather2.util.WeatherUtilConfig;
 import weather2.util.WeatherUtilEntity;
 import weather2.volcano.Volcano;
-import weather2.weathersystem.storm.CloudStorm;
-import weather2.weathersystem.storm.Storm;
-import weather2.weathersystem.storm.SandStorm;
-import weather2.weathersystem.wind.WindManager;
+import weather2.weather.storm.CloudStorm;
+import weather2.weather.storm.Storm;
+import weather2.weather.storm.SandStorm;
+import weather2.weather.wind.WindManager;
 
 import java.util.Iterator;
 import java.util.Random;

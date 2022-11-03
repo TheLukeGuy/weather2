@@ -11,8 +11,8 @@ import weather2.CommonProxy;
 import weather2.config.ConfigMisc;
 import weather2.config.ConfigSand;
 import weather2.util.WeatherUtilSound;
-import weather2.weathersystem.storm.CloudStorm;
-import weather2.weathersystem.storm.SandStorm;
+import weather2.weather.storm.CloudStorm;
+import weather2.weather.storm.SandStorm;
 
 import java.util.List;
 

@@ -21,7 +21,7 @@ import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import weather2.config.ConfigStorm;
 import weather2.config.ConfigTornado;
 import weather2.util.WeatherUtil;
-import weather2.weathersystem.storm.CloudStorm;
+import weather2.weather.storm.CloudStorm;
 
 import java.util.List;
 

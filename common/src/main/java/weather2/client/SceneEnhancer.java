@@ -56,10 +56,10 @@ import weather2.config.ConfigMisc;
 import weather2.config.ConfigParticle;
 import weather2.config.ConfigStorm;
 import weather2.util.*;
-import weather2.weathersystem.ClientWeatherManager;
-import weather2.weathersystem.storm.CloudStorm;
-import weather2.weathersystem.storm.SandStorm;
-import weather2.weathersystem.wind.WindManager;
+import weather2.weather.ClientWeatherManager;
+import weather2.weather.storm.CloudStorm;
+import weather2.weather.storm.SandStorm;
+import weather2.weather.wind.WindManager;
 
 import java.lang.reflect.Field;
 import java.util.*;

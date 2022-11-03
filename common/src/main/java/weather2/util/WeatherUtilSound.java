@@ -7,7 +7,7 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import weather2.client.sound.MovingSoundStreamingSource;
-import weather2.weathersystem.storm.CloudStorm;
+import weather2.weather.storm.CloudStorm;
 
 import java.util.HashMap;
 import java.util.Random;

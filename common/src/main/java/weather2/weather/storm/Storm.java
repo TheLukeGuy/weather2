@@ -1,10 +1,10 @@
-package weather2.weathersystem.storm;
+package weather2.weather.storm;
 
 import CoroUtil.util.Vec3;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import weather2.util.CachedNbtCompound;
-import weather2.weathersystem.WeatherManager;
+import weather2.weather.WeatherManager;
 
 public class Storm {
     public static long lastUsedStormID = 0; //ID starts from 0 for each game start, no storm nbt disk reload for now

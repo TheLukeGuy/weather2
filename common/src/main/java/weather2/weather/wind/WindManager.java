@@ -1,4 +1,4 @@
-package weather2.weathersystem.wind;
+package weather2.weather.wind;
 
 import CoroUtil.util.CoroUtilEntOrParticle;
 import CoroUtil.util.Vec3;
@@ -10,9 +10,9 @@ import weather2.Weather;
 import weather2.config.ConfigMisc;
 import weather2.config.ConfigWind;
 import weather2.util.WeatherUtilEntity;
-import weather2.weathersystem.WeatherManager;
-import weather2.weathersystem.ServerWeatherManager;
-import weather2.weathersystem.storm.CloudStorm;
+import weather2.weather.WeatherManager;
+import weather2.weather.ServerWeatherManager;
+import weather2.weather.storm.CloudStorm;
 
 import java.util.Random;
 

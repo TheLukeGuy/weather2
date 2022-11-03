@@ -6,7 +6,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import weather2.ClientTickHandler;
 import weather2.ServerTickHandler;
-import weather2.weathersystem.WeatherManager;
+import weather2.weather.WeatherManager;
 
 public class WeatherDataHelper {
 

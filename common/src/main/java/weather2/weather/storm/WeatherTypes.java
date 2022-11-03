@@ -1,4 +1,4 @@
-package weather2.weathersystem.storm;
+package weather2.weather.storm;
 
 import java.util.ArrayList;
 import java.util.List;

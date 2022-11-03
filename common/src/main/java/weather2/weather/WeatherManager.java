@@ -1,4 +1,4 @@
-package weather2.weathersystem;
+package weather2.weather;
 
 import CoroUtil.util.CoroUtilFile;
 import CoroUtil.util.CoroUtilPhysics;
@@ -13,11 +13,11 @@ import weather2.ServerTickHandler;
 import weather2.Weather;
 import weather2.config.ConfigStorm;
 import weather2.volcano.Volcano;
-import weather2.weathersystem.storm.SandStorm;
-import weather2.weathersystem.storm.CloudStorm;
-import weather2.weathersystem.storm.Storm;
-import weather2.weathersystem.storm.StormType;
-import weather2.weathersystem.wind.WindManager;
+import weather2.weather.storm.SandStorm;
+import weather2.weather.storm.CloudStorm;
+import weather2.weather.storm.Storm;
+import weather2.weather.storm.StormType;
+import weather2.weather.wind.WindManager;
 
 import java.io.File;
 import java.io.FileOutputStream;

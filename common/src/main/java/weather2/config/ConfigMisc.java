@@ -5,7 +5,7 @@ import modconfig.IConfigCategory;
 import weather2.Weather;
 import weather2.util.WeatherUtil;
 import weather2.util.WeatherUtilConfig;
-import weather2.weathersystem.storm.CloudStorm;
+import weather2.weather.storm.CloudStorm;
 
 import java.io.File;
 import java.util.ArrayList;

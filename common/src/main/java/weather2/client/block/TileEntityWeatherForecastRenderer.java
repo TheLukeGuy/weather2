@@ -21,10 +21,10 @@ import weather2.block.TileEntityWeatherForecast;
 import weather2.client.SceneEnhancer;
 import weather2.config.ConfigMisc;
 import weather2.util.WindReader;
-import weather2.weathersystem.ClientWeatherManager;
-import weather2.weathersystem.storm.CloudStorm;
-import weather2.weathersystem.storm.Storm;
-import weather2.weathersystem.storm.SandStorm;
+import weather2.weather.ClientWeatherManager;
+import weather2.weather.storm.CloudStorm;
+import weather2.weather.storm.Storm;
+import weather2.weather.storm.SandStorm;
 
 public class TileEntityWeatherForecastRenderer extends TileEntitySpecialRenderer {
     @Override

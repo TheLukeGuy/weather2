@@ -1,4 +1,4 @@
-package weather2.weathersystem;
+package weather2.weather;
 
 import CoroUtil.config.ConfigCoroUtil;
 import extendedrenderer.EventHandler;

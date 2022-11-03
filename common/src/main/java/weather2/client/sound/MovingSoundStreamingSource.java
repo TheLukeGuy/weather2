@@ -7,7 +7,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.client.FMLClientHandler;
-import weather2.weathersystem.storm.CloudStorm;
+import weather2.weather.storm.CloudStorm;
 
 public class MovingSoundStreamingSource extends MovingSound {
 

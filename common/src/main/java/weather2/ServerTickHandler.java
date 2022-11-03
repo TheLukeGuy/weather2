@@ -20,8 +20,8 @@ import weather2.config.ConfigMisc;
 import weather2.entity.EntityLightningBoltCustom;
 import weather2.util.WeatherUtilBlock;
 import weather2.util.WeatherUtilConfig;
-import weather2.weathersystem.WeatherManager;
-import weather2.weathersystem.ServerWeatherManager;
+import weather2.weather.WeatherManager;
+import weather2.weather.ServerWeatherManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;

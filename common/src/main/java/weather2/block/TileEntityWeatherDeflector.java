@@ -13,9 +13,9 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import weather2.ServerTickHandler;
 import weather2.config.ConfigStorm;
-import weather2.weathersystem.ServerWeatherManager;
-import weather2.weathersystem.storm.CloudStorm;
-import weather2.weathersystem.storm.Storm;
+import weather2.weather.ServerWeatherManager;
+import weather2.weather.storm.CloudStorm;
+import weather2.weather.storm.Storm;
 
 import java.util.List;
 

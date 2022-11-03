@@ -15,8 +15,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import weather2.ServerTickHandler;
 import weather2.config.ConfigMisc;
-import weather2.weathersystem.ServerWeatherManager;
-import weather2.weathersystem.storm.CloudStorm;
+import weather2.weather.ServerWeatherManager;
+import weather2.weather.storm.CloudStorm;
 
 import java.util.Random;
 

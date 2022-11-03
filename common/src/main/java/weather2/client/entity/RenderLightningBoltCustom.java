@@ -16,7 +16,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import weather2.ClientTickHandler;
 import weather2.entity.EntityLightningBoltCustom;
-import weather2.weathersystem.storm.SandStorm;
+import weather2.weather.storm.SandStorm;
 
 import java.util.List;
 

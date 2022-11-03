@@ -1,4 +1,4 @@
-package weather2.weathersystem.storm;
+package weather2.weather.storm;
 
 import CoroUtil.block.TileEntityRepairingBlock;
 import CoroUtil.forge.CULog;

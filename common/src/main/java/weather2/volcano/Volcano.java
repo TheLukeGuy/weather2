@@ -24,7 +24,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import weather2.Weather;
 import weather2.util.WeatherUtil;
 import weather2.util.WeatherUtilBlock;
-import weather2.weathersystem.WeatherManager;
+import weather2.weather.WeatherManager;
 
 import java.util.ArrayList;
 import java.util.List;

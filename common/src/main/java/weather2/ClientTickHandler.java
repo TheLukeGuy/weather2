@@ -20,8 +20,8 @@ import weather2.config.ConfigFoliage;
 import weather2.config.ConfigMisc;
 import weather2.util.WeatherUtilConfig;
 import weather2.util.WindReader;
-import weather2.weathersystem.EntityRendererProxyWeather2Mini;
-import weather2.weathersystem.ClientWeatherManager;
+import weather2.weather.EntityRendererProxyWeather2Mini;
+import weather2.weather.ClientWeatherManager;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;

@@ -1,4 +1,4 @@
-package weather2.weathersystem.storm;
+package weather2.weather.storm;
 
 import CoroUtil.util.Vec3;
 import extendedrenderer.particle.ParticleRegistry;
@@ -19,8 +19,8 @@ import weather2.config.ConfigSand;
 import weather2.util.CachedNbtCompound;
 import weather2.util.WeatherUtil;
 import weather2.util.WeatherUtilBlock;
-import weather2.weathersystem.WeatherManager;
-import weather2.weathersystem.wind.WindManager;
+import weather2.weather.WeatherManager;
+import weather2.weather.wind.WindManager;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -13,10 +13,10 @@ import net.minecraft.world.World;
 import weather2.entity.EntityLightningBolt;
 import weather2.util.WeatherUtilBlock;
 import weather2.volcano.Volcano;
-import weather2.weathersystem.ServerWeatherManager;
-import weather2.weathersystem.storm.CloudStorm;
-import weather2.weathersystem.storm.Storm;
-import weather2.weathersystem.storm.SandStorm;
+import weather2.weather.ServerWeatherManager;
+import weather2.weather.storm.CloudStorm;
+import weather2.weather.storm.Storm;
+import weather2.weather.storm.SandStorm;
 
 import java.util.List;
 import java.util.Random;

@@ -1,4 +1,4 @@
-package weather2.weathersystem.storm;
+package weather2.weather.storm;
 
 import CoroUtil.config.ConfigCoroUtil;
 import CoroUtil.util.*;
@@ -38,9 +38,9 @@ import weather2.entity.EntityIceBall;
 import weather2.entity.EntityLightningBolt;
 import weather2.player.PlayerData;
 import weather2.util.*;
-import weather2.weathersystem.WeatherManager;
-import weather2.weathersystem.ServerWeatherManager;
-import weather2.weathersystem.wind.WindManager;
+import weather2.weather.WeatherManager;
+import weather2.weather.ServerWeatherManager;
+import weather2.weather.wind.WindManager;
 
 import java.util.*;
 
