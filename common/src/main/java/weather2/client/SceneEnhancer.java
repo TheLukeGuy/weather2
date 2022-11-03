@@ -47,7 +47,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.*;
 import weather2.ClientTickHandler;
-import weather2.SoundRegistry;
 import weather2.client.entity.particle.EntityWaterfallFX;
 import weather2.client.entity.particle.ParticleFish;
 import weather2.client.entity.particle.ParticleSandstorm;

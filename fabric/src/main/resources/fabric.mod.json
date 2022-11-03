@@ -16,7 +16,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.examplemod.fabric.ExampleModFabric"
+      "weather2.FabricWeather"
+    ],
+    "client": [
+      "weather2.FabricWeather"
     ]
   },
   "mixins": [

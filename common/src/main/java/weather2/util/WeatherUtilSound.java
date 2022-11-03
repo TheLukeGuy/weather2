@@ -6,7 +6,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import weather2.SoundRegistry;
 import weather2.client.sound.MovingSoundStreamingSource;
 import weather2.weathersystem.storm.CloudStorm;
 

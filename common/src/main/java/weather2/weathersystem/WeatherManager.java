@@ -96,9 +96,7 @@ public class WeatherManager {
                 removeStorm(storm.ID);
                 ((ServerWeatherManager) this).syncStormRemove(storm);
             } else if (world.isClient) {
-                Weather.dbg("WARNING!!! - detected isDead storm object still in client side list, had to remove " +
-                        "storm object with ID " + storm.ID + " from client side, wasn't properly removed via main " +
-                        "channels");
+                Weather.LOGGER.warn("Found a dead storm with ID " + storm.ID + " that wasn't properly removed!");
                 removeStorm(storm.ID);
             }
         }
@@ -145,9 +143,7 @@ public class WeatherManager {
 
     public void addStorm(Storm storm) {
         if (stormsById.containsKey(storm.ID)) {
-            Weather.dbg("Weather2 WARNING!!! Received new storm create for an ID that is already active! design " +
-                    "bug or edgecase with PlayerEvent.Clone, ID: " + storm.ID);
-            Weather.dbgStackTrace();
+            Weather.LOGGER.error("Tried adding a storm with ID " + storm.ID + ", but that ID is already active!");
             return;
         }
 
@@ -162,8 +158,7 @@ public class WeatherManager {
     public void removeStorm(long id) {
         Storm storm = stormsById.get(id);
         if (storm == null) {
-            Weather.dbg("error looking up storm ID on server for removal: " + id + " - lookup count: " +
-                    stormsById.size() + " - last used ID: " + Storm.lastUsedStormID);
+            Weather.LOGGER.warn("Tried removing a storm with ID " + id + ", but no storm with that ID exists!");
             return;
         }
 
@@ -182,8 +177,7 @@ public class WeatherManager {
 
     public void addVolcano(Volcano volcano) {
         if (volcanoesById.containsKey(volcano.ID)) {
-            Weather.dbg("Weather2 WARNING!!! Client received new volcano create for an ID that is already " +
-                    "active! design bug");
+            Weather.LOGGER.error("Tried adding a volcano with ID " + volcano.ID + ", but that ID is already active!");
             return;
         }
         volcanoes.add(volcano);
@@ -193,14 +187,13 @@ public class WeatherManager {
     public void removeVolcano(long id) {
         Volcano volcano = volcanoesById.get(id);
         if (volcano == null) {
+            Weather.LOGGER.warn("Tried removing a volcano with ID " + id + ", but no volcano with that ID exists!");
             return;
         }
 
         volcano.setDead();
         volcanoes.remove(volcano);
         volcanoesById.remove(id);
-
-        Weather.dbg("removing volcano");
     }
 
     public CloudStorm getClosestCloudStorm(Vec3 pos, double maxDistance) {
