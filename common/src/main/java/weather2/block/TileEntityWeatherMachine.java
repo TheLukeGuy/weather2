@@ -78,7 +78,7 @@ public class TileEntityWeatherMachine extends TileEntity implements ITickable {
 
             if (lastTickStormObject != null) {
 
-                wm.removeStorm(lastTickStormObject.ID);
+                wm.removeStorm(lastTickStormObject.id);
                 wm.syncStormRemove(lastTickStormObject);
                 lastTickStormObject = null;
             }
@@ -103,7 +103,7 @@ public class TileEntityWeatherMachine extends TileEntity implements ITickable {
 
             if (world.getTotalWorldTime() % 40 == 0) {
 
-                if (lastTickStormObject != null && lastTickStormObject.isDead) {
+                if (lastTickStormObject != null && lastTickStormObject.dead) {
                     lastTickStormObject = null;
                 }
 
@@ -115,7 +115,7 @@ public class TileEntityWeatherMachine extends TileEntity implements ITickable {
                         CloudStorm obj = manager.getCloudStormById(lastTickStormObjectID);
                         if (obj != null) {
                             lastTickStormObject = obj;
-                            Weather.dbg("regrabbed old storm instance by ID " + obj.ID + " for weather machine");
+                            Weather.dbg("regrabbed old storm instance by ID " + obj.id + " for weather machine");
                         }
                     }
                 }
@@ -136,12 +136,12 @@ public class TileEntityWeatherMachine extends TileEntity implements ITickable {
                         manager.addStorm(so);
                         manager.syncStormNew(so);
                         lastTickStormObject = so;
-                        lastTickStormObjectID = so.ID;
+                        lastTickStormObjectID = so.id;
                     }
                 }
             }
 
-            if (lastTickStormObject != null && !lastTickStormObject.isDead) {
+            if (lastTickStormObject != null && !lastTickStormObject.dead) {
 
                 Random rand = new Random();
 

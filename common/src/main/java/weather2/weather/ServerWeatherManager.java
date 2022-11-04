@@ -53,8 +53,8 @@ public class ServerWeatherManager extends WeatherManager {
         World world = getWorld();
 
         //wrap back to ID 0 just in case someone manages to hit 9223372036854775807 O_o
-        if (Storm.lastUsedStormID >= Long.MAX_VALUE) {
-            Storm.lastUsedStormID = 0;
+        if (Storm.lastStormId >= Long.MAX_VALUE) {
+            Storm.lastStormId = 0;
         }
 
         tickWeatherCoverage();
@@ -107,12 +107,12 @@ public class ServerWeatherManager extends WeatherManager {
                         //finally remove if nothing near for 30 seconds, gives multiplayer server a chance to get players in
                         if (so.ticksSinceNoNearPlayer > 20 * 30 || ConfigMisc.Aesthetic_Only_Mode) {
                             if (world.playerEntities.size() == 0) {
-                                Weather.dbg("removing distant storm: " + so.ID + ", running without players");
+                                Weather.dbg("removing distant storm: " + so.id + ", running without players");
                             } else {
-                                Weather.dbg("removing distant storm: " + so.ID);
+                                Weather.dbg("removing distant storm: " + so.id);
                             }
 
-                            removeStorm(so.ID);
+                            removeStorm(so.id);
                             syncStormRemove(so);
                         }
                     } else {
@@ -472,7 +472,7 @@ public class ServerWeatherManager extends WeatherManager {
                 if (so.levelCurIntensityStage > 0 || so.attrib_precipitation) {
                     NBTTagCompound nbtStorm = so.nbtForIMC();
 
-                    data.setTag("storm_" + so.ID, nbtStorm);
+                    data.setTag("storm_" + so.id, nbtStorm);
                 }
             }
 

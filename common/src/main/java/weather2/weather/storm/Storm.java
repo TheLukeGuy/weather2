@@ -1,15 +1,13 @@
 package weather2.weather.storm;
 
 import CoroUtil.util.Vec3;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
 import weather2.util.CachedNbtCompound;
 import weather2.weather.WeatherManager;
 
 public class Storm {
-    public static long lastUsedStormID = 0; //ID starts from 0 for each game start, no storm nbt disk reload for now
-    public long ID; //loosely accurate ID for tracking, but we wanted to persist between world reloads..... need proper UUID??? I guess add in UUID later and dont persist, start from 0 per game run
-    public boolean isDead = false;
+    public static long lastStormId = 0;
+    public long id; // TODO: Use UUIDs for storm IDs
+    public boolean dead = false;
 
     /**
      * used to count up to a threshold to finally remove weather objects,
@@ -30,9 +28,7 @@ public class Storm {
 
     public StormType weatherObjectType = StormType.CLOUD;
 
-    private CachedNbtCompound nbtCache;
-
-    //private NBTTagCompound cachedClientNBTState;
+    private final CachedNbtCompound nbtCache;
 
     public Storm(WeatherManager parManager) {
         manager = parManager;
@@ -40,15 +36,13 @@ public class Storm {
     }
 
     public void initFirstTime() {
-        ID = lastUsedStormID++;
+        id = lastStormId++;
     }
 
     public void tick() {
-
     }
 
     public void tickRender(float partialTick) {
-
     }
 
     public void reset() {
@@ -56,15 +50,11 @@ public class Storm {
     }
 
     public void setDead() {
-        //Weather.dbg("storm killed, ID: " + ID);
+        dead = true;
 
-        isDead = true;
-
-        //cleanup memory
-        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT/*manager.getWorld().isRemote*/) {
+        if (manager.getWorld().isClient) {
             cleanupClient();
         }
-
         cleanup();
     }
 
@@ -73,7 +63,6 @@ public class Storm {
     }
 
     public void cleanupClient() {
-
     }
 
     public int getUpdateRateForNetwork() {
@@ -81,16 +70,14 @@ public class Storm {
     }
 
     public void readFromNBT() {
-
     }
 
     public void writeToNBT() {
-
     }
 
     public void nbtSyncFromServer() {
         CachedNbtCompound parNBT = this.getNbtCache();
-        ID = parNBT.getLong("ID");
+        id = parNBT.getLong("ID");
         //Weather.dbg("StormObject " + ID + " receiving sync");
 
         pos = new Vec3(parNBT.getDouble("posX"), parNBT.getDouble("posY"), parNBT.getDouble("posZ"));
@@ -111,9 +98,9 @@ public class Storm {
         nbt.putDouble("vecY", motion.yCoord);
         nbt.putDouble("vecZ", motion.zCoord);
 
-        nbt.putLong("ID", ID);
+        nbt.putLong("ID", id);
         //just blind set ID into non cached data so client always has it, no need to check for forced state and restore orig state
-        nbt.getNewNbt().setLong("ID", ID);
+        nbt.getNewNbt().putLong("ID", id);
 
         nbt.setInt("size", size);
         nbt.setInt("maxSize", maxSize);
@@ -122,9 +109,5 @@ public class Storm {
 
     public CachedNbtCompound getNbtCache() {
         return nbtCache;
-    }
-
-    public void setNbtCache(CachedNbtCompound nbtCache) {
-        this.nbtCache = nbtCache;
     }
 }

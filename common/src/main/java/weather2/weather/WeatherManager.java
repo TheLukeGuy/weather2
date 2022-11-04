@@ -90,14 +90,14 @@ public class WeatherManager {
 
         // Tick storms
         for (Storm storm : storms) {
-            if (!storm.isDead) {
+            if (!storm.dead) {
                 storm.tick();
             } else if (this instanceof ServerWeatherManager) {
-                removeStorm(storm.ID);
+                removeStorm(storm.id);
                 ((ServerWeatherManager) this).syncStormRemove(storm);
             } else if (world.isClient) {
-                Weather.LOGGER.warn("Found a dead storm with ID " + storm.ID + " that wasn't properly removed!");
-                removeStorm(storm.ID);
+                Weather.LOGGER.warn("Found a dead storm with ID " + storm.id + " that wasn't properly removed!");
+                removeStorm(storm.id);
             }
         }
 
@@ -142,13 +142,13 @@ public class WeatherManager {
     }
 
     public void addStorm(Storm storm) {
-        if (stormsById.containsKey(storm.ID)) {
-            Weather.LOGGER.error("Tried adding a storm with ID " + storm.ID + ", but that ID is already active!");
+        if (stormsById.containsKey(storm.id)) {
+            Weather.LOGGER.error("Tried adding a storm with ID " + storm.id + ", but that ID is already active!");
             return;
         }
 
         storms.add(storm);
-        stormsById.put(storm.ID, storm);
+        stormsById.put(storm.id, storm);
         if (storm instanceof CloudStorm) {
             CloudStorm cloudStorm = (CloudStorm) storm;
             cloudStormsByLayer.get(cloudStorm.layer).add(cloudStorm);
@@ -213,7 +213,7 @@ public class WeatherManager {
                 continue;
             }
             CloudStorm cloudStorm = (CloudStorm) storm;
-            if (cloudStorm.isDead) {
+            if (cloudStorm.dead) {
                 continue;
             }
 
@@ -240,7 +240,7 @@ public class WeatherManager {
             }
 
             CloudStorm cloudStorm = (CloudStorm) storm;
-            if (cloudStorm.isDead) {
+            if (cloudStorm.dead) {
                 continue;
             }
             if (cloudStorm.attrib_precipitation) {
@@ -266,7 +266,7 @@ public class WeatherManager {
                 continue;
             }
             SandStorm sandStorm = (SandStorm) storm;
-            if (sandStorm.isDead) {
+            if (sandStorm.dead) {
                 continue;
             }
 
@@ -301,7 +301,7 @@ public class WeatherManager {
     public List<Storm> getStormsAround(Vec3 pos, double maxDistance, boolean forDeflector) {
         List<Storm> results = new ArrayList<>();
         for (Storm storm : storms) {
-            if (storm.isDead) continue;
+            if (storm.dead) continue;
             if (storm instanceof CloudStorm) {
                 CloudStorm cloudStorm = (CloudStorm) storm;
 
@@ -343,10 +343,10 @@ public class WeatherManager {
             obj.getNbtCache().setForcingUpdates(true);
             obj.writeToNBT();
             obj.getNbtCache().setForcingUpdates(false);
-            listStormsNBT.put("storm_" + obj.ID, obj.getNbtCache().getNewNbt());
+            listStormsNBT.put("storm_" + obj.id, obj.getNbtCache().getNewNbt());
         }
         mainNBT.put("stormData", listStormsNBT);
-        mainNBT.putLong("lastUsedIDStorm", Storm.lastUsedStormID);
+        mainNBT.putLong("lastUsedIDStorm", Storm.lastStormId);
 
         mainNBT.putLong("lastStormFormed", lastCloudStormFormed);
 
@@ -420,7 +420,7 @@ public class WeatherManager {
         }
 
         Volcano.lastUsedID = rtsNBT.getLong("lastUsedIDVolcano");
-        Storm.lastUsedStormID = rtsNBT.getLong("lastUsedIDStorm");
+        Storm.lastStormId = rtsNBT.getLong("lastUsedIDStorm");
 
         windManager.readFromNBT(rtsNBT.getCompound("windMan"));
 

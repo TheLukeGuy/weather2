@@ -48,7 +48,7 @@ public class TileEntityWeatherDeflector extends TileEntity implements ITickable 
                             Storm storm = storms.get(i);
 
                             if (storm != null) {
-                                wm.removeStorm(storm.ID);
+                                wm.removeStorm(storm.id);
                                 wm.syncStormRemove(storm);
                             }
                         }
