@@ -4,14 +4,11 @@ import CoroUtil.util.Vec3;
 import extendedrenderer.particle.ParticleRegistry;
 import extendedrenderer.particle.behavior.ParticleBehaviorSandstorm;
 import extendedrenderer.particle.entity.EntityRotFX;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.init.Biomes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import weather2.CommonProxy;
 import weather2.client.entity.particle.ParticleSandstorm;
 import weather2.config.ConfigParticle;
@@ -44,12 +41,10 @@ import java.util.Random;
  * @author Corosus
  */
 public class SandStorm extends Storm {
-
     public int height = 0;
 
     public Vec3 posSpawn = new Vec3(0, 0, 0);
 
-    @SideOnly(Side.CLIENT)
     public List<EntityRotFX> listParticlesCloud;
 
     public ParticleBehaviorSandstorm particleBehavior;
@@ -72,8 +67,8 @@ public class SandStorm extends Storm {
 
         this.weatherObjectType = StormType.SAND;
 
-        if (parManager.getWorld().isRemote) {
-            listParticlesCloud = new ArrayList<EntityRotFX>();
+        if (parManager.getWorld().isClient) {
+            listParticlesCloud = new ArrayList<>();
 
         }
     }
@@ -85,30 +80,12 @@ public class SandStorm extends Storm {
         sizePeak = 1;
         maxSize = 100;
 
-        //temp start
-		/*float angle = manager.getWindManager().getWindAngleForClouds();
-		
-		double vecX = -Math.sin(Math.toRadians(angle));
-		double vecZ = Math.cos(Math.toRadians(angle));
-		double speed = 150D;
-		
-		this.pos.xCoord -= vecX * speed;
-		this.pos.zCoord -= vecZ * speed;*/
-        //temp end
-
         World world = manager.getWorld();
-        int yy = WeatherUtilBlock.getPrecipitationHeightSafe(world, new BlockPos(pos.xCoord, 0, pos.zCoord)).getY();
-        pos.yCoord = yy;
+        pos.yCoord = WeatherUtilBlock.getPrecipitationHeightSafe(world, new BlockPos(pos.xCoord, 0, pos.zCoord)).getY();
 
         posGround = new Vec3(pos);
 
         this.posSpawn = new Vec3(this.pos);
-		
-		/*height = 0;
-		size = 0;
-		
-		maxSize = 300;
-		maxHeight = 100;*/
     }
 
     public float getSandstormScale() {
@@ -125,13 +102,9 @@ public class SandStorm extends Storm {
 
     /**
      * prevent rivers from killing sandstorm if its just passing over from desert to more desert
-     *
-     * @param biome
-     * @param forSpawn
-     * @return
      */
     public static boolean isDesert(Biome biome, boolean forSpawn) {
-        return biome == Biomes.DESERT || biome == Biomes.DESERT_HILLS || (!forSpawn && biome == Biomes.RIVER) || biome.biomeName.toLowerCase().contains("desert");
+        return biome.getCategory() == Biome.Category.DESERT || (!forSpawn && biome.getCategory() == Biome.Category.RIVER);
     }
 
     /**
@@ -142,18 +115,17 @@ public class SandStorm extends Storm {
      * - storm continues for minutes even after front has exited desert
      */
     public void tickProgressionAndMovement() {
-
         World world = manager.getWorld();
         WindManager windMan = manager.getWindManager();
 
         float angle = windMan.getWindAngleForClouds();
         float speedWind = windMan.getWindSpeedForClouds();
 
-        /**
-         * Progression
+        /*
+          Progression
          */
 
-        if (!world.isRemote) {
+        if (!world.isClient) {
             age++;
 
             //boolean isGrowing = true;
@@ -161,15 +133,9 @@ public class SandStorm extends Storm {
             BlockPos posBlock = pos.toBlockPos();
 
             //only grow if in loaded area and in desert, also prevent it from growing again for some reason if it started dying already
-            if (isFrontGrowing && world.isBlockLoaded(posBlock)) {
-                Biome biomeIn = world.getBiomeForCoordsBody(posBlock);
-
-                if (isDesert(biomeIn)) {
-                    isFrontGrowing = true;
-                } else {
-                    //System.out.println("sandstorm fadeout started");
-                    isFrontGrowing = false;
-                }
+            if (isFrontGrowing && world.canSetBlock(posBlock)) {
+                Biome biomeIn = world.getBiome(posBlock);
+                isFrontGrowing = isDesert(biomeIn);
             } else {
                 isFrontGrowing = false;
             }
@@ -177,14 +143,14 @@ public class SandStorm extends Storm {
             int sizeAdjRate = 10;
 
             if (isFrontGrowing) {
-                if (world.getTotalWorldTime() % sizeAdjRate == 0) {
+                if (world.getTime() % sizeAdjRate == 0) {
                     if (size < maxSize) {
                         size++;
                         //System.out.println("size: " + size);
                     }
                 }
             } else {
-                if (world.getTotalWorldTime() % sizeAdjRate == 0) {
+                if (world.getTime() % sizeAdjRate == 0) {
                     if (size > 0) {
                         size--;
                         //System.out.println("size: " + size);
@@ -204,22 +170,14 @@ public class SandStorm extends Storm {
                 sizePeak = size;
             }
 
-            //System.out.println("sandstorm age: " + age);
-            //will die once it builds down
-			/*if (age >= maxAge) {
-				this.setDead();
-				return;
-			}*/
-
             //keep high wind active incase it dies off during storm
             if (windMan.highWindTimer < 100) {
                 windMan.highWindTimer = 100;
             }
-
         }
 
-        /**
-         * Movement
+        /*
+          Movement
          */
 
         //clouds move at 0.2 amp of actual wind speed
@@ -234,20 +192,12 @@ public class SandStorm extends Storm {
             this.pos.zCoord += vecZ * speed;
         }
 
-        //wind movement
-        //this.motion = windMan.applyWindForceImpl(this.motion, 5F, 1F/20F, 0.5F);
-		
-		/*this.pos.xCoord += this.motion.xCoord;
-		this.pos.yCoord += this.motion.yCoord;
-		this.pos.zCoord += this.motion.zCoord;*/
-
         int yy = WeatherUtilBlock.getPrecipitationHeightSafe(world, new BlockPos(pos.xCoord, 0, pos.zCoord)).getY();
 
         this.pos.yCoord = yy + 1;
     }
 
     public void tickBlockSandBuildup() {
-
         World world = manager.getWorld();
         WindManager windMan = manager.getWindManager();
 
@@ -257,14 +207,10 @@ public class SandStorm extends Storm {
         int delay = ConfigSand.Sandstorm_Sand_Buildup_TickRate;
         int loop = (int) ((float) ConfigSand.Sandstorm_Sand_Buildup_LoopAmountBase * getSandstormScale());
 
-        int count = 0;
-
         //sand block buildup
-        if (!world.isRemote) {
-            if (world.getTotalWorldTime() % delay == 0) {
-
+        if (!world.isClient) {
+            if (world.getTime() % delay == 0) {
                 for (int i = 0; i < loop; i++) {
-
                     //rate of placement based on storm intensity
                     if (rand.nextDouble() >= getSandstormScale()) continue;
 
@@ -274,20 +220,14 @@ public class SandStorm extends Storm {
                     vecPos.yCoord = y;
 
                     //avoid unloaded areas
-                    if (!world.isBlockLoaded(vecPos.toBlockPos())) continue;
+                    if (!world.canSetBlock(vecPos.toBlockPos())) continue;
 
-                    Biome biomeIn = world.getBiomeForCoordsBody(vecPos.toBlockPos());
+                    Biome biomeIn = world.getBiome(vecPos.toBlockPos());
 
                     if (ConfigSand.Sandstorm_Sand_Buildup_AllowOutsideDesert || isDesert(biomeIn)) {
                         WeatherUtilBlock.fillAgainstWallSmoothly(world, vecPos, angle/* + angleRand*/, 15, 2, CommonProxy.blockSandLayer);
                     }
-
-                    count++;
-
-
                 }
-
-                //System.out.println("count: " + count);
             }
         }
     }
@@ -302,7 +242,6 @@ public class SandStorm extends Storm {
         }
 
         World world = manager.getWorld();
-        WindManager windMan = manager.getWindManager();
 
         if (world == null) {
             System.out.println("world is null for " + this + ", why!!!");
@@ -311,13 +250,11 @@ public class SandStorm extends Storm {
 
         if (WeatherUtil.isPausedSideSafe(world)) return;
 
-
         tickProgressionAndMovement();
 
         int yy = WeatherUtilBlock.getPrecipitationHeightSafe(world, new BlockPos(pos.xCoord, 0, pos.zCoord)).getY();
 
-
-        if (world.isRemote) {
+        if (world.isClient) {
             tickClient();
         }
 
@@ -329,16 +266,10 @@ public class SandStorm extends Storm {
         this.posGround.xCoord = pos.xCoord;
         this.posGround.yCoord = yy;
         this.posGround.zCoord = pos.zCoord;
-
     }
 
-    @SideOnly(Side.CLIENT)
     public void tickClient() {
-
-        //moved
-        //if (WeatherUtil.isPaused()) return;
-
-        Minecraft mc = Minecraft.getMinecraft();
+        MinecraftClient mc = MinecraftClient.getInstance();
         World world = manager.getWorld();
         WindManager windMan = manager.getWindManager();
 
@@ -346,49 +277,15 @@ public class SandStorm extends Storm {
             particleBehavior = new ParticleBehaviorSandstorm(pos);
         }
 
-        //double size = 15;
-        //double height = 50;
-        double distanceToCenter = pos.distanceTo(new Vec3(mc.player.posX, mc.player.posY, mc.player.posZ));
-        //how close to renderable particle wall
-        double distanceToFront = distanceToCenter - size;
-        boolean isInside = distanceToFront < 0;
-
-        double circ = Math.PI * size;
-
         //double scale = 10;
         double distBetweenParticles = 3;
 
         //double circScale = circ / distBetweenParticles;
 
-        /**
-         * if circ is 10, 10 / 3 size = 3 particles
-         * if 30 circ / 3 size = 10 particles
-         * if 200 circ / 3 size = 66 particles
-         *
-         * how many degrees do we need to jump,
-         * 360 / 3 part = 120
-         * 360 / 10 part = 36
-         * 360 / 66 part = 5.4
-         *
-         */
-
-        //need steady dist between particles
-
-        double degRate = 360D / (circ / distBetweenParticles);
-
-        if (mc.world.getTotalWorldTime() % 40 == 0) {
-            //System.out.println("circ: " + circ);
-            //System.out.println("degRate: " + degRate);
-        }
-
-        Random rand = mc.world.rand;
+        Random rand = mc.world.random;
 
         this.height = this.size / 4;
         int heightLayers = Math.max(1, this.height / (int) distBetweenParticles);
-
-        if ((mc.world.getTotalWorldTime()) % 10 == 0) {
-            //System.out.println(heightLayers);
-        }
 
         double distFromSpawn = this.posSpawn.distanceTo(this.pos);
 
@@ -397,23 +294,12 @@ public class SandStorm extends Storm {
 
         double directionAngle = Math.atan2(zVec, xVec);
 
-        /**
-         *
-         * ideas:
-         * - pull particle distance inwards as its y reduces
-         * -- factor in initial height spawn, first push out, then in, for a circularly shaped effect vertically
-         * - base needs to be bigger than upper area
-         * -- account for size change in the degRate value calculations for less particle spam
-         * - needs more independant particle motion, its too unified atm
-         * - irl sandstorms last between hours and days, adjust time for mc using speed and scale and lifetime
-         */
-
         double directionAngleDeg = Math.toDegrees(directionAngle);
 
         int spawnedThisTick = 0;
 
-        /**
-         * stormfront wall
+        /*
+          stormfront wall
          */
         float sandstormScale = getSandstormScale();
 
@@ -423,7 +309,7 @@ public class SandStorm extends Storm {
                 //youd think this should be angle - 90 to angle + 90, but minecraft / bad math
                 //for (double i = directionAngleDeg; i < directionAngleDeg + (180); i += degRate) {
                 double i = directionAngleDeg + (rand.nextDouble() * 180D);
-                if ((mc.world.getTotalWorldTime()) % 2 == 0) {
+                if ((mc.world.getTime()) % 2 == 0) {
 
                     if (rand.nextDouble() >= sandstormParticleRateDust) continue;
 
@@ -431,7 +317,7 @@ public class SandStorm extends Storm {
                     double sizeDyn = size - sizeSub;
                     double inwardsAdj = rand.nextDouble() * 5D;//(sizeDyn * 0.75D);
 
-                    double sizeRand = (sizeDyn + /*rand.nextDouble() * 30D*/ -inwardsAdj/*30D*/)/* / (double)heightLayer*/;
+                    double sizeRand = (sizeDyn - /*rand.nextDouble() * 30D*/ inwardsAdj/*30D*/)/* / (double)heightLayer*/;
                     double x = pos.xCoord + (-Math.sin(Math.toRadians(i)) * (sizeRand));
                     double z = pos.zCoord + (Math.cos(Math.toRadians(i)) * (sizeRand));
                     double y = pos.yCoord + (heightLayer * distBetweenParticles * 2);
@@ -469,13 +355,6 @@ public class SandStorm extends Storm {
                     part.spawnAsWeatherEffect();
 
                     spawnedThisTick++;
-
-                    //only need for non managed particles
-                    //ClientTickHandler.weatherManager.addWeatheredParticle(part);
-
-                    //mc.effectRenderer.addEffect(part);
-
-
                 }
                 //}
             }
@@ -487,12 +366,8 @@ public class SandStorm extends Storm {
             spawnedThisTick = 0;
         }
 
-        if ((mc.world.getTotalWorldTime()) % 20 == 0) {
-            //System.out.println("sandstormScale: " + sandstormScale + " - size: " + size);
-        }
-
         //half of the angle (?)
-        double spawnAngle = Math.atan2((double) this.sizePeak/*this.size*//* / 2D*/, distFromSpawn);
+        double spawnAngle = Math.atan2(this.sizePeak/*this.size*//* / 2D*/, distFromSpawn);
 
         //tweaking for visual due to it moving, etc
         spawnAngle *= 1.2D;
@@ -501,15 +376,12 @@ public class SandStorm extends Storm {
 
         double extraDistSpawnIntoWall = sizePeak / 2D;
 
-        /**
-         * Spawn particles between spawn pos and current pos, cone shaped
-         */
-        if ((mc.world.getTotalWorldTime()) % 3 == 0) {
+        // Spawn particles between spawn pos and current pos, cone shaped
+        if ((mc.world.getTime()) % 3 == 0) {
 
             //System.out.println(this.particleBehavior.particles.size());
 
             for (double spawnDistTick = 0; spawnDistTick < distFromSpawn + (extraDistSpawnIntoWall) && spawnedThisTick < 500; spawnDistTick += spawnDistInc) {
-
                 //rate of spawn based on storm intensity
                 if (rand.nextDouble() >= sandstormScale) continue;
 
@@ -565,11 +437,6 @@ public class SandStorm extends Storm {
             //System.out.println("age: " + age + " - SCALE: " + getSandstormScale());
         }
 
-        if (spawnedThisTick > 0) {
-            //System.out.println("spawnedThisTickv2: " + spawnedThisTick);
-
-        }
-
         float angle = windMan.getWindAngleForClouds();
         float speedWind = windMan.getWindSpeedForClouds();
 
@@ -583,15 +450,11 @@ public class SandStorm extends Storm {
 
         //System.out.println("client side size: " + size);
 
-        /**
-         * keep sandstorm front in position
-         */
+        // keep sandstorm front in position
         for (int i = 0; i < particleBehavior.particles.size(); i++) {
             ParticleSandstorm particle = (ParticleSandstorm) particleBehavior.particles.get(i);
 
-            /**
-             * lock to position while sandstorm is in first size using phase, otherwise just let them fly without lock
-             */
+            // lock to position while sandstorm is in first size using phase, otherwise just let them fly without lock
             if (particle.lockPosition) {
                 if (size > 0) {
                     double x = pos.xCoord + (-Math.sin(Math.toRadians(particle.angleToStorm)) * (particle.distAdj));
@@ -609,7 +472,6 @@ public class SandStorm extends Storm {
                 particle.setMotionZ(/*particle.getMotionZ() + */(vecZ * speed));
             }
             //windMan.applyWindForceNew(particle);
-
         }
 
         //System.out.println("spawn particles at: " + pos);
@@ -625,7 +487,7 @@ public class SandStorm extends Storm {
         double xVec = this.posSpawn.xCoord - this.pos.xCoord;
         double zVec = this.posSpawn.zCoord - this.pos.zCoord;
 
-        double spawnAngle = Math.atan2((double) this.sizePeak, distFromSpawn);
+        double spawnAngle = Math.atan2(this.sizePeak, distFromSpawn);
 
         //tweaking for visual due to it moving, etc
         //spawnAngle *= 1.2D;
@@ -652,27 +514,12 @@ public class SandStorm extends Storm {
         double xVec = this.posSpawn.xCoord - this.pos.xCoord;
         double zVec = this.posSpawn.zCoord - this.pos.zCoord;
 
-        double spawnAngle = Math.atan2((double) this.sizePeak, distFromSpawn);
+        double spawnAngle = Math.atan2(this.sizePeak, distFromSpawn);
 
         double directionAngle = Math.atan2(zVec, xVec);
 
         double angleLeft = directionAngle + (Math.PI / 2D) - (spawnAngle);
         double angleRight = directionAngle + (Math.PI / 2D) - (spawnAngle) + (/*rand.nextDouble() * */spawnAngle * 2D);
-
-        //kinda ok, but needs go to side more
-        double angleLeft1 = directionAngle + (Math.PI / 2D) - (spawnAngle);
-        double angleRight1 = directionAngle + (Math.PI / 2D) - (spawnAngle) + (/*rand.nextDouble() * */spawnAngle * 2D);
-
-        double wat = extraDistSpawnIntoWall;
-
-        double xLeft1 = posSpawn.xCoord + (-Math.sin(/*Math.toRadians(*/angleLeft1/*)*/) * wat);
-        double zLeft1 = posSpawn.zCoord + (Math.cos(/*Math.toRadians(*/angleLeft1/*)*/) * wat);
-
-        double xRight1 = posSpawn.xCoord + (-Math.sin(/*Math.toRadians(*/angleRight1/*)*/) * wat);
-        double zRight1 = posSpawn.zCoord + (Math.cos(/*Math.toRadians(*/angleRight1/*)*/) * wat);
-
-        //listPoints.add(new Vec3(xRight1, 0, zRight1));
-        //listPoints.add(new Vec3(xLeft1, 0, zLeft1));
 
         double xLeft = posSpawn.xCoord + (-Math.sin(/*Math.toRadians(*/angleLeft/*)*/) * (distFromSpawn + extraDistSpawnIntoWall));
         double zLeft = posSpawn.zCoord + (Math.cos(/*Math.toRadians(*/angleLeft/*)*/) * (distFromSpawn + extraDistSpawnIntoWall));
@@ -688,23 +535,16 @@ public class SandStorm extends Storm {
 
     public void moveToPosition(ParticleSandstorm particle, double x, double y, double z, double maxSpeed) {
         if (particle.getPosX() > x) {
-            particle.setMotionX(particle.getMotionX() + -maxSpeed);
+            particle.setMotionX(particle.getMotionX() - maxSpeed);
         } else {
             particle.setMotionX(particle.getMotionX() + maxSpeed);
         }
-		
-		/*if (particle.getPosY() > y) {
-			particle.setMotionY(particle.getMotionY() + -maxSpeed);
-		} else {
-			particle.setMotionY(particle.getMotionY() + maxSpeed);
-		}*/
 
         if (particle.getPosZ() > z) {
             particle.setMotionZ(particle.getMotionZ() + -maxSpeed);
         } else {
             particle.setMotionZ(particle.getMotionZ() + maxSpeed);
         }
-
 
         double distXZ = Math.sqrt((particle.getPosX() - x) * 2 + (particle.getPosZ() - z) * 2);
         if (distXZ < 5D) {
@@ -735,11 +575,6 @@ public class SandStorm extends Storm {
         data.setInt("age", age);
 
         data.putBoolean("isFrontGrowing", isFrontGrowing);
-		
-		/*data.setLong("ID", ID);
-		data.setInteger("size", size);
-		data.setInteger("maxSize", maxSize);*/
-
     }
 
     @Override
@@ -787,7 +622,6 @@ public class SandStorm extends Storm {
         super.cleanup();
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
     public void cleanupClient() {
         super.cleanupClient();
@@ -795,5 +629,4 @@ public class SandStorm extends Storm {
         if (particleBehavior != null && particleBehavior.particles != null) particleBehavior.particles.clear();
         particleBehavior = null;
     }
-
 }

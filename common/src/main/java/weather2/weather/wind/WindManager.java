@@ -198,7 +198,7 @@ public class WindManager {
                         if (ConfigWind.Wind_LowWindEvents) {
                             if (rand.nextInt(ConfigWind.lowWindOddsTo1) == 0) {
                                 startLowWindEvent();
-                                Weather.dbg("low wind event started, for ticks: " + lowWindTimer);
+                                Weather.LOGGER.debug("low wind event started, for ticks: " + lowWindTimer);
                             }
                         }
                     } else {
@@ -209,13 +209,13 @@ public class WindManager {
                     if (ConfigWind.Wind_HighWindEvents && highWindTimer <= 0) {
                         if (rand.nextInt(ConfigWind.highWindOddsTo1) == 0) {
                             startHighWindEvent();
-                            Weather.dbg("high wind event started, for ticks: " + highWindTimer);
+                            Weather.LOGGER.debug("high wind event started, for ticks: " + highWindTimer);
                         }
                     }
                 } else {
                     lowWindTimer--;
                     if (lowWindTimer <= 0) {
-                        Weather.dbg("low wind event ended");
+                        Weather.LOGGER.debug("low wind event ended");
                     }
                     windSpeedGlobal -= 0.01F;
                 }
@@ -223,7 +223,7 @@ public class WindManager {
                 if (highWindTimer > 0) {
                     highWindTimer--;
                     if (highWindTimer <= 0) {
-                        Weather.dbg("high wind event ended");
+                        Weather.LOGGER.debug("high wind event ended");
                     }
                 }
 
