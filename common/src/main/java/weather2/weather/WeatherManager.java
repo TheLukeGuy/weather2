@@ -5,6 +5,7 @@ import CoroUtil.util.CoroUtilPhysics;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
 import org.apache.commons.io.FileUtils;
@@ -195,15 +196,15 @@ public class WeatherManager {
         volcanoesById.remove(id);
     }
 
-    public CloudStorm getClosestCloudStorm(Vec3 pos, double maxDistance) {
+    public CloudStorm getClosestCloudStorm(Vec3d pos, double maxDistance) {
         return getClosestCloudStorm(pos, maxDistance, -1, true);
     }
 
-    public CloudStorm getClosestCloudStorm(Vec3 pos, double maxDistance, int minIntensity) {
+    public CloudStorm getClosestCloudStorm(Vec3d pos, double maxDistance, int minIntensity) {
         return getClosestCloudStorm(pos, maxDistance, minIntensity, false);
     }
 
-    public CloudStorm getClosestCloudStorm(Vec3 pos, double maxDistance, int minIntensity, boolean orRain) {
+    public CloudStorm getClosestCloudStorm(Vec3d pos, double maxDistance, int minIntensity, boolean orRain) {
         CloudStorm closestStorm = null;
         double closestDistance = Double.MAX_VALUE;
 
@@ -229,10 +230,10 @@ public class WeatherManager {
     }
 
     public boolean isPrecipitatingAt(BlockPos pos) {
-        return isPrecipitatingAt(new Vec3(pos));
+        return isPrecipitatingAt(new Vec3d(pos.getX(), pos.getY(), pos.getZ()));
     }
 
-    public boolean isPrecipitatingAt(Vec3 pos) {
+    public boolean isPrecipitatingAt(Vec3d pos) {
         for (Storm storm : storms) {
             if (!(storm instanceof CloudStorm)) {
                 continue;
@@ -255,7 +256,7 @@ public class WeatherManager {
     /**
      * Gets the most intense sandstorm, used for effects and sounds
      */
-    public SandStorm getClosestSandStormByIntensity(Vec3 pos) {
+    public SandStorm getClosestSandStormByIntensity(Vec3d pos) {
         SandStorm closestStorm = null;
         double closestDistance = Double.MAX_VALUE;
         double highestIntensity = 0;
@@ -269,7 +270,7 @@ public class WeatherManager {
                 continue;
             }
 
-            List<Vec3> points = sandStorm.getSandstormAsShape();
+            List<Vec3d> points = sandStorm.getSandstormAsShape();
 
             double intensity = sandStorm.getSandstormScale();
             boolean inStorm = CoroUtilPhysics.isInConvexShape(pos, points);
@@ -293,11 +294,11 @@ public class WeatherManager {
         return closestStorm;
     }
 
-    public List<Storm> getStormsAround(Vec3 pos, double maxDistance) {
+    public List<Storm> getStormsAround(Vec3d pos, double maxDistance) {
         return getStormsAround(pos, maxDistance, false);
     }
 
-    public List<Storm> getStormsAround(Vec3 pos, double maxDistance, boolean forDeflector) {
+    public List<Storm> getStormsAround(Vec3d pos, double maxDistance, boolean forDeflector) {
         List<Storm> results = new ArrayList<>();
         for (Storm storm : storms) {
             if (storm.dead) continue;
@@ -316,7 +317,7 @@ public class WeatherManager {
                     results.add(cloudStorm);
                 }
             } else if (storm instanceof SandStorm && (!forDeflector || ConfigStorm.Storm_Deflector_RemoveSandstorms)) {
-                List<Vec3> points = ((SandStorm) storm).getSandstormAsShape();
+                List<Vec3d> points = ((SandStorm) storm).getSandstormAsShape();
                 double distanceToStorm = CoroUtilPhysics.getDistanceToShape(pos, points);
                 if (distanceToStorm < maxDistance) {
                     results.add(storm);
