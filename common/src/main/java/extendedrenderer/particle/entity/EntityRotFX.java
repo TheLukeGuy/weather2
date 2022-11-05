@@ -1,8 +1,7 @@
 package extendedrenderer.particle.entity;
 
-import CoroUtil.api.weather.IWindHandler;
+import weather2.api.IWindHandler;
 import CoroUtil.util.CoroUtilBlockLightCache;
-import CoroUtil.util.Vec3;
 import extendedrenderer.ExtendedRenderer;
 import extendedrenderer.particle.behavior.ParticleBehaviors;
 import extendedrenderer.render.RotatingParticleManager;

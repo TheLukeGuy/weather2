@@ -2,7 +2,6 @@ package weather2.weather;
 
 import CoroUtil.packet.PacketHelper;
 import CoroUtil.util.CoroUtilEntity;
-import CoroUtil.util.Vec3;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;

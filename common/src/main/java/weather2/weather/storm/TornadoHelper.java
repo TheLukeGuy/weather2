@@ -1,11 +1,7 @@
 package weather2.weather.storm;
 
-import CoroUtil.block.TileEntityRepairingBlock;
-import CoroUtil.forge.CULog;
 import CoroUtil.forge.CommonProxy;
 import CoroUtil.util.CoroUtilBlock;
-import CoroUtil.util.UtilMining;
-import CoroUtil.util.Vec3;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -155,13 +151,8 @@ public class TornadoHelper {
                     BlockUpdateSnapshot snapshot = it.next();
                     World world = DimensionManager.getWorld(snapshot.getDimID());
                     if (world != null) {
-                        if (snapshot.getState().getBlock() == Blocks.AIR && ConfigTornado.Storm_Tornado_grabbedBlocksRepairOverTime && UtilMining.canConvertToRepairingBlock(world, snapshot.statePrev)) {
-                            TileEntityRepairingBlock.replaceBlockAndBackup(world, snapshot.getPos(), ConfigTornado.Storm_Tornado_TicksToRepairBlock);
-                            //world.setBlockState(snapshot.getPos(), Blocks.LEAVES.getDefaultState(), 3);
-                        } else {
-                            CULog.dbg("cant use repairing block on: " + snapshot.statePrev);
-                            world.setBlockState(snapshot.getPos(), snapshot.getState(), 3);
-                        }
+                        // TODO: Repair blocks? Maybe?
+                        world.setBlockState(snapshot.getPos(), snapshot.getState(), 3);
 
                         if (snapshot.isCreateEntityForBlockRemoval()) {
                             EntityMovingBlock mBlock = new EntityMovingBlock(parWorld, snapshot.getPos().getX(), snapshot.getPos().getY(), snapshot.getPos().getZ(), snapshot.statePrev, storm);

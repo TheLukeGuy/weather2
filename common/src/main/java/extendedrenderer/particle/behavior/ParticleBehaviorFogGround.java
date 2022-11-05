@@ -1,6 +1,5 @@
 package extendedrenderer.particle.behavior;
 
-import CoroUtil.util.Vec3;
 import extendedrenderer.particle.entity.EntityRotFX;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;

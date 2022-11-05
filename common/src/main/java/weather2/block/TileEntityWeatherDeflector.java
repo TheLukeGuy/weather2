@@ -1,6 +1,5 @@
 package weather2.block;
 
-import CoroUtil.util.Vec3;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;

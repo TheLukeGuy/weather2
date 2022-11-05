@@ -1,6 +1,5 @@
 package weather2.util;
 
-import CoroUtil.util.Vec3;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;

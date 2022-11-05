@@ -2,7 +2,6 @@ package weather2.weather;
 
 import CoroUtil.util.CoroUtilFile;
 import CoroUtil.util.CoroUtilPhysics;
-import CoroUtil.util.Vec3;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.util.math.BlockPos;

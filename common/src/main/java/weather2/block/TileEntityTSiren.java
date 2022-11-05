@@ -1,7 +1,6 @@
 package weather2.block;
 
 import CoroUtil.util.CoroUtilPhysics;
-import CoroUtil.util.Vec3;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.fml.relauncher.Side;

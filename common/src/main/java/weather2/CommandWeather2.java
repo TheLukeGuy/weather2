@@ -1,7 +1,6 @@
 package weather2;
 
 import CoroUtil.util.CoroUtilEntity;
-import CoroUtil.util.Vec3;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;

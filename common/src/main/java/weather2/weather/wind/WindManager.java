@@ -1,7 +1,6 @@
 package weather2.weather.wind;
 
 import CoroUtil.util.CoroUtilEntOrParticle;
-import CoroUtil.util.Vec3;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.nbt.NbtCompound;

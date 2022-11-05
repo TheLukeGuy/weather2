@@ -1,8 +1,7 @@
 package weather2.entity;
 
-import CoroUtil.api.weather.IWindHandler;
+import weather2.api.IWindHandler;
 import CoroUtil.entity.EntityThrowableUsefull;
-import CoroUtil.util.Vec3;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.SoundEvents;

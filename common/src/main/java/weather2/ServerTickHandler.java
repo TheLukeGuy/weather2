@@ -2,7 +2,6 @@ package weather2;
 
 import CoroUtil.forge.CULog;
 import CoroUtil.packet.PacketHelper;
-import CoroUtil.util.Vec3;
 import modconfig.ConfigMod;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;

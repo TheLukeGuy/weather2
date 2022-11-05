@@ -1,7 +1,6 @@
 package weather2.item;
 
 import CoroUtil.packet.PacketHelper;
-import CoroUtil.util.Vec3;
 import extendedrenderer.particle.ParticleRegistry;
 import extendedrenderer.particle.behavior.ParticleBehaviorSandstorm;
 import net.minecraft.client.Minecraft;

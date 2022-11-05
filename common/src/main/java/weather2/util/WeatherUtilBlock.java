@@ -1,7 +1,6 @@
 package weather2.util;
 
 import CoroUtil.forge.CULog;
-import CoroUtil.util.Vec3;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.BlockSnow;

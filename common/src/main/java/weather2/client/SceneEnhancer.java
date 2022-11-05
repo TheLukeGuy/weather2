@@ -1,6 +1,6 @@
 package weather2.client;
 
-import CoroUtil.api.weather.IWindHandler;
+import weather2.api.IWindHandler;
 import CoroUtil.config.ConfigCoroUtil;
 import CoroUtil.forge.CULog;
 import CoroUtil.util.*;

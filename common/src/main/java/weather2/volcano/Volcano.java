@@ -1,7 +1,6 @@
 package weather2.volcano;
 
 import CoroUtil.util.CoroUtilBlock;
-import CoroUtil.util.Vec3;
 import extendedrenderer.ExtendedRenderer;
 import extendedrenderer.particle.ParticleRegistry;
 import extendedrenderer.particle.behavior.ParticleBehaviors;

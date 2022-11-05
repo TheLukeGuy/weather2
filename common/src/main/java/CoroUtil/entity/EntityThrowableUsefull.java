@@ -1,7 +1,6 @@
 package CoroUtil.entity;
 
 import CoroUtil.util.CoroUtilEntity;
-import CoroUtil.util.Vec3;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;

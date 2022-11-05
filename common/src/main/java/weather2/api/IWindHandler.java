@@ -1,4 +1,4 @@
-package CoroUtil.api.weather;
+package weather2.api;
 
 public interface IWindHandler {
 

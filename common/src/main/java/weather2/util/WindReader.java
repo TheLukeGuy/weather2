@@ -1,6 +1,5 @@
 package weather2.util;
 
-import CoroUtil.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

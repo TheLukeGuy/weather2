@@ -1,6 +1,5 @@
 package weather2.client.block;
 
-import CoroUtil.util.Vec3;
 import extendedrenderer.ExtendedRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;

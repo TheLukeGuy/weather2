@@ -1,6 +1,5 @@
 package extendedrenderer.particle.behavior;
 
-import CoroUtil.util.Vec3;
 import extendedrenderer.particle.entity.EntityRotFX;
 import extendedrenderer.particle.entity.ParticleTexFX;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;

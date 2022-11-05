@@ -1,6 +1,6 @@
 package weather2.client.entity.particle;
 
-import CoroUtil.api.weather.IWindHandler;
+import weather2.api.IWindHandler;
 import extendedrenderer.particle.entity.EntityRotFX;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;

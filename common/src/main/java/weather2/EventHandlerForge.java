@@ -9,7 +9,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.EntityAIMoveIndoors;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -30,8 +29,6 @@ import weather2.client.SceneEnhancer;
 import weather2.client.foliage.FoliageEnhancerShader;
 import weather2.config.ConfigFoliage;
 import weather2.config.ConfigMisc;
-import weather2.entity.AI.EntityAIMoveIndoorsStorm;
-import weather2.util.UtilEntityBuffsMini;
 import weather2.weather.storm.TornadoHelper;
 import weather2.weather.wind.WindManager;
 
@@ -247,9 +244,7 @@ public class EventHandlerForge {
         if (ConfigMisc.Villager_MoveInsideForStorms) {
             if (event.getEntity() instanceof EntityVillager) {
                 EntityVillager ent = (EntityVillager) event.getEntity();
-
-                //Weather.dbg("applying villager storm AI");
-                UtilEntityBuffsMini.replaceTaskIfMissing(ent, EntityAIMoveIndoors.class, EntityAIMoveIndoorsStorm.class, 2);
+                // TODO: Add move indoor task
             }
         }
     }

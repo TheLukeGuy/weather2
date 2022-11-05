@@ -1,6 +1,5 @@
 package extendedrenderer.particle.behavior;
 
-import CoroUtil.util.Vec3;
 import extendedrenderer.particle.entity.EntityRotFX;
 
 public class ParticleBehaviorMiniTornado extends ParticleBehaviors {

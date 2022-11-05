@@ -1,6 +1,5 @@
 package weather2.client.sound;
 
-import CoroUtil.util.Vec3;
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;

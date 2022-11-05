@@ -3,7 +3,6 @@ package weather2.client.foliage;
 import CoroUtil.config.ConfigCoroUtil;
 import CoroUtil.forge.CULog;
 import CoroUtil.util.CoroUtilBlockLightCache;
-import CoroUtil.util.Vec3;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Sets;
 import extendedrenderer.EventHandler;

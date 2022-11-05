@@ -1,6 +1,5 @@
 package weather2.weather.storm;
 
-import CoroUtil.util.Vec3;
 import weather2.util.CachedNbtCompound;
 import weather2.weather.WeatherManager;
 

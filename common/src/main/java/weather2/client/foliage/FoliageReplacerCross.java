@@ -1,6 +1,5 @@
 package weather2.client.foliage;
 
-import CoroUtil.util.Vec3;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;

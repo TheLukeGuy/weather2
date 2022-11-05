@@ -1,8 +1,7 @@
 package weather2.util;
 
-import CoroUtil.api.weather.IWindHandler;
+import weather2.api.IWindHandler;
 import CoroUtil.util.CoroUtilEntOrParticle;
-import CoroUtil.util.Vec3;
 import extendedrenderer.particle.entity.EntityRotFX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;

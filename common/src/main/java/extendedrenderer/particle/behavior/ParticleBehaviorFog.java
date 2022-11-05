@@ -1,7 +1,6 @@
 package extendedrenderer.particle.behavior;
 
 import CoroUtil.config.ConfigCoroUtil;
-import CoroUtil.util.Vec3;
 import extendedrenderer.particle.entity.EntityRotFX;
 
 public class ParticleBehaviorFog extends ParticleBehaviors {

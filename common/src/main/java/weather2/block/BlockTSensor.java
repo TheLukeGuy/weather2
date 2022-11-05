@@ -1,6 +1,5 @@
 package weather2.block;
 
-import CoroUtil.util.Vec3;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;

@@ -1,6 +1,5 @@
 package weather2.weather.storm;
 
-import CoroUtil.util.Vec3;
 import extendedrenderer.particle.ParticleRegistry;
 import extendedrenderer.particle.behavior.ParticleBehaviorSandstorm;
 import extendedrenderer.particle.entity.EntityRotFX;

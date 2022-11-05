@@ -1,7 +1,6 @@
 package weather2.entity;
 
 import CoroUtil.util.CoroUtilBlock;
-import CoroUtil.util.Vec3;
 import net.minecraft.block.BlockFire;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
