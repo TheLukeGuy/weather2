@@ -1,6 +1,6 @@
 package weather2.client;
 
-import weather2.api.IWindHandler;
+import weather2.weather.wind.WindAffected;
 import CoroUtil.config.ConfigCoroUtil;
 import CoroUtil.forge.CULog;
 import CoroUtil.util.*;
@@ -1923,9 +1923,9 @@ public class SceneEnhancer implements Runnable {
                     }
 
                     if ((WeatherUtilBlock.getPrecipitationHeightSafe(world, new BlockPos(MathHelper.floor(entity1.getPosX()), 0, MathHelper.floor(entity1.getPosZ()))).getY() - 1 < (int) entity1.getPosY() + 1) || (entity1 instanceof ParticleTexFX)) {
-                        if (entity1 instanceof IWindHandler) {
-                            if (((IWindHandler) entity1).getParticleDecayExtra() > 0 && WeatherUtilParticle.getParticleAge(entity1) % 2 == 0) {
-                                WeatherUtilParticle.setParticleAge(entity1, WeatherUtilParticle.getParticleAge(entity1) + ((IWindHandler) entity1).getParticleDecayExtra());
+                        if (entity1 instanceof WindAffected) {
+                            if (((WindAffected) entity1).getParticleDecayExtra() > 0 && WeatherUtilParticle.getParticleAge(entity1) % 2 == 0) {
+                                WeatherUtilParticle.setParticleAge(entity1, WeatherUtilParticle.getParticleAge(entity1) + ((WindAffected) entity1).getParticleDecayExtra());
                             }
                         } else if (WeatherUtilParticle.getParticleAge(entity1) % 2 == 0) {
                             WeatherUtilParticle.setParticleAge(entity1, WeatherUtilParticle.getParticleAge(entity1) + 1);
@@ -1976,9 +1976,9 @@ public class SceneEnhancer implements Runnable {
                                 if (windMan.getWindSpeedForPriority() >= 0.20) {
                                     entity1.particleAge += 1;
                                 }
-                            } else if (entity1 instanceof IWindHandler) {
-                                if (((IWindHandler) entity1).getParticleDecayExtra() > 0 && WeatherUtilParticle.getParticleAge(entity1) % 2 == 0) {
-                                    entity1.particleAge += ((IWindHandler) entity1).getParticleDecayExtra();
+                            } else if (entity1 instanceof WindAffected) {
+                                if (((WindAffected) entity1).getParticleDecayExtra() > 0 && WeatherUtilParticle.getParticleAge(entity1) % 2 == 0) {
+                                    entity1.particleAge += ((WindAffected) entity1).getParticleDecayExtra();
                                 }
                             }/*
 	                        else if (WeatherUtilParticle.getParticleAge(entity1) % 2 == 0)

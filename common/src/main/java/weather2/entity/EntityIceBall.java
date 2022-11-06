@@ -1,6 +1,6 @@
 package weather2.entity;
 
-import weather2.api.IWindHandler;
+import weather2.weather.wind.WindAffected;
 import CoroUtil.entity.EntityThrowableUsefull;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -16,7 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public class EntityIceBall extends EntityThrowableUsefull implements IWindHandler {
+public class EntityIceBall extends EntityThrowableUsefull implements WindAffected {
     public int ticksInAir;
 
     @SideOnly(Side.CLIENT)

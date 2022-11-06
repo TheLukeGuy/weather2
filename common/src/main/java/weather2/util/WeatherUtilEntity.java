@@ -1,6 +1,6 @@
 package weather2.util;
 
-import weather2.api.IWindHandler;
+import weather2.weather.wind.WindAffected;
 import CoroUtil.util.CoroUtilEntOrParticle;
 import extendedrenderer.particle.entity.EntityRotFX;
 import net.minecraft.entity.Entity;
@@ -19,7 +19,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import weather2.ClientTickHandler;
-import weather2.api.WeatherUtilData;
 import weather2.entity.EntityMovingBlock;
 import weather2.weather.wind.WindManager;
 
@@ -41,8 +40,8 @@ public class WeatherUtilEntity {
             return 1F;
         }
 
-        if (entity1 instanceof IWindHandler) {
-            return ((IWindHandler) entity1).getWindWeight();
+        if (entity1 instanceof WindAffected) {
+            return ((WindAffected) entity1).getWindWeight();
         }
 
         if (entity1 instanceof EntityMovingBlock) {

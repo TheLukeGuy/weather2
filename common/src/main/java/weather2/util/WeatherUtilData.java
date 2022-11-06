@@ -1,4 +1,4 @@
-package weather2.api;
+package weather2.util;
 
 import net.minecraft.entity.Entity;
 

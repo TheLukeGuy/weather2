@@ -1,9 +1,7 @@
-package weather2.api;
+package weather2.weather.wind;
 
-public interface IWindHandler {
-
+public interface WindAffected {
     float getWindWeight();
 
     int getParticleDecayExtra();
-
 }

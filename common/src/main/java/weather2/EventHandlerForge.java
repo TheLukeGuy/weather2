@@ -24,7 +24,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import weather2.api.WeatherUtilData;
+import weather2.util.WeatherUtilData;
 import weather2.client.SceneEnhancer;
 import weather2.client.foliage.FoliageEnhancerShader;
 import weather2.config.ConfigFoliage;

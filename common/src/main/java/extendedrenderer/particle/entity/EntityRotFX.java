@@ -1,6 +1,6 @@
 package extendedrenderer.particle.entity;
 
-import weather2.api.IWindHandler;
+import weather2.weather.wind.WindAffected;
 import CoroUtil.util.CoroUtilBlockLightCache;
 import extendedrenderer.ExtendedRenderer;
 import extendedrenderer.particle.behavior.ParticleBehaviors;
@@ -27,7 +27,7 @@ import javax.vecmath.Vector3f;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
-public class EntityRotFX extends Particle implements IWindHandler, IShaderRenderedEntity {
+public class EntityRotFX extends Particle implements WindAffected, IShaderRenderedEntity {
     public boolean weatherEffect = false;
 
     public float spawnY = -1;

@@ -1,6 +1,6 @@
 package weather2.client.entity.particle;
 
-import weather2.api.IWindHandler;
+import weather2.weather.wind.WindAffected;
 import extendedrenderer.particle.entity.EntityRotFX;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.awt.*;
 
 @SideOnly(Side.CLIENT)
-public class EntityWaterfallFX extends EntityRotFX implements IWindHandler {
+public class EntityWaterfallFX extends EntityRotFX implements WindAffected {
     public int age;
     public float brightness;
 
