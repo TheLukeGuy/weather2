@@ -1,11 +1,28 @@
-## Description
+![Weather2](common/src/main/resources/assets/weather2/icon.png)
 
-Minecraft Mod - Localized Weather - A rewrite of weather &amp; tornadoes with a focus on localized storm systems
+# Weather2
 
-Requires https://github.com/Corosauce/CoroUtil and the forge and mcp snapshot specified in build.gradle to build
+This is an **unofficial** port of the [Localized Weather & Storms](https://coros.us/mods/weather2) mod (more commonly known as **Weather2**) to Fabric and Forge 1.16/1.18/1.19.
 
-## Pull requests
+On top of this, some other changes are being made to ensure maintainability and portability, such as:
 
-- Target the default branch only, that is the current actively maintained branch.
-- Focus on 1 feature per branch
-- Keep it clean, no unnecessary changes
+* Cleaning up the entire codebase with a consistent structure and code style
+* Merging the required parts of CoroUtil directly into Weather2
+* Rewriting the configuration code with [Cloth Config API](https://www.curseforge.com/minecraft/mc-mods/cloth-config) for a more standard + consistent experience
+* And maybe more in the future?
+
+## Why?
+
+The original mod has been stuck on Forge 1.12 for years, and while the original developer is working on a [new version](https://github.com/Corosauce/weather2/tree/1.18_lt_server) for Forge 1.18, it still only supports Forge and seems to have larger + more time-consuming goals than a simple port of the 1.12 version.
+
+## Versions
+
+| Minecraft | Branch                                                         | Release     |
+|-----------|----------------------------------------------------------------|-------------|
+| 1.16.5    | [`mc1.16`](https://github.com/TheLukeGuy/weather2/tree/mc1.16) | None (yet!) |
+| 1.18.2    | ~~`mc1.18`~~ WIP                                               | None (yet!) |
+| 1.19.2    | ~~`mc1.19`~~ WIP                                               | None (yet!) |
+
+## License
+
+Commits from the [original Weather2 codebase](https://github.com/TheLukeGuy/weather2/tree/mc1.12/corosus) are not licensed and therefore not open-source. All other commits are licensed under the terms of the MIT license. See [LICENSE.md](LICENSE.md) for more detailed information.
