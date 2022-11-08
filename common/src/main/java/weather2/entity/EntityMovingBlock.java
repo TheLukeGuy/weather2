@@ -386,26 +386,15 @@ public class EntityMovingBlock extends Entity implements IEntityAdditionalSpawnD
         Block var5 = this.world.getBlockState(new BlockPos(var1, var2, var3)).getBlock();
 
         if (this.tileentity != null || this.type != 0 || ConfigTornado.Storm_Tornado_rarityOfBreakOnFall > 0 && this.rand.nextInt(ConfigTornado.Storm_Tornado_rarityOfBreakOnFall + 1) != 0) {
-            if (!WeatherUtil.shouldRemoveBlock(var5) && !WeatherUtil.isOceanBlock(var5) && var2 < 255) {
+            if (!WeatherUtil.shouldRemoveBlock(var5) && var2 < 255) {
                 this.world.setBlockState(new BlockPos(var1, var2 + 1, var3), this.tile.getStateFromMeta(this.metadata), 3);
             }
 
             boolean var6 = false;
 
-            if (!WeatherUtil.isOceanBlock(var5)) {
-                if (this.world.setBlockState(new BlockPos(var1, var2, var3), this.tile.getStateFromMeta(this.metadata), 3)) {
-                    var6 = true;
-                }
-            }/*
-            else
-            {
-                this.world.setBlockState(new BlockPos(var1, var2, var3), WeatherMod.finiteWaterId.getDefaultState(), this.metadata, 3);
-
-                if (var2 < 255)
-                {
-                    this.world.setBlockState(new BlockPos(var1, var2 + 1, var3), WeatherMod.finiteWaterId.getDefaultState(), this.metadata, 3);
-                }
-            }*/
+            if (this.world.setBlockState(new BlockPos(var1, var2, var3), this.tile.getStateFromMeta(this.metadata), 3)) {
+                var6 = true;
+            }
 
             if (var6) {
                 //Block.blocksList[this.tile].onBlockPlacedBy(this.world, var1, var2, var3, var4, this);

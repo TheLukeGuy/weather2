@@ -1,5 +1,6 @@
 package weather2.client;
 
+import net.minecraft.client.MinecraftClient;
 import weather2.weather.wind.WindAffected;
 import CoroUtil.config.ConfigCoroUtil;
 import CoroUtil.forge.CULog;
@@ -182,7 +183,7 @@ public class SceneEnhancer implements Runnable {
 
     //run from client side _mc_ thread
     public void tickClient() {
-        if (!WeatherUtil.isPaused() && !ConfigMisc.Client_PotatoPC_Mode) {
+        if (!MinecraftClient.getInstance().isPaused() && !ConfigMisc.Client_PotatoPC_Mode) {
             tryParticleSpawning();
             tickRainRates();
             tickParticlePrecipitation();

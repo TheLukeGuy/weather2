@@ -374,7 +374,7 @@ public class CloudStorm extends Storm {
 
         //TODO: consider only putting funnel in this method since its the fast part, the rest might be slow enough to only need to do per gametick
 
-        if (!WeatherUtil.isPaused()) {
+        if (!MinecraftClient.getInstance().isPaused()) {
             //ParticleBehaviorFog.newCloudWay = true;
 
             Iterator<Map.Entry<Integer, EntityRotFX>> it = lookupParticlesCloud.entrySet().iterator();
@@ -456,7 +456,7 @@ public class CloudStorm extends Storm {
         posGround = new Vec3d(pos.x, currentTopYBlock, pos.z);
 
         if (manager.getWorld().isClient) {
-            if (!WeatherUtil.isPaused()) {
+            if (!MinecraftClient.getInstance().isPaused()) {
 
                 ticksSinceLastPacketReceived++;
 

@@ -247,7 +247,9 @@ public class SandStorm extends Storm {
             return;
         }
 
-        if (WeatherUtil.isPausedSideSafe(world)) return;
+        if (world.isClient && MinecraftClient.getInstance().isPaused()) {
+            return;
+        }
 
         tickProgressionAndMovement();
 

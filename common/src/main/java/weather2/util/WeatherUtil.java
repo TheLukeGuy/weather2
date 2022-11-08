@@ -1,48 +1,26 @@
 package weather2.util;
 
 import CoroUtil.util.CoroUtilCompatibility;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockLog;
-import net.minecraft.block.BlockTallGrass;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.block.*;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.item.Items;
+import net.minecraft.tag.BlockTags;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import weather2.CommonProxy;
 import weather2.config.ConfigTornado;
 
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Set;
 
 public class WeatherUtil {
-
-    public static HashMap<Block, Boolean> blockIDToUseMapping = new HashMap<Block, Boolean>();
-
-    public static boolean isPaused() {
-        if (FMLClientHandler.instance().getClient().isGamePaused()) return true;
-        return false;
-    }
-
-    public static boolean isPausedSideSafe(World world) {
-        //return false if server side because it cant be paused legit
-        if (!world.isRemote) return false;
-        return isPausedForClient();
-    }
-
-    public static boolean isPausedForClient() {
-        if (FMLClientHandler.instance().getClient().isGamePaused()) return true;
-        return false;
-    }
+    public static HashMap<Block, Boolean> blockIDToUseMapping = new HashMap<>();
 
     //Terrain grabbing
-    public static boolean shouldGrabBlock(World parWorld, IBlockState state) {
+    public static boolean shouldGrabBlock(World parWorld, BlockState state) {
         try {
             ItemStack itemStr = new ItemStack(Items.DIAMOND_AXE);
 
@@ -54,11 +32,11 @@ public class WeatherUtil {
                 try {
 
                     if (!ConfigTornado.Storm_Tornado_GrabListBlacklistMode) {
-                        if (!((Boolean) blockIDToUseMapping.get(block)).booleanValue()) {
+                        if (!blockIDToUseMapping.get(block)) {
                             result = false;
                         }
                     } else {
-                        if (((Boolean) blockIDToUseMapping.get(block)).booleanValue()) {
+                        if (blockIDToUseMapping.get(block)) {
                             result = false;
                         }
                     }
@@ -67,41 +45,33 @@ public class WeatherUtil {
                     result = false;
                 }
             } else {
-
                 if (ConfigTornado.Storm_Tornado_GrabCond_StrengthGrabbing) {
                     float strMin = 0.0F;
                     float strMax = 0.74F;
 
                     if (block == null) {
-                        result = false;
-                        return result; //force return false to prevent unchecked future code outside scope
+                        return false; //force return false to prevent unchecked future code outside scope
                     } else {
+                        float strVsBlock = block.getDefaultState().getHardness(parWorld, new BlockPos(0, 0, 0)) - (((itemStr.getMiningSpeedMultiplier(block.getDefaultState()) - 1) / 4F));
 
-                        float strVsBlock = block.getBlockHardness(block.getDefaultState(), parWorld, new BlockPos(0, 0, 0)) - (((itemStr.getStrVsBlock(block.getDefaultState()) - 1) / 4F));
-
-                        //System.out.println(strVsBlock);
-                        if (/*block.getHardness() <= 10000.6*/ (strVsBlock <= strMax && strVsBlock >= strMin) ||
-                                (block.getMaterial(block.getDefaultState()) == Material.WOOD) ||
-                                block.getMaterial(block.getDefaultState()) == Material.CLOTH ||
-                                block.getMaterial(block.getDefaultState()) == Material.PLANTS ||
-                                block.getMaterial(block.getDefaultState()) == Material.VINE ||
-                                block instanceof BlockTallGrass) {
-    	                    /*if (block.blockMaterial == Material.water) {
-    	                    	return false;
-    	                    }*/
+                        Material material = block.getDefaultState().getMaterial();
+                        if ((strVsBlock <= strMax && strVsBlock >= strMin) ||
+                                (material == Material.WOOD) ||
+                                material == Material.WOOL ||
+                                material == Material.PLANT ||
+                                material == Material.REPLACEABLE_PLANT ||
+                                block instanceof FernBlock) {
                             if (!safetyCheck(block)) {
                                 result = false;
                             }
                         } else {
                             result = false;
                         }
-
-
                     }
                 }
 
                 if (ConfigTornado.Storm_Tornado_RefinedGrabRules) {
-                    if (block == Blocks.DIRT || block == Blocks.GRASS || block == Blocks.SAND || block instanceof BlockLog/* || block.blockMaterial == Material.wood*/) {
+                    if (block == Blocks.DIRT || block == Blocks.GRASS || block == Blocks.SAND || block.isIn(BlockTags.LOGS)/* || block.blockMaterial == Material.wood*/) {
                         result = false;
                     }
                     if (!CoroUtilCompatibility.canTornadoGrabBlockRefinedRules(state)) {
@@ -122,80 +92,14 @@ public class WeatherUtil {
     }
 
     public static boolean safetyCheck(Block id) {
-        if (id != Blocks.BEDROCK && id != Blocks.LOG && id != Blocks.CHEST && id != Blocks.JUKEBOX/* && id != Block.waterMoving.blockID && id != Block.waterStill.blockID */) {
-            return true;
-        } else {
-            return false;
-        }
+        return id != Blocks.BEDROCK && !id.isIn(BlockTags.LOGS) && id != Blocks.CHEST && id != Blocks.JUKEBOX;
     }
 
     public static boolean shouldRemoveBlock(Block blockID) {
-        /*if (tryFinite)
-        {
-            try
-            {
-                if (Class.forName("BlockNWater").isInstance(Block.blocksList[blockID]))
-                {
-                    return false;
-                }
-
-                if (Class.forName("BlockNOcean").isInstance(Block.blocksList[blockID]))
-                {
-                    return false;
-                }
-
-                if (Class.forName("BlockNWater_Pressure").isInstance(Block.blocksList[blockID])) {
-                    return false;
-                }
-
-                if (Class.forName("BlockNWater_Still").isInstance(Block.blocksList[blockID]))
-                {
-                    return true;
-                }
-            }
-            catch (Exception exception)
-            {
-                tryFinite = false;
-                return false;
-            }
-        }*/
-
-        //water no
-        if (blockID.getMaterial(blockID.getDefaultState()) == Material.WATER) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public static boolean isOceanBlock(Block blockID) {
-        /*if (tryFinite)
-        {
-            try
-            {
-                if (Class.forName("BlockNOcean").isInstance(Block.blocksList[blockID]))
-                {
-                    return true;
-                }
-            }
-            catch (Exception exception)
-            {
-                tryFinite = false;
-                return false;
-            }
-        }*/
-
-        return false;
-    }
-
-    public static boolean isSolidBlock(Block id) {
-        return (id == Blocks.STONE ||
-                id == Blocks.COBBLESTONE ||
-                id == Blocks.SANDSTONE);
+        return blockID.getDefaultState().getMaterial() != Material.WATER;
     }
 
     public static void doBlockList() {
-
         //System.out.println("1.8 TODO: verify block list lookup matching for exact comparions");
 
         blockIDToUseMapping.clear();
@@ -206,69 +110,34 @@ public class WeatherUtil {
         if (splEnts.length > 0) {
             for (int i = 0; i < splEnts.length; i++) {
                 splEnts[i] = splEnts[i].trim();
-                //blocks[i] = Integer.valueOf(splEnts[i]);
-                //System.out.println(splEnts[i]);
             }
         }
 
-        boolean dbgShow = false;
-        String dbg = "block list: ";
-
-        //HashMap hashmap = null;
-        //System.out.println("?!?!" + Block.blocksList.length);
         blockIDToUseMapping.put(Blocks.AIR, false);
 
-        Set set = Block.REGISTRY.getKeys();
-        Iterator it = set.iterator();
-        while (it.hasNext()) {
-            Object obj = it.next();
-            //String tagName = (String) ((ResourceLocation)obj).toString();
-            ResourceLocation tagName = ((ResourceLocation) obj);
-
-
-            Block block = (Block) Block.REGISTRY.getObject(tagName);
+        Set<Identifier> set = Registry.BLOCK.getIds();
+        for (Identifier tagName : set) {
+            Block block = Registry.BLOCK.get(tagName);
             //if (dbgShow) System.out.println("??? " + Block.REGISTRY.getNameForObject(block));
 
-            if (block != null) {
-                boolean foundEnt = false;
+            boolean foundEnt = false;
 
-                for (int j = 0; j < splEnts.length; j++) {
-                    if (ConfigTornado.Storm_Tornado_GrabCond_List_PartialMatches) {
-                        if (tagName.toString().contains(splEnts[j])) {
-                            dbg += Block.REGISTRY.getNameForObject(block) + ", ";
-                            foundEnt = true;
-                            break;
-                        }
-                    } else {
-                        Block blockEntry = (Block) Block.REGISTRY.getObject(new ResourceLocation(splEnts[j]));
-
-                        if (blockEntry != null && block == blockEntry) {
-                            foundEnt = true;
-                            dbg += Block.REGISTRY.getNameForObject(block) + ", ";
-                            //blackList.append(s + " ");
-                            //System.out.println("adding to list: " + blocks[j]);
-                            break;
-                        }
+            for (String splEnt : splEnts) {
+                if (ConfigTornado.Storm_Tornado_GrabCond_List_PartialMatches) {
+                    if (tagName.toString().contains(splEnt)) {
+                        foundEnt = true;
+                        break;
+                    }
+                } else {
+                    Block blockEntry = Registry.BLOCK.get(new Identifier(splEnt));
+                    if (block == blockEntry) {
+                        foundEnt = true;
+                        break;
                     }
                 }
-
-                blockIDToUseMapping.put(block, foundEnt);
-
-                //entList.append(s + " ");
-                //if (foundEnt) {
-                //blockIDToUseMapping.put(block, foundEnt);
-                //} else {
-                //blockIDToUseMapping.put(block, false);
-                //}
-            } else {
-                //blockIDToUseMapping.put(block, false);
             }
 
-
-        }
-
-        if (dbgShow) {
-            System.out.println(dbg);
+            blockIDToUseMapping.put(block, foundEnt);
         }
     }
 
@@ -281,6 +150,4 @@ public class WeatherUtil {
 
         return calendar.get(Calendar.MONTH) == Calendar.APRIL && calendar.get(Calendar.DAY_OF_MONTH) == 1;
     }
-
-
 }

@@ -9,6 +9,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -199,7 +200,7 @@ public class Volcano {
 
         Side side = FMLCommonHandler.instance().getEffectiveSide();
         if (side == Side.CLIENT) {
-            if (!WeatherUtil.isPaused()) {
+            if (!MinecraftClient.getInstance().isPaused()) {
                 tickClient();
             }
         } else {
