@@ -8,7 +8,7 @@ On top of this, some other changes are being made to ensure maintainability and 
 
 * Cleaning up the entire codebase with a consistent structure and code style
 * Merging the required parts of CoroUtil directly into Weather2
-* Rewriting the configuration code with [Cloth Config API](https://www.curseforge.com/minecraft/mc-mods/cloth-config) for a more standard + consistent experience
+* Rewriting the configuration code for more consistency and predictability
 * And maybe more in the future?
 
 ## Why?
@@ -20,8 +20,8 @@ The original mod has been stuck on Forge 1.12 for years, and while the original 
 | Minecraft | Branch                                                         | Release     |
 |-----------|----------------------------------------------------------------|-------------|
 | 1.16.5    | [`mc1.16`](https://github.com/TheLukeGuy/weather2/tree/mc1.16) | None (yet!) |
-| 1.18.2    | ~~`mc1.18`~~ WIP                                               | None (yet!) |
-| 1.19.2    | ~~`mc1.19`~~ WIP                                               | None (yet!) |
+| 1.18.2    | <code><del>mc1.18</del></code> WIP                             | None (yet!) |
+| 1.19.2    | <code><del>mc1.19</del></code> WIP                             | None (yet!) |
 
 ## License
 
