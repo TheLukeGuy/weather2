@@ -1,13 +1,11 @@
 package extendedrenderer.foliage;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.render.model.BakedModel;
 
 import java.util.concurrent.ConcurrentHashMap;
 
 public class FoliageData {
-
     //orig values
-    public static ConcurrentHashMap<IBlockState, IBakedModel> backupBakedModelStore = new ConcurrentHashMap<>();
-
+    public static ConcurrentHashMap<BlockState, BakedModel> backupBakedModelStore = new ConcurrentHashMap<>();
 }

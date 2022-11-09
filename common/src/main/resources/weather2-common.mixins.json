@@ -3,6 +3,7 @@
   "package": "weather2.mixin",
   "compatibilityLevel": "JAVA_8",
   "client": [
+    "client.ParticleAccessor"
   ],
   "mixins": [
   ],

@@ -1,7 +1,6 @@
 package weather2.weather;
 
 import CoroUtil.packet.PacketHelper;
-import CoroUtil.util.CoroUtilEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -162,7 +161,7 @@ public class ServerWeatherManager extends WeatherManager {
                     } else {
                         for (int i = 0; i < world.getPlayers().size(); i++) {
                             PlayerEntity entP = world.getPlayers().get(i);
-                            NbtCompound playerNBT = PlayerData.getPlayerNBT(CoroUtilEntity.getName(entP));
+                            NbtCompound playerNBT = PlayerData.getPlayerNBT(entP.getEntityName());
                             boolean sandstormMade = trySandstormForPlayer(entP, playerNBT.getLong("lastSandstormTime"));
                             if (sandstormMade) {
                                 playerNBT.putLong("lastSandstormTime", world.getTime());
@@ -375,7 +374,7 @@ public class ServerWeatherManager extends WeatherManager {
             if (layer != 0) {
                 so.canBeDeadly = false;
             }
-            so.userSpawnedFor = CoroUtilEntity.getName(entP);
+            so.userSpawnedFor = entP.getEntityName();
             if (rand.nextFloat() >= cloudIntensity) {
                 so.setCloudlessStorm(true);
             }

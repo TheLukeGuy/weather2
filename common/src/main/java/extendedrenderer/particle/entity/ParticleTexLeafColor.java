@@ -1,9 +1,10 @@
 package extendedrenderer.particle.entity;
 
-import CoroUtil.util.CoroUtilColor;
+import weather2.util.WeatherUtilColor;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoublePlant;
 import net.minecraft.block.BlockDoublePlant.EnumBlockHalf;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.color.BlockColors;
@@ -53,7 +54,7 @@ public class ParticleTexLeafColor extends ParticleTexFX {
         }
 
         BlockPos pos = new BlockPos(posXIn, posYIn, posZIn);
-        IBlockState state = worldIn.getBlockState(pos);
+        BlockState state = worldIn.getBlockState(pos);
 
         // top of double plants doesn't have variant property
         if (state.getBlock() instanceof BlockDoublePlant && state.getValue(BlockDoublePlant.HALF) == EnumBlockHalf.UPPER) {
@@ -65,7 +66,7 @@ public class ParticleTexLeafColor extends ParticleTexFX {
         int[] colors = colorCache.get(state);
         if (colors == null) {
 
-            colors = CoroUtilColor.getColors(state);
+            colors = WeatherUtilColor.getColors(state);
 
             if (colors.length == 0) {
 

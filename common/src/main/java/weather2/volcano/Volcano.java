@@ -1,6 +1,5 @@
 package weather2.volcano;
 
-import CoroUtil.util.CoroUtilBlock;
 import extendedrenderer.ExtendedRenderer;
 import extendedrenderer.particle.ParticleRegistry;
 import extendedrenderer.particle.behavior.ParticleBehaviors;
@@ -189,9 +188,7 @@ public class Volcano {
                 startYPos = (int) pos.y;
 
                 BlockState statez = world.getBlockState(new BlockPos(MathHelper.floor(pos.x), MathHelper.floor(pos.y - 1), MathHelper.floor(pos.z)));
-                topBlockID = statez.getBlock();
-
-                if (CoroUtilBlock.isAir(topBlockID) || !statez.getMaterial().isSolid()) {
+                if (statez.getMaterial() == Material.AIR || !statez.getMaterial().isSolid()) {
                     topBlockID = world.getBlockState(new BlockPos((int) pos.x, (int) pos.y - 1, (int) pos.z)).getBlock();
                 }
 
@@ -221,8 +218,8 @@ public class Volcano {
 
                             //skip derpy top layer
                             if (yy != startYPos + curHeight) {
-                                Block idScan = world.getBlockState(new BlockPos(posX, yy, posZ)).getBlock();
-                                if (CoroUtilBlock.isAir(idScan) || idScan.getDefaultState().getMaterial() == Material.WATER) {
+                                BlockState idScan = world.getBlockState(new BlockPos(posX, yy, posZ));
+                                if (idScan.getMaterial() == Material.AIR || idScan.getMaterial() == Material.WATER) {
                                     world.setBlockState(new BlockPos(posX, yy, posZ), blockID.getDefaultState());
                                 }
                             }
@@ -268,18 +265,18 @@ public class Volcano {
 
                                 //skip top layers
                                 if (yy != curHeight) {
-                                    if (CoroUtilBlock.isAir(world.getBlockState(new BlockPos(posX, startYPos + yy, posZ)).getBlock())) {
+                                    if (world.getBlockState(new BlockPos(posX, startYPos + yy, posZ)).getMaterial() == Material.AIR) {
                                         world.setBlockState(new BlockPos(posX, startYPos + yy, posZ), blockID.getDefaultState());
                                     }
                                 }
 
                                 //handle growth under expanded area
                                 int underY = startYPos + yy - 1;
-                                Block underBlockID = world.getBlockState(new BlockPos(posX, underY, posZ)).getBlock();
-                                while ((CoroUtilBlock.isAir(underBlockID) || underBlockID.getDefaultState().getMaterial() == Material.WATER) && underY > 1) {
+                                BlockState underBlockState = world.getBlockState(new BlockPos(posX, underY, posZ));
+                                while ((underBlockState.getMaterial() == Material.AIR || underBlockState.getMaterial() == Material.WATER) && underY > 1) {
                                     world.setBlockState(new BlockPos(posX, underY, posZ), Blocks.DIRT.getDefaultState());
                                     underY--;
-                                    underBlockID = world.getBlockState(new BlockPos(posX, underY, posZ)).getBlock();
+                                    underBlockState = world.getBlockState(new BlockPos(posX, underY, posZ));
                                 }
                             }
                         }

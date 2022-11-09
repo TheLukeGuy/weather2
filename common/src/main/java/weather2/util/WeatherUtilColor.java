@@ -1,44 +1,39 @@
-package CoroUtil.util;
+package weather2.util;
 
-import CoroUtil.repack.de.androidpit.colorthief.ColorThief;
+import de.androidpit.colorthief.ColorThief;
 import extendedrenderer.foliage.FoliageData;
 import it.unimi.dsi.fastutil.ints.IntArrays;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.client.texture.MissingSprite;
+import net.minecraft.client.texture.Sprite;
 
 import java.awt.image.BufferedImage;
 
-public class CoroUtilColor {
-
-    @SuppressWarnings("null")
-    public static int[] getColors(IBlockState state) {
-        if (state instanceof IExtendedBlockState) {
-            state = ((IExtendedBlockState) state).getClean();
-        }
-        IBakedModel model;
+public class WeatherUtilColor {
+    public static int[] getColors(BlockState state) {
+        BakedModel model;
 
         //used when foliage shader is on
         if (FoliageData.backupBakedModelStore.containsKey(state)) {
             model = FoliageData.backupBakedModelStore.get(state);
         } else {
-            model = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState(state);
+            model = MinecraftClient.getInstance().getBlockRenderManager().getModels().getModel(state);
         }
 
-        if (model != null && !model.isBuiltInRenderer()) {
-            TextureAtlasSprite sprite = model.getParticleTexture();
-            if (sprite != null && sprite != Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite()) {
-                return getColors(model.getParticleTexture());
+        if (model != null && !model.isBuiltin()) {
+            Sprite sprite = model.getSprite();
+            if (sprite != null && sprite.getId() != MissingSprite.getMissingSpriteId()) {
+                return getColors(model.getSprite());
             }
         }
         return IntArrays.EMPTY_ARRAY;
     }
 
-    public static int[] getColors(TextureAtlasSprite sprite) {
-        int width = sprite.getIconWidth();
-        int height = sprite.getIconHeight();
+    public static int[] getColors(Sprite sprite) {
+        int width = sprite.getWidth();
+        int height = sprite.getHeight();
         int frames = sprite.getFrameCount();
 
         BufferedImage img = new BufferedImage(width, height * frames, BufferedImage.TYPE_4BYTE_ABGR);
@@ -64,5 +59,4 @@ public class CoroUtilColor {
 
         return 0xFF000000 | (((int) (colorData[0] * mr)) << 16) | (((int) (colorData[1] * mg)) << 8) | (int) (colorData[2] * mb);
     }
-
 }

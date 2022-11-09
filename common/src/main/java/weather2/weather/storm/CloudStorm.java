@@ -852,7 +852,7 @@ public class CloudStorm extends Storm {
             }
 
             Block blockID = world.getBlockState(new BlockPos(MathHelper.floor(pos.x), currentTopYBlock - 1, MathHelper.floor(pos.z))).getBlock();
-            if (!CoroUtilBlock.isAir(blockID)) {
+            if (blockID.getDefaultState().getMaterial() != Material.AIR) {
                 //Block block = Block.blocksList[blockID];
                 if (blockID.getDefaultState().getMaterial() == Material.WATER) {
                     isOverWater = true;
@@ -1228,15 +1228,14 @@ public class CloudStorm extends Storm {
     }
 
     public void aimStormAtClosestOrProvidedPlayer(PlayerEntity entP) {
-
         if (entP == null) {
             entP = manager.getWorld().getClosestPlayer(pos.x, pos.y, pos.z, -1, false);
         }
 
         if (entP != null) {
             Random rand = new Random();
-            double var11 = entP.posX - pos.x;
-            double var15 = entP.posZ - pos.z;
+            double var11 = entP.getX() - pos.x;
+            double var15 = entP.getZ() - pos.z;
             float yaw = -(float) (Math.atan2(var11, var15) * 180.0D / Math.PI);
             //weather override!
             //yaw = weatherMan.wind.direction;
@@ -1248,7 +1247,7 @@ public class CloudStorm extends Storm {
             angleIsOverridden = true;
             angleMovementTornadoOverride = yaw;
 
-            Weather.LOGGER.debug("stormfront aimed at player " + CoroUtilEntity.getName(entP));
+            Weather.LOGGER.debug("stormfront aimed at player " + entP.getEntityName());
         }
     }
 
@@ -1796,7 +1795,7 @@ public class CloudStorm extends Storm {
 
         boolean forTornado = true;//entT != null;
 
-        World world = CoroUtilEntOrParticle.getWorld(entity1);
+        World world = WeatherUtilEntityOrParticle.getWorld(entity1);
         long worldTime = world.getTime();
 
         Entity ent = null;
@@ -1807,12 +1806,12 @@ public class CloudStorm extends Storm {
         //ConfigTornado.Storm_Tornado_height;
         double radius = 10D;
         double scale = conf.tornadoWidthScale;
-        double d1 = entity.pos.x - CoroUtilEntOrParticle.getPosX(entity1);
-        double d2 = entity.pos.z - CoroUtilEntOrParticle.getPosZ(entity1);
+        double d1 = entity.pos.x - WeatherUtilEntityOrParticle.getPosX(entity1);
+        double d2 = entity.pos.z - WeatherUtilEntityOrParticle.getPosZ(entity1);
 
         if (conf.type == WeatherEntityConfig.TYPE_SPOUT) {
             float range = 30F * (float) Math.sin((Math.toRadians(((worldTime * 0.5F) + (id * 50)) % 360)));
-            float heightPercent = (float) (1F - ((CoroUtilEntOrParticle.getPosY(entity1) - posGround.y) / (pos.y - posGround.y)));
+            float heightPercent = (float) (1F - ((WeatherUtilEntityOrParticle.getPosY(entity1) - posGround.y) / (pos.y - posGround.y)));
             float posOffsetX = (float) Math.sin((Math.toRadians(heightPercent * 360F)));
             float posOffsetZ = (float) -Math.cos((Math.toRadians(heightPercent * 360F)));
             d1 += range * posOffsetX;
@@ -1831,10 +1830,10 @@ public class CloudStorm extends Storm {
         double distY;
         double distXZ = Math.sqrt(Math.abs(d1)) + Math.sqrt(Math.abs(d2));
 
-        if (CoroUtilEntOrParticle.getPosY(entity1) - entity.pos.y < 0.0D) {
+        if (WeatherUtilEntityOrParticle.getPosY(entity1) - entity.pos.y < 0.0D) {
             distY = 1.0D;
         } else {
-            distY = CoroUtilEntOrParticle.getPosY(entity1) - entity.pos.y;
+            distY = WeatherUtilEntityOrParticle.getPosY(entity1) - entity.pos.y;
         }
 
         if (distY > maxHeight) {
@@ -1867,7 +1866,7 @@ public class CloudStorm extends Storm {
 
             grab = grab - adjGrab;
 
-            if (CoroUtilEntOrParticle.getMotionY(entity1) > -0.8) {
+            if (WeatherUtilEntityOrParticle.getMotionY(entity1) > -0.8) {
                 //System.out.println(entity1.motionY);
                 ent.fallDistance = 0F;
             }
@@ -1968,9 +1967,9 @@ public class CloudStorm extends Storm {
     }
 
     public void setVel(Object entity, float f, float f1, float f2) {
-        CoroUtilEntOrParticle.setMotionX(entity, CoroUtilEntOrParticle.getMotionX(entity) + f);
-        CoroUtilEntOrParticle.setMotionY(entity, CoroUtilEntOrParticle.getMotionY(entity) + f1);
-        CoroUtilEntOrParticle.setMotionZ(entity, CoroUtilEntOrParticle.getMotionZ(entity) + f2);
+        WeatherUtilEntityOrParticle.setMotionX(entity, WeatherUtilEntityOrParticle.getMotionX(entity) + f);
+        WeatherUtilEntityOrParticle.setMotionY(entity, WeatherUtilEntityOrParticle.getMotionY(entity) + f1);
+        WeatherUtilEntityOrParticle.setMotionZ(entity, WeatherUtilEntityOrParticle.getMotionZ(entity) + f2);
 
         if (entity instanceof SquidEntity) {
             Entity ent = (Entity) entity;

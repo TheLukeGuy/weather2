@@ -1,5 +1,6 @@
 package weather2.client;
 
+import net.minecraft.block.Material;
 import net.minecraft.client.MinecraftClient;
 import weather2.weather.wind.WindAffected;
 import CoroUtil.config.ConfigCoroUtil;
@@ -1852,7 +1853,7 @@ public class SceneEnhancer implements Runnable {
         for (BlockPos posRel : listPosRandom) {
             Block blockCheck = getBlock(world, posOrigin.add(posRel));
 
-            if (blockCheck != null && CoroUtilBlock.isAir(blockCheck)) {
+            if (blockCheck != null && blockCheck.getDefaultState().getMaterial() == Material.AIR) {
                 return posRel;
             }
         }
@@ -1973,7 +1974,7 @@ public class SceneEnhancer implements Runnable {
                             //Weather.dbg("process: " + className);
                         }
 
-                        if ((WeatherUtilBlock.getPrecipitationHeightSafe(world, new BlockPos(MathHelper.floor(CoroUtilEntOrParticle.getPosX(entity1)), 0, MathHelper.floor(CoroUtilEntOrParticle.getPosZ(entity1)))).getY() - 1 < (int) CoroUtilEntOrParticle.getPosY(entity1) + 1) || (entity1 instanceof ParticleTexFX)) {
+                        if ((WeatherUtilBlock.getPrecipitationHeightSafe(world, new BlockPos(MathHelper.floor(WeatherUtilEntityOrParticle.getPosX(entity1)), 0, MathHelper.floor(WeatherUtilEntityOrParticle.getPosZ(entity1)))).getY() - 1 < (int) WeatherUtilEntityOrParticle.getPosY(entity1) + 1) || (entity1 instanceof ParticleTexFX)) {
                             if ((entity1 instanceof ParticleFlame)) {
                                 if (windMan.getWindSpeedForPriority() >= 0.20) {
                                     entity1.particleAge += 1;
@@ -1997,9 +1998,9 @@ public class SceneEnhancer implements Runnable {
 		                            entity1.motionY += rand.nextDouble() * entity1.getMotionX();
 		                        }*/
 
-                                if (CoroUtilEntOrParticle.getMotionX(entity1) < 0.01F && CoroUtilEntOrParticle.getMotionZ(entity1) < 0.01F) {
+                                if (WeatherUtilEntityOrParticle.getMotionX(entity1) < 0.01F && WeatherUtilEntityOrParticle.getMotionZ(entity1) < 0.01F) {
                                     //ent.setMotionY(ent.getMotionY() + rand.nextDouble() * 0.02);
-                                    CoroUtilEntOrParticle.setMotionY(entity1, CoroUtilEntOrParticle.getMotionY(entity1) + rand.nextDouble() * 0.02);
+                                    WeatherUtilEntityOrParticle.setMotionY(entity1, WeatherUtilEntityOrParticle.getMotionY(entity1) + rand.nextDouble() * 0.02);
                                 }
                             }
 

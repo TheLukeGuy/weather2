@@ -1,11 +1,7 @@
-package CoroUtil.entity;
+package weather2.entity;
 
-import CoroUtil.util.CoroUtilEntity;
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IProjectile;
-import net.minecraft.entity.MoverType;
+import net.minecraft.entity.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
@@ -19,7 +15,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public abstract class EntityThrowableUsefull extends Entity implements IProjectile {
+public abstract class ThrowableEntity extends Entity implements IProjectile {
     int xTile = -1;
     private int yTile = -1;
     private int zTile = -1;
@@ -30,7 +26,7 @@ public abstract class EntityThrowableUsefull extends Entity implements IProjecti
     /**
      * Is the entity that throws this 'thing' (snowball, ender pearl, eye of ender or potion)
      */
-    public EntityLivingBase thrower;
+    public LivingEntity thrower;
     public EntityLivingBase target;
 
     //adding in this feature failed horribly, retry next time when this class is recoded to base motions off of rotations and force isntead of its current opposite
@@ -43,7 +39,7 @@ public abstract class EntityThrowableUsefull extends Entity implements IProjecti
 
     public int ticksMaxAlive = 120;
 
-    public EntityThrowableUsefull(World par1World) {
+    public ThrowableEntity(World par1World) {
         super(par1World);
         this.setSize(0.25F, 0.25F);
     }
@@ -63,7 +59,7 @@ public abstract class EntityThrowableUsefull extends Entity implements IProjecti
         return par1 < d1 * d1;
     }
 
-    public EntityThrowableUsefull(World par1World, EntityLivingBase par2EntityLivingBase, EntityLivingBase parTarget, double parSpeed) {
+    public ThrowableEntity(World par1World, EntityLivingBase par2EntityLivingBase, EntityLivingBase parTarget, double parSpeed) {
         super(par1World);
         this.thrower = par2EntityLivingBase;
         this.setSize(0.25F, 0.25F);
@@ -85,11 +81,11 @@ public abstract class EntityThrowableUsefull extends Entity implements IProjecti
         this.setPosition(this.posX, this.posY, this.posZ);
     }
 
-    public EntityThrowableUsefull(World par1World, EntityLivingBase par2EntityLivingBase) {
+    public ThrowableEntity(World par1World, EntityLivingBase par2EntityLivingBase) {
         this(par1World, par2EntityLivingBase, 1);
     }
 
-    public EntityThrowableUsefull(World par1World, EntityLivingBase par2EntityLivingBase, double parSpeed) {
+    public ThrowableEntity(World par1World, EntityLivingBase par2EntityLivingBase, double parSpeed) {
         super(par1World);
         this.thrower = par2EntityLivingBase;
         this.setSize(0.25F, 0.25F);
@@ -113,7 +109,7 @@ public abstract class EntityThrowableUsefull extends Entity implements IProjecti
         return super.getYOffset();
     }
 
-    public EntityThrowableUsefull(World par1World, double par2, double par4, double par6) {
+    public ThrowableEntity(World par1World, double par2, double par4, double par6) {
         super(par1World);
         this.setSize(0.25F, 0.25F);
         this.setPosition(par2, par4, par6);
@@ -425,7 +421,7 @@ public abstract class EntityThrowableUsefull extends Entity implements IProjecti
         par1NBTTagCompound.setByte("inGround", (byte) (this.inGround ? 1 : 0));
 
         if ((this.throwerName == null || this.throwerName.length() == 0) && this.thrower != null && this.thrower instanceof EntityPlayer) {
-            this.throwerName = CoroUtilEntity.getName(thrower);
+            this.throwerName = thrower.getEntityName();
         }
 
         par1NBTTagCompound.setString("ownerName", this.throwerName == null ? "" : this.throwerName);

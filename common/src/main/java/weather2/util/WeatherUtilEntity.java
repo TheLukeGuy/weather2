@@ -1,6 +1,5 @@
 package weather2.util;
 
-import CoroUtil.util.CoroUtilEntOrParticle;
 import extendedrenderer.particle.entity.EntityRotFX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
@@ -28,7 +27,7 @@ public class WeatherUtilEntity {
     }
 
     public static float getWeight(Object entity1, boolean forTornado) {
-        World world = CoroUtilEntOrParticle.getWorld(entity1);
+        World world = WeatherUtilEntityOrParticle.getWorld(entity1);
 
         //fixes issue #270
         if (world == null) {

@@ -1,9 +1,8 @@
 package weather2;
 
-import CoroUtil.util.CoroUtilEntity;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -14,8 +13,8 @@ import weather2.util.WeatherUtilBlock;
 import weather2.volcano.Volcano;
 import weather2.weather.ServerWeatherManager;
 import weather2.weather.storm.CloudStorm;
-import weather2.weather.storm.Storm;
 import weather2.weather.storm.SandStorm;
+import weather2.weather.storm.Storm;
 
 import java.util.List;
 import java.util.Random;
@@ -32,9 +31,9 @@ public class CommandWeather2 extends CommandBase {
 
         String helpMsgStorm = "Syntax: storm create <rain/thunder/wind/spout/hail/F0/F1/F2/F3/F4/F5/C0/C1/C2/C3/C4/C5/hurricane> <Optional: alwaysProgress>... example: storm create F1 alwaysProgress ... eg2: storm killall";
 
-        EntityPlayer player = null;
-        if (var1 instanceof EntityPlayer) {
-            player = (EntityPlayer) var1;
+        PlayerEntity player = null;
+        if (var1 instanceof PlayerEntity) {
+            player = (PlayerEntity) var1;
         }
         World world = var1.getEntityWorld();
         int dimension = world.provider.getDimension();
@@ -119,7 +118,7 @@ public class CommandWeather2 extends CommandBase {
                         ServerWeatherManager wm = ServerTickHandler.lookupDimToWeatherMan.get(dimension);
                         CloudStorm so = new CloudStorm(wm);
                         so.layer = 0;
-                        so.userSpawnedFor = CoroUtilEntity.getName(player);
+                        so.userSpawnedFor = player != null ? player.getEntityName() : "nullObject";
                         so.naturallySpawned = false;
                         so.levelTemperature = 0.1F;
                         so.pos = new Vec3(posVec.x, CloudStorm.layers.get(so.layer), posVec.z);

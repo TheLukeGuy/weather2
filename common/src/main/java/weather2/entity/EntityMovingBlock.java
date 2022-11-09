@@ -1,10 +1,9 @@
 package weather2.entity;
 
-import CoroUtil.util.CoroUtilBlock;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,7 +13,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
@@ -135,7 +136,7 @@ public class EntityMovingBlock extends Entity implements IEntityAdditionalSpawnD
             }
         }
 
-        if (CoroUtilBlock.isAir(this.tile)) {
+        if (this.tile.getDefaultState().getMaterial() == Material.AIR) {
             this.setDead();
             //return;
         } else {

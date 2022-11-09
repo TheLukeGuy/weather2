@@ -1,7 +1,7 @@
 package weather2.entity;
 
-import CoroUtil.util.CoroUtilBlock;
 import net.minecraft.block.BlockFire;
+import net.minecraft.block.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.EntityWeatherEffect;
@@ -91,7 +91,7 @@ public class EntityLightningBoltCustom extends EntityWeatherEffect {
                 int j = MathHelper.floor(par4);
                 int k = MathHelper.floor(par6);
 
-                if (CoroUtilBlock.isAir(par1World.getBlockState(new BlockPos(i, j, k)).getBlock()) && Blocks.FIRE.canPlaceBlockAt(par1World, new BlockPos(i, j, k))) {
+                if (par1World.getBlockState(new BlockPos(i, j, k)).getMaterial() == Material.AIR && Blocks.FIRE.canPlaceBlockAt(par1World, new BlockPos(i, j, k))) {
                     //par1World.setBlockState(new BlockPos(i, j, k), Blocks.fire, fireLifeTime, 3);
                     par1World.setBlockState(new BlockPos(i, j, k), Blocks.FIRE.getDefaultState().withProperty(BlockFire.AGE, fireLifeTime));
                 }
@@ -101,7 +101,7 @@ public class EntityLightningBoltCustom extends EntityWeatherEffect {
                     k = MathHelper.floor(par4) + this.rand.nextInt(3) - 1;
                     int l = MathHelper.floor(par6) + this.rand.nextInt(3) - 1;
 
-                    if (CoroUtilBlock.isAir(par1World.getBlockState(new BlockPos(j, k, l)).getBlock()) && Blocks.FIRE.canPlaceBlockAt(par1World, new BlockPos(j, k, l))) {
+                    if (par1World.getBlockState(new BlockPos(j, k, l)).getMaterial() == Material.AIR && Blocks.FIRE.canPlaceBlockAt(par1World, new BlockPos(j, k, l))) {
                         //par1World.setBlockState(new BlockPos(j, k, l), Blocks.fire.getDefaultState(), fireLifeTime, 3);
                         par1World.setBlockState(new BlockPos(i, j, k), Blocks.FIRE.getDefaultState().withProperty(BlockFire.AGE, fireLifeTime));
                     }
@@ -142,7 +142,7 @@ public class EntityLightningBoltCustom extends EntityWeatherEffect {
                     int k = MathHelper.floor(this.posZ);
 
                     if (ConfigStorm.Lightning_StartsFires) {
-                        if (CoroUtilBlock.isAir(world.getBlockState(new BlockPos(i, j, k)).getBlock()) && Blocks.FIRE.canPlaceBlockAt(world, new BlockPos(i, j, k))) {
+                        if (world.getBlockState(new BlockPos(i, j, k)).getMaterial() == Material.AIR && Blocks.FIRE.canPlaceBlockAt(world, new BlockPos(i, j, k))) {
                             world.setBlockState(new BlockPos(i, j, k), Blocks.FIRE.getDefaultState().withProperty(BlockFire.AGE, fireLifeTime), 3);
                         }
                     }

@@ -1,11 +1,11 @@
 package weather2.weather.storm;
 
 import CoroUtil.forge.CommonProxy;
-import CoroUtil.util.CoroUtilBlock;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.Material;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
@@ -312,7 +312,7 @@ public class TornadoHelper {
                 for (int i = 0; i < firesPerTickMax; i++) {
                     BlockPos posUp = new BlockPos(storm.posGround.x, storm.posGround.y + rand.nextInt(30), storm.posGround.z);
                     BlockState state = parWorld.getBlockState(posUp);
-                    if (CoroUtilBlock.isAir(state.getBlock())) {
+                    if (state.getMaterial() == Material.AIR) {
                         //parWorld.setBlockState(posUp, Blocks.FIRE.getDefaultState());
 
                         EntityMovingBlock mBlock = new EntityMovingBlock(parWorld, posUp.getX(), posUp.getY(), posUp.getZ(), Blocks.FIRE.getDefaultState(), storm);
@@ -339,11 +339,11 @@ public class TornadoHelper {
 
             if (dist < tornadoBaseSize / 2 + randSize / 2 && tryRipCount < tryRipMax) {
                 BlockPos pos = new BlockPos(tryX, tryY, tryZ);
-                Block block = parWorld.getBlockState(pos).getBlock();
+                BlockState blockState = parWorld.getBlockState(pos);
                 BlockPos posUp = new BlockPos(tryX, tryY + 1, tryZ);
-                Block blockUp = parWorld.getBlockState(posUp).getBlock();
+                BlockState blockStateUp = parWorld.getBlockState(posUp);
 
-                if (!CoroUtilBlock.isAir(block) && CoroUtilBlock.isAir(blockUp)) {
+                if (blockState.getMaterial() != Material.AIR && blockStateUp.getMaterial() == Material.AIR) {
                     parWorld.setBlockState(posUp, Blocks.FIRE.getDefaultState());
                 }
             }
@@ -410,7 +410,7 @@ public class TornadoHelper {
     }
 
     public boolean canGrab(World parWorld, BlockState state, BlockPos pos) {
-        if (!CoroUtilBlock.isAir(state.getBlock()) &&
+        if (state.getBlock().getDefaultState().getMaterial() != Material.AIR &&
                 state.getBlock() != Blocks.FIRE &&
                 state.getBlock() != CommonProxy.blockRepairingBlock &&
                 WeatherUtil.shouldGrabBlock(parWorld, state) &&

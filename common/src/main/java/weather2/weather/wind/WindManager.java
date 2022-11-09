@@ -1,6 +1,6 @@
 package weather2.weather.wind;
 
-import CoroUtil.util.CoroUtilEntOrParticle;
+import weather2.util.WeatherUtilEntityOrParticle;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -387,13 +387,13 @@ public class WindManager {
      * - profit
      */
     public void applyWindForceNew(Object ent, float multiplier, float maxSpeed) {
-        Vec3 pos = new Vec3(CoroUtilEntOrParticle.getPosX(ent), CoroUtilEntOrParticle.getPosY(ent), CoroUtilEntOrParticle.getPosZ(ent));
+        Vec3 pos = new Vec3(WeatherUtilEntityOrParticle.getPosX(ent), WeatherUtilEntityOrParticle.getPosY(ent), WeatherUtilEntityOrParticle.getPosZ(ent));
 
-        Vec3 motion = applyWindForceImpl(pos, new Vec3(CoroUtilEntOrParticle.getMotionX(ent), CoroUtilEntOrParticle.getMotionY(ent), CoroUtilEntOrParticle.getMotionZ(ent)),
+        Vec3 motion = applyWindForceImpl(pos, new Vec3(WeatherUtilEntityOrParticle.getMotionX(ent), WeatherUtilEntityOrParticle.getMotionY(ent), WeatherUtilEntityOrParticle.getMotionZ(ent)),
                 WeatherUtilEntity.getWeight(ent), multiplier, maxSpeed);
 
-        CoroUtilEntOrParticle.setMotionX(ent, motion.xCoord);
-        CoroUtilEntOrParticle.setMotionZ(ent, motion.zCoord);
+        WeatherUtilEntityOrParticle.setMotionX(ent, motion.xCoord);
+        WeatherUtilEntityOrParticle.setMotionZ(ent, motion.zCoord);
     }
 
     /**
