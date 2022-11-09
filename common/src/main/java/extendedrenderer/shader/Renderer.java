@@ -2,7 +2,7 @@ package extendedrenderer.shader;
 
 
 import CoroUtil.forge.CoroUtil;
-import CoroUtil.util.CoroUtilFile;
+import weather2.util.WeatherUtilFile;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
@@ -24,8 +24,8 @@ public class Renderer {
         ShaderProgram shaderProgram = new ShaderProgramParticle("particle");
 
         //String folderShaders = "/mnt/e/git/CoroUtil_1.10.2/src/main/resources/assets/coroutil/shaders/";
-        String vertex = CoroUtilFile.getContentsFromResourceLocation(new ResourceLocation(CoroUtil.modID, "shaders/particle.vs"));
-        String fragment = CoroUtilFile.getContentsFromResourceLocation(new ResourceLocation(CoroUtil.modID, "shaders/particle.fs"));
+        String vertex = WeatherUtilFile.getContentsFromResourceLocation(new ResourceLocation(CoroUtil.modID, "shaders/particle.vs"));
+        String fragment = WeatherUtilFile.getContentsFromResourceLocation(new ResourceLocation(CoroUtil.modID, "shaders/particle.fs"));
 
         shaderProgram.createVertexShader(vertex);
         shaderProgram.createFragmentShader(fragment);
@@ -43,8 +43,8 @@ public class Renderer {
         shaderProgram = new ShaderProgramFoliage("foliage");
 
         //String folderShaders = "/mnt/e/git/CoroUtil_1.10.2/src/main/resources/assets/coroutil/shaders/";
-        vertex = CoroUtilFile.getContentsFromResourceLocation(new ResourceLocation(CoroUtil.modID, "shaders/foliage.vs"));
-        fragment = CoroUtilFile.getContentsFromResourceLocation(new ResourceLocation(CoroUtil.modID, "shaders/foliage.fs"));
+        vertex = WeatherUtilFile.getContentsFromResourceLocation(new ResourceLocation(CoroUtil.modID, "shaders/foliage.vs"));
+        fragment = WeatherUtilFile.getContentsFromResourceLocation(new ResourceLocation(CoroUtil.modID, "shaders/foliage.fs"));
 
         shaderProgram.createVertexShader(vertex);
         shaderProgram.createFragmentShader(fragment);

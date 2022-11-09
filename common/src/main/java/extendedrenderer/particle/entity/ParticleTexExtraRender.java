@@ -1,7 +1,6 @@
 package extendedrenderer.particle.entity;
 
-import CoroUtil.util.CoroUtilBlockLightCache;
-import CoroUtil.util.CoroUtilParticle;
+import weather2.util.WeatherUtilBlockLightCache;
 import extendedrenderer.render.RotatingParticleManager;
 import extendedrenderer.shader.InstancedMeshParticle;
 import extendedrenderer.shader.Matrix4fe;
@@ -156,7 +155,7 @@ public class ParticleTexExtraRender extends ParticleTexFX {
         if (noExtraParticles) {
             renderAmount = 1;
         } else {
-            renderAmount = Math.min(extraParticlesBaseAmount + ((Math.max(0, severityOfRainRate - 1)) * 5), CoroUtilParticle.maxRainDrops);
+            renderAmount = Math.min(extraParticlesBaseAmount + ((Math.max(0, severityOfRainRate - 1)) * 5), WeatherUtilParticle.maxRainDrops);
         }
 
         //test
@@ -173,9 +172,9 @@ public class ParticleTexExtraRender extends ParticleTexFX {
                 double zz = 0;
                 double yy = 0;
                 if (ii != 0) {
-                    xx = CoroUtilParticle.rainPositions[ii].xCoord;
-                    zz = CoroUtilParticle.rainPositions[ii].zCoord;
-                    yy = CoroUtilParticle.rainPositions[ii].yCoord;
+                    xx = WeatherUtilParticle.rainPositions[ii].xCoord;
+                    zz = WeatherUtilParticle.rainPositions[ii].zCoord;
+                    yy = WeatherUtilParticle.rainPositions[ii].yCoord;
 
                     f5 += xx;
                     f6 += yy;
@@ -254,7 +253,7 @@ public class ParticleTexExtraRender extends ParticleTexFX {
         if (noExtraParticles) {
             renderAmount = 1;
         } else {
-            renderAmount = Math.min(extraParticlesBaseAmount + ((Math.max(0, severityOfRainRate - 1)) * 5), CoroUtilParticle.maxRainDrops);
+            renderAmount = Math.min(extraParticlesBaseAmount + ((Math.max(0, severityOfRainRate - 1)) * 5), WeatherUtilParticle.maxRainDrops);
         }
 
         for (int iii = 0; iii < renderAmount; iii++) {
@@ -264,9 +263,9 @@ public class ParticleTexExtraRender extends ParticleTexFX {
             Vector3f pos;
 
             if (iii != 0) {
-                pos = new Vector3f(posX + (float) CoroUtilParticle.rainPositions[iii].xCoord,
-                        posY + (float) CoroUtilParticle.rainPositions[iii].yCoord,
-                        posZ + (float) CoroUtilParticle.rainPositions[iii].zCoord);
+                pos = new Vector3f(posX + (float) WeatherUtilParticle.rainPositions[iii].xCoord,
+                        posY + (float) WeatherUtilParticle.rainPositions[iii].yCoord,
+                        posZ + (float) WeatherUtilParticle.rainPositions[iii].zCoord);
             } else {
                 pos = new Vector3f(posX, posY, posZ);
             }
@@ -301,9 +300,9 @@ public class ParticleTexExtraRender extends ParticleTexFX {
             //brightness = CoroUtilBlockLightCache.getBrightnessCached(worldObj, pos.x, pos.y, pos.z);
             //brightness = this.brightnessCache;
             if (fastLight) {
-                brightness = CoroUtilBlockLightCache.brightnessPlayer;
+                brightness = WeatherUtilBlockLightCache.brightnessPlayer;
             } else {
-                brightness = CoroUtilBlockLightCache.getBrightnessCached(world, (float) this.posX, (float) this.posY, (float) this.posZ);
+                brightness = WeatherUtilBlockLightCache.getBrightnessCached(world, (float) this.posX, (float) this.posY, (float) this.posZ);
             }
 
             //brightness to buffer

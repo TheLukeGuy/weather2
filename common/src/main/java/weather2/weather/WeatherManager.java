@@ -1,7 +1,7 @@
 package weather2.weather;
 
-import CoroUtil.util.CoroUtilFile;
-import CoroUtil.util.CoroUtilPhysics;
+import weather2.util.WeatherUtilFile;
+import weather2.util.WeatherUtilPhysics;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.util.math.BlockPos;
@@ -273,8 +273,8 @@ public class WeatherManager {
             List<Vec3d> points = sandStorm.getSandstormAsShape();
 
             double intensity = sandStorm.getSandstormScale();
-            boolean inStorm = CoroUtilPhysics.isInConvexShape(pos, points);
-            double distance = CoroUtilPhysics.getDistanceToShape(pos, points);
+            boolean inStorm = WeatherUtilPhysics.isInConvexShape(pos, points);
+            double distance = WeatherUtilPhysics.getDistanceToShape(pos, points);
             if (inStorm) {
                 // If the position is within the storm, compare intensities
                 closestDistance = 0;
@@ -318,7 +318,7 @@ public class WeatherManager {
                 }
             } else if (storm instanceof SandStorm && (!forDeflector || ConfigStorm.Storm_Deflector_RemoveSandstorms)) {
                 List<Vec3d> points = ((SandStorm) storm).getSandstormAsShape();
-                double distanceToStorm = CoroUtilPhysics.getDistanceToShape(pos, points);
+                double distanceToStorm = WeatherUtilPhysics.getDistanceToShape(pos, points);
                 if (distanceToStorm < maxDistance) {
                     results.add(storm);
                 }
@@ -356,7 +356,7 @@ public class WeatherManager {
 
         mainNBT.put("windMan", windManager.writeToNBT(new NbtCompound()));
 
-        String saveFolder = CoroUtilFile.getWorldSaveFolderPath() + CoroUtilFile.getWorldFolderName() + "weather2" + File.separator;
+        String saveFolder = WeatherUtilFile.getWorldSaveFolderPath() + WeatherUtilFile.getWorldFolderName() + "weather2" + File.separator;
 
         try {
             //Write out to file
@@ -372,7 +372,7 @@ public class WeatherManager {
     public void readFromFile() {
         NbtCompound rtsNBT = new NbtCompound();
 
-        String saveFolder = CoroUtilFile.getWorldSaveFolderPath() + CoroUtilFile.getWorldFolderName() + "weather2" + File.separator;
+        String saveFolder = WeatherUtilFile.getWorldSaveFolderPath() + WeatherUtilFile.getWorldFolderName() + "weather2" + File.separator;
 
         boolean readFail = false;
 

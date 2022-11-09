@@ -1,7 +1,6 @@
 package weather2.util;
 
 import CoroUtil.config.ConfigCoroUtil;
-import CoroUtil.util.CoroUtilFile;
 import modconfig.ConfigMod;
 import modconfig.IConfigCategory;
 import net.minecraft.nbt.NbtCompound;
@@ -474,9 +473,9 @@ public class WeatherUtilConfig {
     public static void nbtWriteNBTToDisk(NbtCompound parData, boolean saveForClient) {
         String fileURL;
         if (saveForClient) {
-            fileURL = CoroUtilFile.getMinecraftSaveFolderPath() + File.separator + "Weather2" + File.separator + "EZGUIConfigClientData.dat";
+            fileURL = WeatherUtilFile.getMinecraftSaveFolderPath() + File.separator + "Weather2" + File.separator + "EZGUIConfigClientData.dat";
         } else {
-            fileURL = CoroUtilFile.getMinecraftSaveFolderPath() + File.separator + "Weather2" + File.separator + "EZGUIConfigServerData.dat";
+            fileURL = WeatherUtilFile.getMinecraftSaveFolderPath() + File.separator + "Weather2" + File.separator + "EZGUIConfigServerData.dat";
         }
 
         try {

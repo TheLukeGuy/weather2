@@ -3,7 +3,7 @@ package extendedrenderer;
 import CoroUtil.config.ConfigCoroUtil;
 import CoroUtil.config.ConfigCoroUtilAdvanced;
 import CoroUtil.forge.CULog;
-import CoroUtil.util.CoroUtilBlockLightCache;
+import weather2.util.WeatherUtilBlockLightCache;
 import extendedrenderer.particle.ParticleRegistry;
 import extendedrenderer.particle.ShaderManager;
 import extendedrenderer.render.RotatingParticleManager;
@@ -73,7 +73,7 @@ public class EventHandler {
                     boolean lightningActive = mc.world.getLastLightningBolt() > 0;
 
                     if (mc.world.getTotalWorldTime() % 2 == 0 || lightningActive != lastLightningBoltLightState) {
-                        CoroUtilBlockLightCache.clear();
+                        WeatherUtilBlockLightCache.clear();
                     }
 
                     lastLightningBoltLightState = lightningActive;
@@ -255,7 +255,7 @@ public class EventHandler {
 
         GlStateManager.disableCull();
 
-        CoroUtilBlockLightCache.brightnessPlayer = CoroUtilBlockLightCache.getBrightnessFromLightmap(mc.world, (float) entityIn.posX, (float) entityIn.posY, (float) entityIn.posZ);
+        WeatherUtilBlockLightCache.brightnessPlayer = WeatherUtilBlockLightCache.getBrightnessFromLightmap(mc.world, (float) entityIn.posX, (float) entityIn.posY, (float) entityIn.posZ);
 
 
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);

@@ -2,7 +2,7 @@ package weather2.client.foliage;
 
 import CoroUtil.config.ConfigCoroUtil;
 import CoroUtil.forge.CULog;
-import CoroUtil.util.CoroUtilBlockLightCache;
+import weather2.util.WeatherUtilBlockLightCache;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Sets;
 import extendedrenderer.EventHandler;
@@ -1027,7 +1027,7 @@ public class FoliageEnhancerShader implements Runnable {
                         foliage.particleBlue = 1F;
                     }*/
 
-            foliage.brightnessCache = CoroUtilBlockLightCache.brightnessPlayer;
+            foliage.brightnessCache = WeatherUtilBlockLightCache.brightnessPlayer;
 
             //temp
             if ((i + 1) % 2 == 0) {
@@ -1129,7 +1129,7 @@ public class FoliageEnhancerShader implements Runnable {
                         foliage.particleBlue = 1F;
                     }*/
 
-            foliage.brightnessCache = CoroUtilBlockLightCache.brightnessPlayer;
+            foliage.brightnessCache = WeatherUtilBlockLightCache.brightnessPlayer;
 
             //temp
             if ((i + 1) % 2 == 0) {

@@ -1,14 +1,11 @@
-package CoroUtil.util;
+package weather2.util;
 
-import org.lwjgl.util.vector.Quaternion;
-
-import java.text.DecimalFormat;
+import net.minecraft.util.math.Quaternion;
 
 /**
  * Created by corosus on 29/05/17.
  */
-public class CoroUtilMath {
-
+public class WeatherUtilMath {
     final static double EPS = 0.000001;
 
     public static Quaternion rotation(Quaternion q, float angleX, float angleY, float angleZ) {
@@ -35,18 +32,6 @@ public class CoroUtilMath {
 
     public static double cosFromSin(double sin, double angle) {
         return Math.sin(angle + 1.5707963267948966D);
-        /*if(Options.FASTMATH) {
-            return Math.sin(angle + 1.5707963267948966D);
-        } else {
-            double cos = sqrt(1.0D - sin * sin);
-            double a = angle + 1.5707963267948966D;
-            double b = a - (double)((int)(a / 6.283185307179586D)) * 6.283185307179586D;
-            if(b < 0.0D) {
-                b += 6.283185307179586D;
-            }
-
-            return b >= 3.141592653589793D?-cos:cos;
-        }*/
     }
 
     /**
@@ -67,7 +52,7 @@ public class CoroUtilMath {
 
         double dot, s1, s2, om, sinom;
 
-        dot = q2.x * q1.x + q2.y * q1.y + q2.z * q1.z + q2.w * q1.w;
+        dot = q2.getX() * q1.getX() + q2.getY() * q1.getY() + q2.getZ() * q1.getZ() + q2.getW() * q1.getW();
 
         if (dot < 0) {
             // negate quaternion
@@ -87,22 +72,7 @@ public class CoroUtilMath {
             s1 = 1.0 - alpha;
             s2 = alpha;
         }
-        /*w = (float)(s1*q1.w + s2*q2.w);
-        x = (float)(s1*q1.x + s2*q2.x);
-        y = (float)(s1*q1.y + s2*q2.y);
-        z = (float)(s1*q1.z + s2*q2.z);*/
 
-        return new Quaternion((float) (s1 * q1.x + s2 * q2.x), (float) (s1 * q1.y + s2 * q2.y), (float) (s1 * q1.z + s2 * q2.z), (float) (s1 * q1.w + s2 * q2.w));
+        return new Quaternion((float) (s1 * q1.getX() + s2 * q2.getX()), (float) (s1 * q1.getY() + s2 * q2.getY()), (float) (s1 * q1.getZ() + s2 * q2.getZ()), (float) (s1 * q1.getW() + s2 * q2.getW()));
     }
-
-    public static String roundVal(float val) {
-        DecimalFormat df = new DecimalFormat("#.##");
-        return df.format(val);
-    }
-
-    public static String roundVal(double val) {
-        DecimalFormat df = new DecimalFormat("#.##");
-        return df.format(val);
-    }
-
 }

@@ -1,6 +1,5 @@
 package weather2.block;
 
-import CoroUtil.util.CoroUtilMisc;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

@@ -1,6 +1,6 @@
 package weather2.block;
 
-import CoroUtil.util.CoroUtilPhysics;
+import weather2.util.WeatherUtilPhysics;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.fml.relauncher.Side;
@@ -51,8 +51,8 @@ public class TileEntityTSiren extends TileEntity implements ITickable {
                         float distMax = 75F;
 
                         //double scale = sandstorm.getSandstormScale();
-                        boolean inStorm = CoroUtilPhysics.isInConvexShape(pos, points);
-                        double dist = Math.min(distMax, CoroUtilPhysics.getDistanceToShape(pos, points));
+                        boolean inStorm = WeatherUtilPhysics.isInConvexShape(pos, points);
+                        double dist = Math.min(distMax, WeatherUtilPhysics.getDistanceToShape(pos, points));
 
                         if (inStorm || dist < distMax) {
                             String soundToPlay = "siren_sandstorm_5_extra";

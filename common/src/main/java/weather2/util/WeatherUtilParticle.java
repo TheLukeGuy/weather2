@@ -4,6 +4,7 @@ import extendedrenderer.particle.entity.EntityRotFX;
 import extendedrenderer.particle.entity.ParticleTexFX;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleManager;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
 import java.lang.reflect.Field;
@@ -13,8 +14,20 @@ import java.util.Random;
 public class WeatherUtilParticle {
     public static ArrayDeque<Particle>[][] fxLayers;
 
+    public static Vec3d[] rainPositions;
+    public static int maxRainDrops = 2000;
+
     public static Random rand = new Random();
-    //public static int rainDrops = 20;
+
+    static {
+        rainPositions = new Vec3d[maxRainDrops];
+
+        float range = 10F;
+
+        for (int i = 0; i < maxRainDrops; i++) {
+            rainPositions[i] = new Vec3d((rand.nextFloat() * range) - (range / 2), (rand.nextFloat() * range) - (range / 2), (rand.nextFloat() * range) - (range / 2));
+        }
+    }
 
     //weather2: not sure what will happen to this in 1.7, copied over for convenience
     public static int getParticleAge(Particle ent) {

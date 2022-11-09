@@ -1,7 +1,6 @@
 package weather2.weather.storm;
 
 import CoroUtil.config.ConfigCoroUtil;
-import CoroUtil.util.*;
 import extendedrenderer.ExtendedRenderer;
 import extendedrenderer.particle.ParticleRegistry;
 import extendedrenderer.particle.behavior.ParticleBehaviorFog;
@@ -210,7 +209,7 @@ public class CloudStorm extends Storm {
 
         if (bgb != null) {
             //temp = bgb.getFloatTemperature(new BlockPos(MathHelper.floor(pos.xCoord), MathHelper.floor(pos.yCoord), MathHelper.floor(pos.zCoord)));
-            temp = CoroUtilCompatibility.getAdjustedTemperature(manager.getWorld(), bgb, new BlockPos(MathHelper.floor(pos.x), MathHelper.floor(pos.y), MathHelper.floor(pos.z)));
+            temp = WeatherUtilCompatibility.getAdjustedTemperature(manager.getWorld(), bgb, new BlockPos(MathHelper.floor(pos.x), MathHelper.floor(pos.y), MathHelper.floor(pos.z)));
         }
 
         //initial setting, more apparent than gradual adjustments
@@ -770,7 +769,7 @@ public class CloudStorm extends Storm {
 
         //float f = biomegenbase.getFloatTemperature(pos);
 
-        float temperature = CoroUtilCompatibility.getAdjustedTemperature(world, biomegenbase, pos);
+        float temperature = WeatherUtilCompatibility.getAdjustedTemperature(world, biomegenbase, pos);
 
         if ((!canSnowFromCloudTemperature || !(levelTemperature > 0)) && (canSnowFromCloudTemperature || !(temperature > 0.15F))) {
             if (par2 >= 0 && par2 < 256 && world.getLightLevel(LightType.BLOCK, pos) < 10) {
@@ -830,7 +829,7 @@ public class CloudStorm extends Storm {
                 isInOcean = bgb.getCategory() == Biome.Category.OCEAN;
 
                 //float biomeTempAdj = getTemperatureMCToWeatherSys(bgb.getFloatTemperature(new BlockPos(MathHelper.floor(pos.xCoord), MathHelper.floor(pos.yCoord), MathHelper.floor(pos.zCoord))));
-                float biomeTempAdj = getTemperatureMCToWeatherSys(CoroUtilCompatibility.getAdjustedTemperature(manager.getWorld(), bgb, new BlockPos(MathHelper.floor(pos.x), MathHelper.floor(pos.y), MathHelper.floor(pos.z))));
+                float biomeTempAdj = getTemperatureMCToWeatherSys(WeatherUtilCompatibility.getAdjustedTemperature(manager.getWorld(), bgb, new BlockPos(MathHelper.floor(pos.x), MathHelper.floor(pos.y), MathHelper.floor(pos.z))));
                 if (levelTemperature > biomeTempAdj) {
                     levelTemperature -= tempAdjustRate;
                 } else {

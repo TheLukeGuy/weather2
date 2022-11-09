@@ -1,6 +1,5 @@
 package weather2.client.entity;
 
-import CoroUtil.util.CoroUtilParticle;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -146,10 +145,10 @@ public class RenderFlyingBlockOld extends Render {
                         }
 
                     } else if (entity instanceof EntityIceBall) {
-                        for (int ii = 0; ii < Math.min(4, CoroUtilParticle.maxRainDrops); ii++) {
+                        for (int ii = 0; ii < Math.min(4, WeatherUtilParticle.maxRainDrops); ii++) {
                             GlStateManager.pushMatrix();
                             //GlStateManager.translate((float)x, (float)y, (float)z);
-                            GlStateManager.translate((float) CoroUtilParticle.rainPositions[ii].xCoord * 3F, (float) CoroUtilParticle.rainPositions[ii].yCoord * 3F, (float) CoroUtilParticle.rainPositions[ii].zCoord * 3F);
+                            GlStateManager.translate((float) WeatherUtilParticle.rainPositions[ii].xCoord * 3F, (float) WeatherUtilParticle.rainPositions[ii].yCoord * 3F, (float) WeatherUtilParticle.rainPositions[ii].zCoord * 3F);
                             GlStateManager.disableLighting();
                             Tessellator tessellator = Tessellator.getInstance();
                             BufferBuilder worldrenderer = tessellator.getBuffer();

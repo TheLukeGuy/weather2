@@ -1,7 +1,7 @@
 package extendedrenderer.shader;
 
 
-import CoroUtil.util.CoroUtilMath;
+import weather2.util.WeatherUtilMath;
 import org.lwjgl.util.vector.Quaternion;
 
 import javax.vecmath.Vector3f;
@@ -26,7 +26,7 @@ public class Transformation {
     public Matrix4fe buildModelMatrix(IShaderRenderedEntity gameItem, Vector3f posCustom, float partialTicks) {
         Quaternion q = gameItem.getQuaternion();
         if (gameItem.getQuaternionPrev() != null) {
-            q = CoroUtilMath.interpolate(gameItem.getQuaternionPrev(), gameItem.getQuaternion(), partialTicks);
+            q = WeatherUtilMath.interpolate(gameItem.getQuaternionPrev(), gameItem.getQuaternion(), partialTicks);
             //q = gameItem.getQuaternionPrev();
         }
 

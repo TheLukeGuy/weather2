@@ -1,7 +1,7 @@
 package extendedrenderer.particle.entity;
 
 import weather2.weather.wind.WindAffected;
-import CoroUtil.util.CoroUtilBlockLightCache;
+import weather2.util.WeatherUtilBlockLightCache;
 import extendedrenderer.ExtendedRenderer;
 import extendedrenderer.particle.behavior.ParticleBehaviors;
 import extendedrenderer.render.RotatingParticleManager;
@@ -138,7 +138,7 @@ public class EntityRotFX extends Particle implements WindAffected, IShaderRender
 
         rotation = new Quaternion();
 
-        brightnessCache = CoroUtilBlockLightCache.getBrightnessCached(world, (float) posX, (float) posY, (float) posZ);
+        brightnessCache = WeatherUtilBlockLightCache.getBrightnessCached(world, (float) posX, (float) posY, (float) posZ);
     }
 
     public boolean isSlantParticleToWind() {
@@ -295,7 +295,7 @@ public class EntityRotFX extends Particle implements WindAffected, IShaderRender
         }
 
         if (world.getTotalWorldTime() % 5 == 0) {
-            brightnessCache = CoroUtilBlockLightCache.getBrightnessCached(world, (float) posX, (float) posY, (float) posZ);
+            brightnessCache = WeatherUtilBlockLightCache.getBrightnessCached(world, (float) posX, (float) posY, (float) posZ);
         }
 
         rotationAroundCenter += rotationSpeedAroundCenter;

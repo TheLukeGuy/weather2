@@ -1,11 +1,8 @@
 package weather2.client;
 
-import net.minecraft.block.Material;
-import net.minecraft.client.MinecraftClient;
-import weather2.weather.wind.WindAffected;
 import CoroUtil.config.ConfigCoroUtil;
 import CoroUtil.forge.CULog;
-import CoroUtil.util.*;
+import CoroUtil.util.ChunkCoordinatesBlock;
 import extendedrenderer.EventHandler;
 import extendedrenderer.ExtendedRenderer;
 import extendedrenderer.particle.ParticleRegistry;
@@ -20,9 +17,10 @@ import extendedrenderer.particle.entity.ParticleTexLeafColor;
 import extendedrenderer.render.RotatingParticleManager;
 import extendedrenderer.shader.Matrix4fe;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleFlame;
 import net.minecraft.client.renderer.ActiveRenderInfo;
@@ -61,13 +59,12 @@ import weather2.util.*;
 import weather2.weather.ClientWeatherManager;
 import weather2.weather.storm.CloudStorm;
 import weather2.weather.storm.SandStorm;
+import weather2.weather.wind.WindAffected;
 import weather2.weather.wind.WindManager;
 import weather2.weather.wind.WindReader;
 
 import java.lang.reflect.Field;
 import java.util.*;
-
-import static CoroUtil.util.CoroUtilMisc.adjVal;
 
 @SideOnly(Side.CLIENT)
 public class SceneEnhancer implements Runnable {
@@ -475,7 +472,7 @@ public class SceneEnhancer implements Runnable {
                                         }
 
                                         if (!proxFail) {
-                                            soundLocations.add(new ChunkCoordinatesBlock(xx, bottomY, zz, SOUNDMARKER_WATER, 0));
+                                            soundLocations.add(new ChunkCoordinatesBlock(xx, bottomY, zz, SOUNDMARKER_WATER));
                                             //System.out.println("add waterfall");
                                         }
                                     }
@@ -490,7 +487,7 @@ public class SceneEnhancer implements Runnable {
                                 }
 
                                 if (!proxFail) {
-                                    soundLocations.add(new ChunkCoordinatesBlock(xx, yy, zz, SOUNDMARKER_LEAVES, 0));
+                                    soundLocations.add(new ChunkCoordinatesBlock(xx, yy, zz, SOUNDMARKER_LEAVES));
                                     //System.out.println("add leaves sound location");
                                 }
                             }
@@ -969,7 +966,7 @@ public class SceneEnhancer implements Runnable {
             if (biomegenbase != null && (biomegenbase.canRain() || biomegenbase.getEnableSnow())) {
 
                 //biomegenbase.getFloatTemperature(new BlockPos(MathHelper.floor(entP.posX), MathHelper.floor(entP.posY), MathHelper.floor(entP.posZ)));
-                float temperature = CoroUtilCompatibility.getAdjustedTemperature(world, biomegenbase, entP.getPosition());
+                float temperature = WeatherUtilCompatibility.getAdjustedTemperature(world, biomegenbase, entP.getPosition());
                 double d3;
                 float f10;
 
@@ -2234,13 +2231,13 @@ public class SceneEnhancer implements Runnable {
     			System.out.println("point: " + point.toString());
     		}*/
 
-            boolean inStorm = CoroUtilPhysics.isInConvexShape(posPlayer, points);
+            boolean inStorm = WeatherUtilPhysics.isInConvexShape(posPlayer, points);
             if (inStorm) {
                 //System.out.println("in storm");
                 distToStorm = 0;
             } else {
 
-                distToStorm = CoroUtilPhysics.getDistanceToShape(posPlayer, points);
+                distToStorm = WeatherUtilPhysics.getDistanceToShape(posPlayer, points);
                 //System.out.println("near storm: " + distToStorm);
             }
         } else {
@@ -2643,5 +2640,22 @@ public class SceneEnhancer implements Runnable {
                 mc.world.setRainStrength(curRainStr);
             }
         }
+    }
+
+    public static float adjVal(float source, float target, float adj) {
+        if (source < target) {
+            source += adj;
+            //fix over adjust
+            if (source > target) {
+                source = target;
+            }
+        } else if (source > target) {
+            source -= adj;
+            //fix over adjust
+            if (source < target) {
+                source = target;
+            }
+        }
+        return source;
     }
 }

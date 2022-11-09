@@ -1,6 +1,5 @@
 package weather2.util;
 
-import CoroUtil.util.CoroUtilCompatibility;
 import net.minecraft.block.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -74,7 +73,7 @@ public class WeatherUtil {
                     if (block == Blocks.DIRT || block == Blocks.GRASS || block == Blocks.SAND || block.isIn(BlockTags.LOGS)/* || block.blockMaterial == Material.wood*/) {
                         result = false;
                     }
-                    if (!CoroUtilCompatibility.canTornadoGrabBlockRefinedRules(state)) {
+                    if (!WeatherUtilCompatibility.canTornadoGrabBlockRefinedRules(state)) {
                         result = false;
                     }
                 }

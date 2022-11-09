@@ -1,6 +1,6 @@
 package extendedrenderer.render;
 
-import CoroUtil.util.CoroUtilBlockLightCache;
+import weather2.util.WeatherUtilBlockLightCache;
 import extendedrenderer.foliage.Foliage;
 import extendedrenderer.particle.ParticleRegistry;
 import extendedrenderer.particle.ShaderManager;
@@ -339,7 +339,7 @@ public class FoliageRenderer {
                                     foliage.particleAlpha = 1F;
                                 }
 
-                                foliage.brightnessCache = CoroUtilBlockLightCache.brightnessPlayer + 0.0F;
+                                foliage.brightnessCache = WeatherUtilBlockLightCache.brightnessPlayer + 0.0F;
 
                                 //update vbo1
                                 foliage.renderForShaderVBO1(mesh, transformation, viewMatrix, entityIn, partialTicks);
