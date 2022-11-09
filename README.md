@@ -13,7 +13,7 @@ On top of this, some other changes are being made to ensure maintainability and 
 
 ## Why?
 
-The original mod has been stuck on Forge 1.12 for years, and while the original developer is working on a [new version](https://github.com/Corosauce/weather2/tree/1.18_lt_server) for Forge 1.18, it still only supports Forge and seems to have larger + more time-consuming goals than a simple port of the 1.12 version.
+The original mod has been stuck on Forge 1.12 for years, and while the original developer is working on a [new version](https://github.com/Corosauce/weather2/tree/1.18_post_lt) for Forge 1.18, it still only supports Forge and seems to have larger + more time-consuming goals than a simple port of the 1.12 version.
 
 ## Versions
 
