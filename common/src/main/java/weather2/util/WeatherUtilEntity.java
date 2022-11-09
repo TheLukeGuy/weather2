@@ -1,6 +1,6 @@
 package weather2.util;
 
-import extendedrenderer.particle.entity.EntityRotFX;
+import weather2.client.render.particle.entity.EntityRotFX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;

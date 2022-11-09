@@ -1,8 +1,8 @@
 package weather2.weather.storm;
 
-import extendedrenderer.particle.ParticleRegistry;
-import extendedrenderer.particle.behavior.ParticleBehaviorSandstorm;
-import extendedrenderer.particle.entity.EntityRotFX;
+import weather2.client.render.particle.ParticleRegistry;
+import weather2.client.render.particle.behavior.ParticleBehaviorSandstorm;
+import weather2.client.render.particle.entity.EntityRotFX;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.math.BlockPos;

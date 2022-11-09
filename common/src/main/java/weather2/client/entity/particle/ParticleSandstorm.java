@@ -1,6 +1,6 @@
 package weather2.client.entity.particle;
 
-import extendedrenderer.particle.entity.ParticleTexFX;
+import weather2.client.render.particle.entity.ParticleTexFX;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;

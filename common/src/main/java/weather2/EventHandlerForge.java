@@ -1,6 +1,6 @@
 package weather2;
 
-import extendedrenderer.render.FoliageRenderer;
+import weather2.client.render.render.FoliageRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;

@@ -1,8 +1,8 @@
 package weather2.client.tornado;
 
-import extendedrenderer.particle.ParticleRegistry;
-import extendedrenderer.particle.entity.ParticleCustomMatrix;
-import extendedrenderer.shader.Matrix4fe;
+import weather2.client.render.particle.ParticleRegistry;
+import weather2.client.render.particle.entity.ParticleCustomMatrix;
+import weather2.client.render.shader.Matrix4fe;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;

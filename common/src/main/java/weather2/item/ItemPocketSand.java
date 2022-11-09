@@ -1,8 +1,8 @@
 package weather2.item;
 
 import CoroUtil.packet.PacketHelper;
-import extendedrenderer.particle.ParticleRegistry;
-import extendedrenderer.particle.behavior.ParticleBehaviorSandstorm;
+import weather2.client.render.particle.ParticleRegistry;
+import weather2.client.render.particle.behavior.ParticleBehaviorSandstorm;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;

@@ -1,7 +1,7 @@
 package weather2;
 
-import extendedrenderer.shader.IShaderListener;
-import extendedrenderer.shader.ShaderListenerRegistry;
+import weather2.client.render.shader.IShaderListener;
+import weather2.client.render.shader.ShaderListenerRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;

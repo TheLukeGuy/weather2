@@ -1,7 +1,7 @@
 package weather2.client.entity.particle;
 
 import weather2.weather.wind.WindAffected;
-import extendedrenderer.particle.entity.EntityRotFX;
+import weather2.client.render.particle.entity.EntityRotFX;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

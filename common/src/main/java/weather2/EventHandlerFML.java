@@ -1,7 +1,7 @@
 package weather2;
 
 import CoroUtil.forge.CULog;
-import extendedrenderer.EventHandler;
+import weather2.client.render.EventHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;

@@ -1,7 +1,7 @@
 package weather2;
 
 import CoroUtil.packet.PacketHelper;
-import extendedrenderer.ExtendedRenderer;
+import weather2.client.render.ExtendedRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiIngameMenu;

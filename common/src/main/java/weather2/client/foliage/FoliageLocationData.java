@@ -1,6 +1,6 @@
 package weather2.client.foliage;
 
-import extendedrenderer.foliage.Foliage;
+import weather2.client.render.foliage.Foliage;
 
 import java.util.ArrayList;
 import java.util.List;

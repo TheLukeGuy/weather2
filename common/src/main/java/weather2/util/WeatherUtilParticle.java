@@ -1,7 +1,7 @@
 package weather2.util;
 
-import extendedrenderer.particle.entity.EntityRotFX;
-import extendedrenderer.particle.entity.ParticleTexFX;
+import weather2.client.render.particle.entity.EntityRotFX;
+import weather2.client.render.particle.entity.ParticleTexFX;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.util.math.Vec3d;

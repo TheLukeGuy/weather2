@@ -1,7 +1,7 @@
 package weather2.weather;
 
 import CoroUtil.config.ConfigCoroUtil;
-import extendedrenderer.EventHandler;
+import weather2.client.render.EventHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.resources.IResourceManager;

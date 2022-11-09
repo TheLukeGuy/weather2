@@ -1,9 +1,9 @@
 package weather2.volcano;
 
-import extendedrenderer.ExtendedRenderer;
-import extendedrenderer.particle.ParticleRegistry;
-import extendedrenderer.particle.behavior.ParticleBehaviors;
-import extendedrenderer.particle.entity.EntityRotFX;
+import weather2.client.render.ExtendedRenderer;
+import weather2.client.render.particle.ParticleRegistry;
+import weather2.client.render.particle.behavior.ParticleBehaviors;
+import weather2.client.render.particle.entity.EntityRotFX;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;

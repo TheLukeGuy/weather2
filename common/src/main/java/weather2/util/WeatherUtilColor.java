@@ -1,7 +1,7 @@
 package weather2.util;
 
 import de.androidpit.colorthief.ColorThief;
-import extendedrenderer.foliage.FoliageData;
+import weather2.client.render.foliage.FoliageData;
 import it.unimi.dsi.fastutil.ints.IntArrays;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;

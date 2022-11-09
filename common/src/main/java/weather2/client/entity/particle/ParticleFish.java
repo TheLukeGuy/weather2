@@ -1,9 +1,9 @@
 package weather2.client.entity.particle;
 
-import extendedrenderer.particle.entity.ParticleTexFX;
-import extendedrenderer.shader.InstancedMeshParticle;
-import extendedrenderer.shader.Matrix4fe;
-import extendedrenderer.shader.Transformation;
+import weather2.client.render.particle.entity.ParticleTexFX;
+import weather2.client.render.shader.InstancedMeshParticle;
+import weather2.client.render.shader.Matrix4fe;
+import weather2.client.render.shader.Transformation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;

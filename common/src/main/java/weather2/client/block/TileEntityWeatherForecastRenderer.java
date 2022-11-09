@@ -1,6 +1,6 @@
 package weather2.client.block;
 
-import extendedrenderer.ExtendedRenderer;
+import weather2.client.render.ExtendedRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
