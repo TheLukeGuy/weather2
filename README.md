@@ -9,6 +9,7 @@ On top of this, some other changes are being made to ensure maintainability and 
 * Cleaning up the entire codebase with a consistent structure and code style
 * Merging the required parts of CoroUtil directly into Weather2
 * Rewriting the configuration code for more consistency and predictability
+* Moving `weather2` to `sh.lpx.weather2` to prevent conflicts or confusion
 * And maybe more in the future?
 
 ## Why?

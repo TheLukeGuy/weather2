@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "weather2.mixin",
+  "package": "sh.lpx.weather2.mixin",
   "compatibilityLevel": "JAVA_8",
   "client": [
     "client.ParticleAccessor"

@@ -16,10 +16,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "weather2.FabricWeather"
+      "sh.lpx.weather2.fabric.FabricWeather"
     ],
     "client": [
-      "weather2.FabricWeather"
+      "sh.lpx.weather2.fabric.FabricWeather"
     ]
   },
   "mixins": [

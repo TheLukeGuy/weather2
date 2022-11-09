@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "weather2.mixin.forge",
+  "package": "sh.lpx.weather2.mixin.forge",
   "compatibilityLevel": "JAVA_8",
   "client": [
   ],
