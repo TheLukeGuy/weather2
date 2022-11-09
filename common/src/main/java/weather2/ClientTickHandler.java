@@ -19,7 +19,7 @@ import weather2.client.gui.GuiEZConfig;
 import weather2.config.ConfigFoliage;
 import weather2.config.ConfigMisc;
 import weather2.util.WeatherUtilConfig;
-import weather2.util.WindReader;
+import weather2.weather.wind.WindReader;
 import weather2.weather.EntityRendererProxyWeather2Mini;
 import weather2.weather.ClientWeatherManager;
 

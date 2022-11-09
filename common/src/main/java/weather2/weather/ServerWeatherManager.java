@@ -419,7 +419,7 @@ public class ServerWeatherManager extends WeatherManager {
         }
 
         if (!data.isEmpty()) {
-            FMLInterModComms.sendRuntimeMessage(Weather.instance, Weather.modID, "weather.storms", data);
+            FMLInterModComms.sendRuntimeMessage(Weather.instance, Weather.MOD_ID, "weather.storms", data);
         }
     }
 
@@ -435,7 +435,7 @@ public class ServerWeatherManager extends WeatherManager {
         nbt.putBoolean("custom", custom);
         data.put("data", nbt);
         Weather.eventChannel.sendToDimension(PacketHelper.getNBTPacket(data, Weather.eventChannelName), getWorld().getDimension());
-        FMLInterModComms.sendRuntimeMessage(Weather.instance, Weather.modID, "weather.lightning", data);
+        FMLInterModComms.sendRuntimeMessage(Weather.instance, Weather.MOD_ID, "weather.lightning", data);
     }
 
     public void syncWindUpdate(WindManager parManager) {
@@ -445,7 +445,7 @@ public class ServerWeatherManager extends WeatherManager {
         data.putString("command", "syncWindUpdate");
         data.put("data", parManager.nbtSyncForClient());
         Weather.eventChannel.sendToDimension(PacketHelper.getNBTPacket(data, Weather.eventChannelName), getWorld().getDimension());
-        FMLInterModComms.sendRuntimeMessage(Weather.instance, Weather.modID, "weather.wind", data);
+        FMLInterModComms.sendRuntimeMessage(Weather.instance, Weather.MOD_ID, "weather.wind", data);
     }
 
     public void syncStormNew(Storm parStorm) {

@@ -1263,7 +1263,7 @@ public class CloudStorm extends Storm {
         if (isCloudlessStorm()) return;
 
         if (particleBehaviorFog == null) {
-            particleBehaviorFog = new ParticleBehaviorFog(new Vec3d(pos.x, pos.y, pos.z));
+            particleBehaviorFog = new ParticleBehaviorFog(pos);
             //particleBehaviorFog.sourceEntity = this;
         } else {
             if (!MinecraftClient.getInstance().isInSingleplayer() || !(MinecraftClient.getInstance().currentScreen instanceof GameMenuScreen)) {

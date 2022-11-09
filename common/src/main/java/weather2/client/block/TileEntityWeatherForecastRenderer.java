@@ -19,7 +19,7 @@ import weather2.ClientTickHandler;
 import weather2.block.TileEntityWeatherForecast;
 import weather2.client.SceneEnhancer;
 import weather2.config.ConfigMisc;
-import weather2.util.WindReader;
+import weather2.weather.wind.WindReader;
 import weather2.weather.ClientWeatherManager;
 import weather2.weather.storm.CloudStorm;
 import weather2.weather.storm.Storm;

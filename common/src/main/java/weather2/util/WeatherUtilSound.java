@@ -1,10 +1,9 @@
 package weather2.util;
 
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.math.Vec3d;
 import weather2.client.sound.MovingSoundStreamingSource;
 import weather2.weather.storm.CloudStorm;
 
@@ -16,20 +15,19 @@ import java.util.Random;
  * would help cleanup the weird array use this class does
  */
 public class WeatherUtilSound {
-
-    public static String snd_tornado_dmg_close[] = new String[3];
-    public static String snd_wind_close[] = new String[3];
-    public static String snd_wind_far[] = new String[3];
-    public static String snd_sandstorm_low[] = new String[2];
-    public static String snd_sandstorm_med[] = new String[2];
-    public static String snd_sandstorm_high[] = new String[1];
+    public static String[] snd_tornado_dmg_close = new String[3];
+    public static String[] snd_wind_close = new String[3];
+    public static String[] snd_wind_far = new String[3];
+    public static String[] snd_sandstorm_low = new String[2];
+    public static String[] snd_sandstorm_med = new String[2];
+    public static String[] snd_sandstorm_high = new String[1];
     public static HashMap<String, Integer> soundToLength = new HashMap<>();
 
     /**
      * These need to match the amount of array'd strings we use for sounds, was 3, now 6 for sandstorm addition
      */
-    public static int snd_rand[] = new int[6];
-    public static long soundTimer[] = new long[6];
+    public static int[] snd_rand = new int[6];
+    public static long[] soundTimer = new long[6];
 
     public static void init() {
         Random rand = new Random();
@@ -53,9 +51,6 @@ public class WeatherUtilSound {
         snd_rand[3] = rand.nextInt(snd_sandstorm_high.length);
         snd_rand[4] = rand.nextInt(snd_sandstorm_med.length);
         snd_rand[5] = rand.nextInt(snd_sandstorm_low.length);
-        /*soundID[0] = -1;
-        soundID[1] = -1;
-        soundID[2] = -1;*/
         soundToLength.put(snd_tornado_dmg_close[0], 2515);
         soundToLength.put(snd_tornado_dmg_close[1], 2580);
         soundToLength.put(snd_tornado_dmg_close[2], 2741);
@@ -78,36 +73,21 @@ public class WeatherUtilSound {
         soundToLength.put("siren_sandstorm_5_extra", 1282);
     }
 
-    @SideOnly(Side.CLIENT)
-    public static void playNonMovingSound(Vec3 parPos, String var1, float var5, float var6, float parCutOffRange) {
-        //String prefix = "streaming.";
-        String affix = ".ogg";
-        //ResourceLocation res = new ResourceLocation(var1);
+    public static void playNonMovingSound(Vec3d parPos, String var1, float var5, float var6, float parCutOffRange) {
         SoundEvent event = SoundRegistry.get(var1);
         MovingSoundStreamingSource sound = new MovingSoundStreamingSource(parPos, event, SoundCategory.WEATHER, var5, var6, parCutOffRange);
-        FMLClientHandler.instance().getClient().getSoundHandler().playSound(sound);
+        MinecraftClient.getInstance().getSoundManager().play(sound);
     }
 
-    @SideOnly(Side.CLIENT)
     public static void playMovingSound(CloudStorm parStorm, String var1, float var5, float var6, float parCutOffRange) {
-        //String prefix = "streaming.";
-        String affix = ".ogg";
-
-        //ResourceLocation res = new ResourceLocation(var1);
         SoundEvent event = SoundRegistry.get(var1);
-
         MovingSoundStreamingSource sound = new MovingSoundStreamingSource(parStorm, event, SoundCategory.WEATHER, var5, var6, parCutOffRange);
-
-        FMLClientHandler.instance().getClient().getSoundHandler().playSound(sound);
-
+        MinecraftClient.getInstance().getSoundManager().play(sound);
     }
 
-    @SideOnly(Side.CLIENT)
-    public static void playPlayerLockedSound(Vec3 parPos, String var1, float var5, float var6) {
+    public static void playPlayerLockedSound(Vec3d parPos, String var1, float var5, float var6) {
         SoundEvent event = SoundRegistry.get(var1);
         MovingSoundStreamingSource sound = new MovingSoundStreamingSource(parPos, event, SoundCategory.WEATHER, var5, var6, true);
-        FMLClientHandler.instance().getClient().getSoundHandler().playSound(sound);
+        MinecraftClient.getInstance().getSoundManager().play(sound);
     }
-
-
 }

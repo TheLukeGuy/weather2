@@ -1,14 +1,12 @@
-package weather2.util;
+package weather2.weather.wind;
 
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import weather2.ClientTickHandler;
 import weather2.ServerTickHandler;
 import weather2.weather.WeatherManager;
 
 public class WindReader {
-
     /*
      *
      * not exactly a proper api class as it depends on weather2 imports, IMC method to come in future
@@ -36,16 +34,16 @@ public class WindReader {
         CLOUD
     }
 
-    public static float getWindAngle(World parWorld, Vec3 parLocation) {
+    public static float getWindAngle(World parWorld, Vec3d parLocation) {
         return getWindAngle(parWorld, parLocation, WindType.PRIORITY);
     }
 
-    public static float getWindAngle(World parWorld, Vec3 parLocation, WindType parWindType) {
-        WeatherManager wMan = null;
-        if (parWorld.isRemote) {
+    public static float getWindAngle(World parWorld, Vec3d parLocation, WindType parWindType) {
+        WeatherManager wMan;
+        if (parWorld.isClient) {
             wMan = getWeatherManagerClient();
         } else {
-            wMan = ServerTickHandler.lookupDimToWeatherMan.get(parWorld.provider.getDimension());
+            wMan = ServerTickHandler.lookupDimToWeatherMan.get(parWorld.getDimension());
         }
 
         if (wMan != null) {
@@ -65,16 +63,16 @@ public class WindReader {
         }
     }
 
-    public static float getWindSpeed(World parWorld, Vec3 parLocation) {
+    public static float getWindSpeed(World parWorld, Vec3d parLocation) {
         return getWindSpeed(parWorld, parLocation, WindType.PRIORITY);
     }
 
-    public static float getWindSpeed(World parWorld, Vec3 parLocation, WindType parWindType) {
-        WeatherManager wMan = null;
-        if (parWorld.isRemote) {
+    public static float getWindSpeed(World parWorld, Vec3d parLocation, WindType parWindType) {
+        WeatherManager wMan;
+        if (parWorld.isClient) {
             wMan = getWeatherManagerClient();
         } else {
-            wMan = ServerTickHandler.lookupDimToWeatherMan.get(parWorld.provider.getDimension());
+            wMan = ServerTickHandler.lookupDimToWeatherMan.get(parWorld.getDimension());
         }
 
         if (wMan != null) {
@@ -94,7 +92,6 @@ public class WindReader {
         }
     }
 
-    @SideOnly(Side.CLIENT)
     private static WeatherManager getWeatherManagerClient() {
         return ClientTickHandler.weatherManager;
     }

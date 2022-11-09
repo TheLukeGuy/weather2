@@ -7,7 +7,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import weather2.util.WeatherUtilEntity;
-import weather2.util.WindReader;
+import weather2.weather.wind.WindReader;
 
 public class TileEntityAnemometer extends TileEntity implements ITickable {
 

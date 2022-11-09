@@ -61,6 +61,7 @@ import weather2.weather.ClientWeatherManager;
 import weather2.weather.storm.CloudStorm;
 import weather2.weather.storm.SandStorm;
 import weather2.weather.wind.WindManager;
+import weather2.weather.wind.WindReader;
 
 import java.lang.reflect.Field;
 import java.util.*;

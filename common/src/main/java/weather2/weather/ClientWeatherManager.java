@@ -26,7 +26,6 @@ public class ClientWeatherManager extends WeatherManager {
 
     public static CloudStorm closestStormCached;
 
-
     public ClientWeatherManager(int parDim) {
         super(parDim);
     }
