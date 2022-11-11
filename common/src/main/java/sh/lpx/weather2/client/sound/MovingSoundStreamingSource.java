@@ -1,21 +1,21 @@
 package sh.lpx.weather2.client.sound;
 
-import net.minecraft.client.audio.MovingSound;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.sound.MovingSoundInstance;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraft.util.math.Vec3d;
 import sh.lpx.weather2.weather.storm.CloudStorm;
 
-public class MovingSoundStreamingSource extends MovingSound {
-
+public class MovingSoundStreamingSource extends MovingSoundInstance {
     private CloudStorm storm = null;
     public float cutOffRange = 128;
-    public Vec3 realSource = null;
+    public Vec3d realSource = null;
     public boolean lockToPlayer = false;
 
-    public MovingSoundStreamingSource(Vec3 parPos, SoundEvent event, SoundCategory category, float parVolume, float parPitch, boolean lockToPlayer) {
+    public MovingSoundStreamingSource(Vec3d parPos, SoundEvent event, SoundCategory category, float parVolume, float parPitch, boolean lockToPlayer) {
         super(event, category);
         this.repeat = false;
         this.volume = parVolume;
@@ -24,11 +24,11 @@ public class MovingSoundStreamingSource extends MovingSound {
 
         this.lockToPlayer = lockToPlayer;
 
-        update();
+        tick();
     }
 
     //constructor for non moving sounds
-    public MovingSoundStreamingSource(Vec3 parPos, SoundEvent event, SoundCategory category, float parVolume, float parPitch, float parCutOffRange) {
+    public MovingSoundStreamingSource(Vec3d parPos, SoundEvent event, SoundCategory category, float parVolume, float parPitch, float parCutOffRange) {
         super(event, category);
         this.repeat = false;
         this.volume = parVolume;
@@ -37,7 +37,7 @@ public class MovingSoundStreamingSource extends MovingSound {
         realSource = parPos;
 
         //sync position
-        update();
+        tick();
     }
 
     //constructor for moving sounds
@@ -50,25 +50,26 @@ public class MovingSoundStreamingSource extends MovingSound {
         cutOffRange = parCutOffRange;
 
         //sync position
-        update();
+        tick();
     }
 
-    public void update() {
-        EntityPlayer entP = FMLClientHandler.instance().getClient().player;
+    @Override
+    public void tick() {
+        PlayerEntity entP = MinecraftClient.getInstance().player;
 
         if (entP != null) {
-            this.xPosF = (float) entP.posX;
-            this.yPosF = (float) entP.posY;
-            this.zPosF = (float) entP.posZ;
+            this.x = (float) entP.getX();
+            this.y = (float) entP.getY();
+            this.z = (float) entP.getZ();
         }
 
         if (storm != null) {
-            realSource = new Vec3(this.storm.posGround.xCoord, this.storm.posGround.yCoord, this.storm.posGround.zCoord);
+            realSource = new Vec3d(this.storm.posGround.x, this.storm.posGround.y, this.storm.posGround.z);
         }
 
         //if locked to player, don't dynamically adjust volume
         if (!lockToPlayer) {
-            float var3 = (float) ((cutOffRange - (double) MathHelper.sqrt(getDistanceFrom(realSource, new Vec3(entP.posX, entP.posY, entP.posZ)))) / cutOffRange);
+            float var3 = (float) ((cutOffRange - (double) MathHelper.sqrt(getDistanceFrom(realSource, entP.getPos()))) / cutOffRange);
 
             if (var3 < 0.0F) {
                 var3 = 0.0F;
@@ -76,14 +77,12 @@ public class MovingSoundStreamingSource extends MovingSound {
 
             volume = var3;
         }
-
     }
 
-    public double getDistanceFrom(Vec3 source, Vec3 targ) {
-        double d3 = source.xCoord - targ.xCoord;
-        double d4 = source.yCoord - targ.yCoord;
-        double d5 = source.zCoord - targ.zCoord;
+    public double getDistanceFrom(Vec3d source, Vec3d targ) {
+        double d3 = source.x - targ.x;
+        double d4 = source.y - targ.y;
+        double d5 = source.z - targ.z;
         return d3 * d3 + d4 * d4 + d5 * d5;
     }
-
 }

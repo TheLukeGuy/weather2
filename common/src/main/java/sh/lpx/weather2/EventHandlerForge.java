@@ -49,7 +49,6 @@ public class EventHandlerForge {
 
         ClientTickHandler.checkClientWeather();
         ClientTickHandler.weatherManager.tickRender(event.getPartialTicks());
-        SceneEnhancer.renderWorldLast(event);
 
         FoliageRenderer.radialRange = ConfigFoliage.foliageShaderRange;
     }

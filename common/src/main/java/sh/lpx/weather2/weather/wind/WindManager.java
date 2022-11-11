@@ -1,5 +1,6 @@
 package sh.lpx.weather2.weather.wind;
 
+import net.minecraft.util.math.Vec3d;
 import sh.lpx.weather2.Weather;
 import sh.lpx.weather2.config.ConfigMisc;
 import sh.lpx.weather2.config.ConfigWind;
@@ -107,7 +108,7 @@ public class WindManager {
     /**
      * WIP, Returns angle in degrees, 0-360
      */
-    public float getWindAngleForPriority(Vec3 pos) {
+    public float getWindAngleForPriority(Vec3d pos) {
         //gets event wind, or if none, global, etc
         if (windTimeEvent > 0) {
             return getWindAngleForEvents(pos);
@@ -125,10 +126,10 @@ public class WindManager {
         return windAngleEvent;
     }
 
-    public float getWindAngleForEvents(Vec3 pos) {
+    public float getWindAngleForEvents(Vec3d pos) {
         if (pos != null && !windOriginEvent.equals(BlockPos.ORIGIN)) {
-            double var11 = windOriginEvent.getX() + 0.5D - pos.xCoord;
-            double var15 = windOriginEvent.getZ() + 0.5D - pos.zCoord;
+            double var11 = windOriginEvent.getX() + 0.5D - pos.x;
+            double var15 = windOriginEvent.getZ() + 0.5D - pos.z;
             return (-((float) Math.atan2(var11, var15)) * 180.0F / (float) Math.PI) - 45;
         } else {
             return windAngleEvent;
@@ -321,16 +322,16 @@ public class WindManager {
         //event data
         if (entP != null) {
             if (manager.getWorld().getTime() % 10 == 0) {
-                CloudStorm so = manager.getClosestCloudStorm(new Vec3(entP.getX(), CloudStorm.layers.get(0), entP.getZ()), 256, CloudStorm.STATE_HIGHWIND);
+                CloudStorm so = manager.getClosestCloudStorm(new Vec3d(entP.getX(), CloudStorm.layers.get(0), entP.getZ()), 256, CloudStorm.STATE_HIGHWIND);
 
                 if (so != null) {
-                    windOriginEvent = new BlockPos(so.posGround.xCoord, so.posGround.yCoord, so.posGround.zCoord);
+                    windOriginEvent = new BlockPos(so.posGround.x, so.posGround.y, so.posGround.z);
 
                     setWindTimeEvent(80);
 
                     //player pos aiming at storm
-                    double var11 = so.posGround.xCoord - entP.getX();
-                    double var15 = so.posGround.zCoord - entP.getZ();
+                    double var11 = so.posGround.x - entP.getX();
+                    double var15 = so.posGround.z - entP.getZ();
 
                     windAngleEvent = -((float) Math.atan2(var11, var15)) * 180.0F / (float) Math.PI;
                     windSpeedEvent = 2F; //make dynamic?
@@ -387,19 +388,19 @@ public class WindManager {
      * - profit
      */
     public void applyWindForceNew(Object ent, float multiplier, float maxSpeed) {
-        Vec3 pos = new Vec3(WeatherUtilEntityOrParticle.getPosX(ent), WeatherUtilEntityOrParticle.getPosY(ent), WeatherUtilEntityOrParticle.getPosZ(ent));
+        Vec3d pos = new Vec3d(WeatherUtilEntityOrParticle.getPosX(ent), WeatherUtilEntityOrParticle.getPosY(ent), WeatherUtilEntityOrParticle.getPosZ(ent));
 
-        Vec3 motion = applyWindForceImpl(pos, new Vec3(WeatherUtilEntityOrParticle.getMotionX(ent), WeatherUtilEntityOrParticle.getMotionY(ent), WeatherUtilEntityOrParticle.getMotionZ(ent)),
+        Vec3d motion = applyWindForceImpl(pos, new Vec3d(WeatherUtilEntityOrParticle.getMotionX(ent), WeatherUtilEntityOrParticle.getMotionY(ent), WeatherUtilEntityOrParticle.getMotionZ(ent)),
                 WeatherUtilEntity.getWeight(ent), multiplier, maxSpeed);
 
-        WeatherUtilEntityOrParticle.setMotionX(ent, motion.xCoord);
-        WeatherUtilEntityOrParticle.setMotionZ(ent, motion.zCoord);
+        WeatherUtilEntityOrParticle.setMotionX(ent, motion.x);
+        WeatherUtilEntityOrParticle.setMotionZ(ent, motion.z);
     }
 
     /**
      * Handle generic uses of wind force, for stuff like weather objects that arent entities or paticles
      */
-    public Vec3 applyWindForceImpl(Vec3 pos, Vec3 motion, float weight, float multiplier, float maxSpeed) {
+    public Vec3d applyWindForceImpl(Vec3d pos, Vec3d motion, float weight, float multiplier, float maxSpeed) {
         WindManager windMan = this;//ClientTickHandler.weatherManager.windMan;
 
         float windSpeed = windMan.getWindSpeedForPriority();
@@ -408,8 +409,8 @@ public class WindManager {
         float windX = (float) -Math.sin(Math.toRadians(windAngle)) * windSpeed;
         float windZ = (float) Math.cos(Math.toRadians(windAngle)) * windSpeed;
 
-        float objX = (float) motion.xCoord;//CoroUtilEntOrParticle.getMotionX(ent);
-        float objZ = (float) motion.zCoord;//CoroUtilEntOrParticle.getMotionZ(ent);
+        float objX = (float) motion.x;//CoroUtilEntOrParticle.getMotionX(ent);
+        float objZ = (float) motion.z;//CoroUtilEntOrParticle.getMotionZ(ent);
 
         float windWeight = 1F;
         float objWeight = weight;
@@ -428,23 +429,23 @@ public class WindManager {
         vecZ *= multiplier;
 
         //copy over existing motion data
-        Vec3 newMotion = new Vec3(motion);
+        Vec3d newMotion = motion;
 
         double speedCheck = (Math.abs(vecX) + Math.abs(vecZ)) / 2D;
         if (speedCheck < maxSpeed) {
-            newMotion.xCoord = objX - vecX;
-            newMotion.zCoord = objZ - vecZ;
+            newMotion.x = objX - vecX;
+            newMotion.z = objZ - vecZ;
         }
 
         return newMotion;
     }
 
-    public Vec3 getWindForce() {
+    public Vec3d getWindForce() {
         float windSpeed = this.getWindSpeedForPriority();
         float windAngle = this.getWindAngleForPriority(null);
         float windX = (float) -Math.sin(Math.toRadians(windAngle)) * windSpeed;
         float windZ = (float) Math.cos(Math.toRadians(windAngle)) * windSpeed;
-        return new Vec3(windX, 0, windZ);
+        return new Vec3d(windX, 0, windZ);
     }
 
     public void readFromNBT(NbtCompound data) {

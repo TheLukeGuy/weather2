@@ -2,35 +2,31 @@ package sh.lpx.weather2.client;
 
 import CoroUtil.config.ConfigCoroUtil;
 import CoroUtil.util.ChunkCoordinatesBlock;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.GraphicsMode;
 import net.minecraft.client.option.ParticlesMode;
+import net.minecraft.client.particle.FlameParticle;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleFlame;
 import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.texture.Sprite;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.util.vector.*;
 import sh.lpx.weather2.ClientTickHandler;
 import sh.lpx.weather2.Weather;
@@ -643,7 +639,7 @@ public class SceneEnhancer implements Runnable {
                                     rain.setTicksFadeOutMax(4);
                                     rain.renderOrder = 2;
 
-                                    rain.rotationYaw = rain.getWorld().rand.nextInt(360) - 180F;
+                                    rain.rotationYaw = rain.getWorld().random.nextInt(360) - 180F;
                                     rain.rotationPitch = 90;
                                     rain.setMotionY(0D);
                                     rain.setMotionX((rand.nextFloat() - 0.5F) * 0.01F);
@@ -663,7 +659,7 @@ public class SceneEnhancer implements Runnable {
                             //quick is outside check, prevent them spawning right near ground
                             //and especially right above the roof so they have enough space to fade out
                             //results in not seeing them through roofs
-                            if (entP.world.canBlockSeeSky(entP.getPos())) {
+                            if (entP.world.isSkyVisibleAllowingSea(entP.getBlockPos())) {
                                 scanAheadRange = 3;
                             } else {
                                 scanAheadRange = 10;
@@ -708,7 +704,7 @@ public class SceneEnhancer implements Runnable {
                                     rain.setAlphaF(0);
                                     rain.setTicksFadeOutMax(20);
 
-                                    rain.rotationYaw = rain.getWorld().rand.nextInt(360) - 180F;
+                                    rain.rotationYaw = rain.getWorld().random.nextInt(360) - 180F;
                                     //SHADER COMPARE TEST
                                     rain.rotationPitch = 0;
                                     rain.setMotionY(-0.3D);
@@ -941,9 +937,9 @@ public class SceneEnhancer implements Runnable {
     public void profileSurroundings() {
         //tryClouds();
 
-        Minecraft mc = FMLClientHandler.instance().getClient();
+        MinecraftClient mc = MinecraftClient.getInstance();
         World worldRef = lastWorldDetected;
-        EntityPlayer player = FMLClientHandler.instance().getClient().player;
+        PlayerEntity player = mc.player;
         ClientWeatherManager manager = ClientTickHandler.weatherManager;
 
         if (worldRef == null || player == null || manager == null || manager.windManager == null) {
@@ -955,41 +951,23 @@ public class SceneEnhancer implements Runnable {
             return;
         }
 
-        if (threadLastWorldTickTime == worldRef.getTotalWorldTime()) {
+        if (threadLastWorldTickTime == worldRef.getTime()) {
             return;
         }
 
-        threadLastWorldTickTime = worldRef.getTotalWorldTime();
+        threadLastWorldTickTime = worldRef.getTime();
 
         Random rand = new Random();
 
         //mining a tree causes leaves to fall
         int size = 40;
         int hsize = size / 2;
-        int curX = (int) player.posX;
-        int curY = (int) player.posY;
-        int curZ = (int) player.posZ;
+        int curX = (int) player.getX();
+        int curY = (int) player.getY();
+        int curZ = (int) player.getZ();
         //if (true) return;
 
-        float windStr = manager.windManager.getWindSpeedForPriority();//(weatherMan.wind.strength <= 1F ? weatherMan.wind.strength : 1F);
-
-        /*if (mc.objectMouseOver != null && mc.objectMouseOver.getBlockPos() != null) {
-        	Block id = mc.world.getBlockState(new BlockPos(mc.objectMouseOver.getBlockPos().getX(), mc.objectMouseOver.getBlockPos().getY(), mc.objectMouseOver.getBlockPos().getZ())).getBlock();
-        	//System.out.println(mc.world.getBlockStateId(mc.objectMouseOver.blockX,mc.objectMouseOver.blockY,mc.objectMouseOver.blockZ));
-        	if (CoroUtilBlock.isAir(id) && id.getMaterial() == Material.wood) {
-        		float var5 = 0;
-
-        		var5 = (Float)OldUtil.getPrivateValueSRGMCP(PlayerControllerMP.class, (PlayerControllerMP)mc.playerController, OldUtil.refl_curBlockDamageMP_obf, OldUtil.refl_curBlockDamageMP_mcp);
-
-                if (var5 > 0) {
-                	//weather2 disabled for now
-                	//shakeTrees(8);
-                }
-        	}
-        }*/
-
-        //FoliageEnhancerShader.tickThreaded();
-
+        float windStr = manager.windManager.getWindSpeedForPriority();
 
         if ((!ConfigParticle.Wind_Particle_leafs && !ConfigParticle.Wind_Particle_waterfall)/* || weatherMan.wind.strength < 0.10*/) {
             return;
@@ -997,7 +975,6 @@ public class SceneEnhancer implements Runnable {
 
         //Wind requiring code goes below
         int spawnRate = (int) (30 / (windStr + 0.001));
-
 
         float lastBlockCount = lastTickFoundBlocks;
 
@@ -1013,8 +990,8 @@ public class SceneEnhancer implements Runnable {
 
         int BlockCountRate = (int) (((300 / scaleRate + 0.001F)) / (particleCreationRate + 0.001F));
 
-        spawnRate *= (mc.gameSettings.particleSetting + 1);
-        BlockCountRate *= (mc.gameSettings.particleSetting + 1);
+        spawnRate *= (mc.options.particles.getId() + 1);
+        BlockCountRate *= (mc.options.particles.getId() + 1);
 
         //since reducing threaded ticking to 200ms sleep, 1/4 rate, must decrease rand size
         spawnRate /= 2;
@@ -1029,24 +1006,11 @@ public class SceneEnhancer implements Runnable {
         //patch for block counts over 15000
         if (BlockCountRate > 5000) BlockCountRate = 5000;
 
-        //TEMP!!!
-        //uh = 10;
-
-        //System.out.println("lastTickFoundBlocks: " + lastTickFoundBlocks + " - rand size: " + uh + " - " + BlockCountRate);
-
         lastTickFoundBlocks = 0;
-
-        //Wind_Particle_waterfall = true;
-        //Wind_Particle_leafs = true;
-        //debug = true;
-        //if (true) return;
 
         double particleAmp = 1F;
         if (RotatingParticleManager.useShaders && ConfigCoroUtil.particleShaders) {
             particleAmp = ConfigMisc.shaderParticleRateAmplifier * 2D;
-            //ConfigCoroAI.optimizedCloudRendering = true;
-        } else {
-            //ConfigCoroAI.optimizedCloudRendering = false;
         }
 
         spawnRate = (int) ((double) spawnRate / particleAmp);
@@ -1062,16 +1026,15 @@ public class SceneEnhancer implements Runnable {
 
                     //if (block != null && block.getMaterial() == Material.leaves)
 
-                    if (block != null && (block.getMaterial(block.getDefaultState()) == Material.LEAVES
-                            || block.getMaterial(block.getDefaultState()) == Material.VINE ||
-                            block.getMaterial(block.getDefaultState()) == Material.PLANTS)) {
+                    if (block != null && (block.getDefaultState().getMaterial() == Material.LEAVES
+                            || block.getDefaultState().getMaterial() == Material.REPLACEABLE_PLANT ||
+                            block.getDefaultState().getMaterial() == Material.PLANT)) {
 
                         lastTickFoundBlocks++;
 
-                        if (worldRef.rand.nextInt(spawnRate) == 0) {
+                        if (worldRef.random.nextInt(spawnRate) == 0) {
                             //bottom of tree check || air beside vine check
                             if (ConfigParticle.Wind_Particle_leafs) {
-
                                 //far out enough to avoid having the AABB already inside the block letting it phase through more
                                 //close in as much as we can to make it look like it came from the block
                                 double relAdj = 0.70D;
@@ -1100,12 +1063,12 @@ public class SceneEnhancer implements Runnable {
                                     }
 
                                     EntityRotFX var31 = new ParticleTexLeafColor(worldRef, xx, yy, zz, 0D, 0D, 0D, ParticleRegistry.leaf);
-                                    var31.setPosition(xx + 0.5D + (pos.getX() * relAdj) + xRand,
+                                    var31.setPos(xx + 0.5D + (pos.getX() * relAdj) + xRand,
                                             yy + 0.5D + (pos.getY() * relAdj) + yRand,
                                             zz + 0.5D + (pos.getZ() * relAdj) + zRand);
-                                    var31.setPrevPosX(var31.posX);
-                                    var31.setPrevPosY(var31.posY);
-                                    var31.setPrevPosZ(var31.posZ);
+                                    var31.setPrevPosX(var31.getPosX());
+                                    var31.setPrevPosY(var31.getPosY());
+                                    var31.setPrevPosZ(var31.getPosZ());
                                     var31.setMotionX(0);
                                     var31.setMotionY(0);
                                     var31.setMotionZ(0);
@@ -1118,21 +1081,6 @@ public class SceneEnhancer implements Runnable {
                                     var31.killWhenUnderCameraAtLeast = 20;
                                     var31.killWhenFarFromCameraAtLeast = 20;
                                     var31.isTransparent = false;
-                                    //var31.setSize(1, 1);
-                                    //var31.setKillWhenUnderTopmostBlock(true);
-
-                                    //System.out.println("add particle");
-                                    //Minecraft.getMinecraft().effectRenderer.addEffect(var31);
-                                    //ExtendedRenderer.rotEffRenderer.addEffect(test);
-                                    //ExtendedRenderer.rotEffRenderer.addEffect(var31);
-                                    //WeatherUtil.setParticleGravity((EntityFX)var31, 0.1F);
-
-                                    //worldRef.spawnParticle(EnumParticleTypes.FALLING_DUST, (double)xx, (double)yy, (double)zz, 0.0D, 0.0D, 0.0D, 0);
-
-											/*for (int ii = 0; ii < 10; ii++)
-											{
-												applyWindForce(var31);
-											}*/
 
                                     var31.rotationYaw = rand.nextInt(360);
                                     var31.rotationPitch = rand.nextInt(360);
@@ -1140,24 +1088,9 @@ public class SceneEnhancer implements Runnable {
 
                                     spawnQueue.add(var31);
                                 }
-
-                            } else {
-	                                    /*if (Wind_Particle_leafs)
-	                                    {
-	                                        //This is non leaves, as in wildgrass or wahtever is in the p_blocks_leaf list (no special rules)
-	                                        EntityRotFX var31 = new EntityTexFX(worldRef, (double)xx, (double)yy + 0.5, (double)zz, 0D, 0D, 0D, 10D, 0, effLeafID);
-	                                        c_CoroWeatherUtil.setParticleGravity((EntityFX)var31, 0.1F);
-	                                        var31.rotationYaw = rand.nextInt(360);
-	                                        //var31.spawnAsWeatherEffect();
-	                                        spawnQueue.add(var31);
-	                                        //mc.effectRenderer.addEffect(var31);
-	                                        
-	                                        //System.out.println("leaf spawn!");
-	                                    }*/
                             }
                         }
-                    } else if (ConfigParticle.Wind_Particle_waterfall && player.getDistance(xx, yy, zz) < 16 && (block != null && block.getMaterial(block.getDefaultState()) == Material.WATER)) {
-
+                    } else if (ConfigParticle.Wind_Particle_waterfall && player.squaredDistanceTo(xx, yy, zz) < 16 && (block != null && block.getDefaultState().getMaterial() == Material.WATER)) {
                         int meta = getBlockMetadata(worldRef, xx, yy, zz);
                         if ((meta & 8) != 0) {
                             lastTickFoundBlocks += 70; //adding more to adjust for the rate 1 waterfall block spits out particles
@@ -1166,33 +1099,19 @@ public class SceneEnhancer implements Runnable {
                             Block block2 = getBlock(worldRef, xx, yy - 1, zz);
                             int meta2 = getBlockMetadata(worldRef, xx, yy - 1, zz);
                             Block block3 = getBlock(worldRef, xx, yy + 10, zz);
-                            //Block block2 = Block.blocksList[id2];
-                            //Block block3 = Block.blocksList[id3];
 
-                            //if ((block2 == null || block2.getMaterial() != Material.water) && (block3 != null && block3.getMaterial() == Material.water)) {
-                            //chance /= 3;
-
-                            //}
-                            //System.out.println("woot! " + chance);
-                            if ((((block2 == null || block2.getMaterial(block2.getDefaultState()) != Material.WATER) || (meta2 & 8) == 0) && (block3 != null && block3.getMaterial(block3.getDefaultState()) == Material.WATER)) || worldRef.rand.nextInt(chance) == 0) {
+                            if ((((block2 == null || block2.getDefaultState().getMaterial() != Material.WATER) || (meta2 & 8) == 0) && (block3 != null && block3.getDefaultState().getMaterial() == Material.WATER)) || worldRef.rand.nextInt(chance) == 0) {
 
                                 float range = 0.5F;
 
                                 EntityRotFX waterP;
-                                //if (rand.nextInt(10) == 0) {
-                                //waterP = new EntityBubbleFX(worldRef, (double)xx + 0.5F + ((rand.nextFloat() * range) - (range/2)), (double)yy + 0.5F + ((rand.nextFloat() * range) - (range/2)), (double)zz + 0.5F + ((rand.nextFloat() * range) - (range/2)), 0D, 0D, 0D);
-                                //} else {
-                                waterP = new EntityWaterfallFX(worldRef, (double) xx + 0.5F + ((rand.nextFloat() * range) - (range / 2)), (double) yy + 0.5F + ((rand.nextFloat() * range) - (range / 2)), (double) zz + 0.5F + ((rand.nextFloat() * range) - (range / 2)), 0D, 0D, 0D, 6D, 2);
-                                //}
 
-
-                                if (((block2 == null || block2.getMaterial(block2.getDefaultState()) != Material.WATER) || (meta2 & 8) == 0) && (block3 != null && block3.getMaterial(block3.getDefaultState()) == Material.WATER)) {
-
+                                if (((block2 == null || block2.getDefaultState().getMaterial() != Material.WATER) || (meta2 & 8) == 0) && (block3 != null && block3.getDefaultState().getMaterial() == Material.WATER)) {
                                     range = 2F;
                                     float speed = 0.2F;
 
                                     for (int i = 0; i < 10; i++) {
-                                        if (worldRef.rand.nextInt(chance / 2) == 0) {
+                                        if (worldRef.random.nextInt(chance / 2) == 0) {
                                             waterP = new EntityWaterfallFX(worldRef,
                                                     (double) xx + 0.5F + ((rand.nextFloat() * range) - (range / 2)),
                                                     (double) yy + 0.7F + ((rand.nextFloat() * range) - (range / 2)),
@@ -1219,17 +1138,14 @@ public class SceneEnhancer implements Runnable {
                                     spawnQueueNormal.add(waterP);
                                 }
 
-
                                 //waterP.rotationYaw = rand.nextInt(360);
-
                             }
                         }
 
                     } else if (ConfigParticle.Wind_Particle_fire && (block != null && block == Blocks.FIRE/*block.getMaterial() == Material.fire*/)) {
                         lastTickFoundBlocks++;
 
-                        //
-                        if (worldRef.rand.nextInt(Math.max(1, (spawnRate / 100))) == 0) {
+                        if (worldRef.random.nextInt(Math.max(1, (spawnRate / 100))) == 0) {
                             double speed = 0.15D;
                             //System.out.println("xx:" + xx);
                             EntityRotFX entityfx = pm.spawnNewParticleIconFX(worldRef, ParticleRegistry.smoke, xx + rand.nextDouble(), yy + 0.2D + rand.nextDouble() * 0.2D, zz + rand.nextDouble(), (rand.nextDouble() - rand.nextDouble()) * speed, 0.03D, (rand.nextDouble() - rand.nextDouble()) * speed);//pm.spawnNewParticleWindFX(worldRef, ParticleRegistry.smoke, xx + rand.nextDouble(), yy + 0.2D + rand.nextDouble() * 0.2D, zz + rand.nextDouble(), (rand.nextDouble() - rand.nextDouble()) * speed, 0.03D, (rand.nextDouble() - rand.nextDouble()) * speed);
@@ -1237,13 +1153,8 @@ public class SceneEnhancer implements Runnable {
                             ParticleBehaviors.setParticleFire(entityfx);
                             entityfx.setMaxAge(100 + rand.nextInt(300));
                             spawnQueueNormal.add(entityfx);
-                            //entityfx.spawnAsWeatherEffect();
-                            //pm.particles.add(entityfx);
                         }
                     }
-                    //}
-
-
                 }
             }
         }
@@ -1251,10 +1162,6 @@ public class SceneEnhancer implements Runnable {
 
     /**
      * Returns the successful relative position
-     *
-     * @param world
-     * @param posOrigin
-     * @return
      */
     public static BlockPos getRandomWorkingPos(World world, BlockPos posOrigin) {
         Collections.shuffle(listPosRandom);
@@ -1269,51 +1176,23 @@ public class SceneEnhancer implements Runnable {
         return null;
     }
 
-    @SideOnly(Side.CLIENT)
     public static void tryWind(World world) {
-
-        Minecraft mc = FMLClientHandler.instance().getClient();
-        EntityPlayer player = mc.player;
+        MinecraftClient mc = MinecraftClient.getInstance();
+        PlayerEntity player = mc.player;
 
         if (player == null) {
             return;
         }
-
-        int dist = 60;
-
-        List list = world.loadedEntityList;
 
         ClientWeatherManager weatherMan = ClientTickHandler.weatherManager;
         if (weatherMan == null) return;
         WindManager windMan = weatherMan.getWindManager();
         if (windMan == null) return;
 
-        //Chunk Entities
-        //we're not moving chunk entities with wind this way ....... i think, only weather events like spinning etc
-        /*if (list != null)
-        {
-            for (int i = 0; i < list.size(); i++)
-            {
-                Entity entity1 = (Entity)list.get(i);
-
-                if (canPushEntity(entity1) && !(entity1 instanceof EntityPlayer))
-                {
-                    applyWindForce(entity1, 1F);
-                }
-            }
-        }*/
-
         Random rand = new Random();
-
-        int handleCount = 0;
-
-        if (world.getTotalWorldTime() % 60 == 0) {
-            //System.out.println("weather particles: " + ClientTickHandler.weatherManager.listWeatherEffectedParticles.size());
-        }
 
         //Weather Effects
         for (int i = 0; i < ClientTickHandler.weatherManager.listWeatherEffectedParticles.size(); i++) {
-
             Particle particle = ClientTickHandler.weatherManager.listWeatherEffectedParticles.get(i);
 
             if (!particle.isAlive()) {
@@ -1323,32 +1202,20 @@ public class SceneEnhancer implements Runnable {
 
             if (ClientTickHandler.weatherManager.windManager.getWindSpeedForPriority() >= 0.10) {
 
-                handleCount++;
-
                 if (particle instanceof EntityRotFX) {
-
                     EntityRotFX entity1 = (EntityRotFX) particle;
 
-                    if (entity1 == null) {
-                        continue;
-                    }
-
                     if ((WeatherUtilBlock.getPrecipitationHeightSafe(world, new BlockPos(MathHelper.floor(entity1.getPosX()), 0, MathHelper.floor(entity1.getPosZ()))).getY() - 1 < (int) entity1.getPosY() + 1) || (entity1 instanceof ParticleTexFX)) {
-                        if (entity1 instanceof WindAffected) {
-                            if (((WindAffected) entity1).getParticleDecayExtra() > 0 && WeatherUtilParticle.getParticleAge(entity1) % 2 == 0) {
-                                WeatherUtilParticle.setParticleAge(entity1, WeatherUtilParticle.getParticleAge(entity1) + ((WindAffected) entity1).getParticleDecayExtra());
-                            }
-                        } else if (WeatherUtilParticle.getParticleAge(entity1) % 2 == 0) {
-                            WeatherUtilParticle.setParticleAge(entity1, WeatherUtilParticle.getParticleAge(entity1) + 1);
+                        if (entity1.getParticleDecayExtra() > 0 && WeatherUtilParticle.getParticleAge(entity1) % 2 == 0) {
+                            WeatherUtilParticle.setParticleAge(entity1, WeatherUtilParticle.getParticleAge(entity1) + entity1.getParticleDecayExtra());
                         }
 
-                        if ((entity1 instanceof ParticleTexFX) && ((ParticleTexFX) entity1).getParticleTexture() == ParticleRegistry.leaf/*((ParticleTexFX)entity1).getParticleTextureIndex() == WeatherUtilParticle.effLeafID*/) {
+                        if ((entity1 instanceof ParticleTexFX) && entity1.getParticleTexture() == ParticleRegistry.leaf/*((ParticleTexFX)entity1).getParticleTextureIndex() == WeatherUtilParticle.effLeafID*/) {
                             if (entity1.getMotionX() < 0.01F && entity1.getMotionZ() < 0.01F) {
                                 entity1.setMotionY(entity1.getMotionY() + rand.nextDouble() * 0.02 * ((ParticleTexFX) entity1).particleGravity);
                             }
 
                             entity1.setMotionY(entity1.getMotionY() - 0.01F * ((ParticleTexFX) entity1).particleGravity);
-
                         }
                     }
 
@@ -1368,14 +1235,11 @@ public class SceneEnhancer implements Runnable {
                 for (int i = 0; i < WeatherUtilParticle.fxLayers[layer].length; i++) {
                     //for (int j = 0; j < WeatherUtilParticle.fxLayers[layer][i].size(); j++)
                     for (Particle entity1 : WeatherUtilParticle.fxLayers[layer][i]) {
-
                         //Particle entity1 = WeatherUtilParticle.fxLayers[layer][i].get(j);
 
                         if (ConfigParticle.Particle_VanillaAndWeatherOnly) {
                             String className = entity1.getClass().getName();
-                            if (className.contains("net.minecraft.") || className.contains("weather2.")) {
-
-                            } else {
+                            if (!className.contains("net.minecraft.") && !className.contains("weather2.")) {
                                 continue;
                             }
 
@@ -1383,7 +1247,7 @@ public class SceneEnhancer implements Runnable {
                         }
 
                         if ((WeatherUtilBlock.getPrecipitationHeightSafe(world, new BlockPos(MathHelper.floor(WeatherUtilEntityOrParticle.getPosX(entity1)), 0, MathHelper.floor(WeatherUtilEntityOrParticle.getPosZ(entity1)))).getY() - 1 < (int) WeatherUtilEntityOrParticle.getPosY(entity1) + 1) || (entity1 instanceof ParticleTexFX)) {
-                            if ((entity1 instanceof ParticleFlame)) {
+                            if ((entity1 instanceof FlameParticle)) {
                                 if (windMan.getWindSpeedForPriority() >= 0.20) {
                                     entity1.particleAge += 1;
                                 }
@@ -1391,21 +1255,10 @@ public class SceneEnhancer implements Runnable {
                                 if (((WindAffected) entity1).getParticleDecayExtra() > 0 && WeatherUtilParticle.getParticleAge(entity1) % 2 == 0) {
                                     entity1.particleAge += ((WindAffected) entity1).getParticleDecayExtra();
                                 }
-                            }/*
-	                        else if (WeatherUtilParticle.getParticleAge(entity1) % 2 == 0)
-	                        {
-								entity1.particleAge += 1;
-	                        }*/
+                            }
 
                             //rustle!
                             if (!(entity1 instanceof EntityWaterfallFX)) {
-                                //EntityWaterfallFX ent = (EntityWaterfallFX) entity1;
-		                        /*if (entity1.onGround)
-		                        {
-		                            //entity1.onGround = false;
-		                            entity1.motionY += rand.nextDouble() * entity1.getMotionX();
-		                        }*/
-
                                 if (WeatherUtilEntityOrParticle.getMotionX(entity1) < 0.01F && WeatherUtilEntityOrParticle.getMotionZ(entity1) < 0.01F) {
                                     //ent.setMotionY(ent.getMotionY() + rand.nextDouble() * 0.02);
                                     WeatherUtilEntityOrParticle.setMotionY(entity1, WeatherUtilEntityOrParticle.getMotionY(entity1) + rand.nextDouble() * 0.02);
@@ -1423,66 +1276,18 @@ public class SceneEnhancer implements Runnable {
                     }
                 }
             }
-
-            //My particle renderer - actually, instead add ones you need to weatherEffects (add blank renderer file)
-            /*for (int layer = 0; layer < ExtendedRenderer.rotEffRenderer.layers; layer++)
-            {
-                for (int i = 0; i < ExtendedRenderer.rotEffRenderer.fxLayers[layer].size(); i++)
-                {
-                    Entity entity1 = (Entity)ExtendedRenderer.rotEffRenderer.fxLayers[layer].get(i);
-                }
-            }*/
         }
-
-        //this was code to push player around if really windy, lets not do this anymore, who slides around in wind IRL?
-        //maybe maybe if a highwind/hurricane state is active, adjust their ACTIVE movement to adhere to wind vector
-        /*if (windMan.getWindSpeedForPriority() >= 0.70)
-        {
-            if (WeatherUtilEntity.canPushEntity(player))
-            {
-                applyWindForce(player, 0.2F);
-            }
-        }*/
-
-        //NEEEEEEEED TO STOP WIND WHEN UNDERGROUND!
-        //we kinda did, is it good enough?
-        float volScaleFar = windMan.getWindSpeedForPriority() * 1F;
-
-        if (windMan.getWindSpeedForPriority() <= 0.07F) {
-            volScaleFar = 0F;
-        }
-
-        volScaleFar *= ConfigMisc.volWindScale;
-
-        //Sound whistling noise
-        //First, use volume to represent intensity, maybe get different sound samples for higher level winds as they sound different
-        //Second, when facing towards wind, you're ears hear it tearing by you more, when turned 90 degrees you do not, simulate this
-
-        //weather2: commented out to test before sound code goes in!!!!!!!!!!!!!!!!!!!!!
-        /*tryPlaySound(WeatherUtil.snd_wind_far, 2, mc.player, volScaleFar);
-
-        if (lastSoundPositionUpdate < System.currentTimeMillis())
-        {
-            lastSoundPositionUpdate = System.currentTimeMillis() + 100;
-
-            if (soundID[2] > -1 && soundTimer[2] < System.currentTimeMillis())
-            {
-                setVolume(new StringBuilder().append("sound_" + soundID[2]).toString(), volScaleFar);
-            }
-        }*/
     }
 
     //Thread safe functions
 
-    @SideOnly(Side.CLIENT)
     private static Block getBlock(World parWorld, BlockPos pos) {
         return getBlock(parWorld, pos.getX(), pos.getY(), pos.getZ());
     }
 
-    @SideOnly(Side.CLIENT)
     private static Block getBlock(World parWorld, int x, int y, int z) {
         try {
-            if (!parWorld.isBlockLoaded(new BlockPos(x, 0, z))) {
+            if (!parWorld.canSetBlock(new BlockPos(x, 0, z))) {
                 return null;
             }
 
@@ -1492,13 +1297,12 @@ public class SceneEnhancer implements Runnable {
         }
     }
 
-    @SideOnly(Side.CLIENT)
     private static int getBlockMetadata(World parWorld, int x, int y, int z) {
-        if (!parWorld.isBlockLoaded(new BlockPos(x, 0, z))) {
+        if (!parWorld.canSetBlock(new BlockPos(x, 0, z))) {
             return 0;
         }
 
-        IBlockState state = parWorld.getBlockState(new BlockPos(x, y, z));
+        BlockState state = parWorld.getBlockState(new BlockPos(x, y, z));
         return state.getBlock().getMetaFromState(state);
     }
 
@@ -1506,43 +1310,32 @@ public class SceneEnhancer implements Runnable {
      * Manages transitioning fog densities and color from current vanilla settings to our desired settings, and vice versa
      */
     public static void tickSandstorm() {
-
         if (adjustAmountTargetPocketSandOverride > 0) {
             adjustAmountTargetPocketSandOverride -= 0.01F;
         }
 
-        Minecraft mc = Minecraft.getMinecraft();
-        EntityPlayer player = mc.player;
+        MinecraftClient mc = MinecraftClient.getInstance();
+        PlayerEntity player = mc.player;
         World world = mc.world;
-        Vec3 posPlayer = new Vec3(mc.player.posX, 0/*mc.player.posY*/, mc.player.posZ);
+        Vec3d posPlayer = new Vec3d(mc.player.getX(), 0/*mc.player.posY*/, mc.player.getZ());
         SandStorm sandstorm = ClientTickHandler.weatherManager.getClosestSandStormByIntensity(posPlayer);
         WindManager windMan = ClientTickHandler.weatherManager.getWindManager();
         float scaleIntensityTarget = 0F;
         if (sandstorm != null) {
-
-            if (mc.world.getTotalWorldTime() % 40 == 0) {
+            if (mc.world.getTime() % 40 == 0) {
                 isPlayerOutside = WeatherUtilEntity.isEntityOutside(mc.player);
                 //System.out.println("isPlayerOutside: " + isPlayerOutside);
             }
 
-
             scaleIntensityTarget = sandstorm.getSandstormScale();
-    		/*Vec3 posNoY = new Vec3(sandstorm.pos);
-    		posNoY.yCoord = mc.player.posY;
-    		distToStorm = posPlayer.distanceTo(posNoY);*/
 
-            List<Vec3> points = sandstorm.getSandstormAsShape();
-    		
-    		/*for (Vec3 point : points) {
-    			System.out.println("point: " + point.toString());
-    		}*/
+            List<Vec3d> points = sandstorm.getSandstormAsShape();
 
             boolean inStorm = WeatherUtilPhysics.isInConvexShape(posPlayer, points);
             if (inStorm) {
                 //System.out.println("in storm");
                 distToStorm = 0;
             } else {
-
                 distToStorm = WeatherUtilPhysics.getDistanceToShape(posPlayer, points);
                 //System.out.println("near storm: " + distToStorm);
             }
@@ -1551,40 +1344,6 @@ public class SceneEnhancer implements Runnable {
         }
 
         scaleIntensitySmooth = adjVal(scaleIntensitySmooth, scaleIntensityTarget, 0.01F);
-
-        //temp off
-        //distToStorm = distToStormThreshold;
-
-        //distToStorm = 0;
-
-        /**
-         * new way to detect in sandstorm
-         * 1. use in convex shape method
-         * 2. if not, get closest point of shape to player, use that for distance
-         * -- note, add extra points to compare against so its hard to enter between points and have it think player is 50 blocks away still
-         *
-         * - better idea, do 1., then if not, do point vs "minimum distance from a point to a line segment."
-         */
-
-
-        //square shape test
-    	/*points.add(new Vec3(-100, 0, -100));
-    	points.add(new Vec3(-100, 0, 100));
-    	points.add(new Vec3(100, 0, 100));
-    	points.add(new Vec3(100, 0, -100));*/
-
-        //triangle test
-    	/*points.add(new Vec3(-100, 0, -100));
-    	points.add(new Vec3(-100, 0, 100));
-    	points.add(new Vec3(100, 0, 0));*/
-        //points.add(new Vec3(100, 0, -100));
-
-        //tested works well
-
-
-        float fogColorChangeRate = 0.01F;
-        float fogDistChangeRate = 2F;
-        float fogDensityChangeRate = 0.01F;
 
         //make it be full intensity once storm is halfway there
         adjustAmountTarget = 1F - (float) ((distToStorm) / distToStormThreshold);
@@ -1600,14 +1359,8 @@ public class SceneEnhancer implements Runnable {
         if (adjustAmountTarget < 0F) adjustAmountTarget = 0F;
         if (adjustAmountTarget > 1F) adjustAmountTarget = 1F;
 
-        //test debug sandstorm fog
-        //adjustAmountTarget = 0.95F;
-        //adjustAmountTarget = 0F;
-
-
-        float sunBrightness = mc.world.getSunBrightness(1F) * 1F;
-        /*mc.world.rainingStrength = 1F;
-        mc.world.thunderingStrength = 1F;*/
+        // method_23783 = getStarBrightness in Yarn 1.18+ :/
+        float sunBrightness = mc.world.method_23783(1F);
 
         //since size var adjusts by 10 every x seconds, transition is rough, try to make it smooth but keeps up
         if (!pocketSandOverride) {
@@ -1626,20 +1379,7 @@ public class SceneEnhancer implements Runnable {
         //update coroutil particle renderer fog state
         EventHandler.sandstormFogAmount = adjustAmountSmooth;
 
-        if (mc.world.getTotalWorldTime() % 20 == 0) {
-            //System.out.println(adjustAmount + " - " + distToStorm);
-            if (adjustAmountSmooth > 0) {
-                //System.out.println("adjustAmountTarget: " + adjustAmountTarget);
-                //System.out.println("adjustAmountSmooth: " + adjustAmountSmooth);
-            }
-
-            //System.out.println("wut: " + mc.world.getCelestialAngle(1));
-            //System.out.println("wutF: " + mc.world.getSunBrightnessFactor(1F));
-            //System.out.println("wut: " + mc.world.getSunBrightness(1F));
-        }
-
         if (adjustAmountSmooth > 0/*distToStorm < distToStormThreshold*/) {
-
             //TODO: remove fetching of colors from this now that we dynamically track that
             if (needFogState) {
                 //System.out.println("getting fog state");
@@ -1647,9 +1387,9 @@ public class SceneEnhancer implements Runnable {
                 try {
                     Object fogState = ObfuscationReflectionHelper.getPrivateValue(GlStateManager.class, null, "field_179155_g");
                     Class<?> innerClass = Class.forName("net.minecraft.client.renderer.GlStateManager$FogState");
-                    Field fieldDensity = null;
-                    Field fieldStart = null;
-                    Field fieldEnd = null;
+                    Field fieldDensity;
+                    Field fieldStart;
+                    Field fieldEnd;
                     try {
                         fieldDensity = innerClass.getField("field_179048_c");
                         fieldDensity.setAccessible(true);
@@ -1681,7 +1421,6 @@ public class SceneEnhancer implements Runnable {
                     stormFogEndCloudsOrig = stormFogEndClouds;
 
                     stormFogDensityOrig = stormFogDensity;
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -1700,18 +1439,14 @@ public class SceneEnhancer implements Runnable {
             stormFogStartClouds = stormFogStartCloudsOrig + (-(stormFogStartCloudsOrig - 0F) * adjustAmountSmooth);
             stormFogEndClouds = stormFogEndCloudsOrig + (-(stormFogEndCloudsOrig - 20F) * adjustAmountSmooth);
         } else {
-            if (!needFogState) {
-                //System.out.println("resetting need for fog state");
-            }
             needFogState = true;
         }
 
         //enhance the scene further with particles around player, check for sandstorm to account for pocket sand modifying adjustAmountTarget
         if (adjustAmountSmooth > 0.75F && sandstorm != null) {
+            Vec3d windForce = windMan.getWindForce();
 
-            Vec3 windForce = windMan.getWindForce();
-
-            Random rand = mc.world.rand;
+            Random rand = mc.world.random;
             int spawnAreaSize = 80;
 
             double sandstormParticleRateDebris = ConfigParticle.Sandstorm_Particle_Debris_effect_rate;
@@ -1723,13 +1458,13 @@ public class SceneEnhancer implements Runnable {
             for (int i = 0; i < ((float) 30 * adjustAmountSmooth75 * sandstormParticleRateDust)/*adjustAmountSmooth * 20F * ConfigMisc.Particle_Precipitation_effect_rate*/; i++) {
 
                 BlockPos pos = new BlockPos(
-                        player.posX + rand.nextInt(spawnAreaSize) - (spawnAreaSize / 2),
-                        player.posY - 2 + rand.nextInt(10),
-                        player.posZ + rand.nextInt(spawnAreaSize) - (spawnAreaSize / 2));
+                        player.getX() + rand.nextInt(spawnAreaSize) - (spawnAreaSize / 2),
+                        player.getY() - 2 + rand.nextInt(10),
+                        player.getZ() + rand.nextInt(spawnAreaSize) - (spawnAreaSize / 2));
 
 
                 if (canPrecipitateAt(world, pos)) {
-                    TextureAtlasSprite sprite = ParticleRegistry.cloud256;
+                    Sprite sprite = ParticleRegistry.cloud256;
 
                     ParticleSandstorm part = new ParticleSandstorm(world, pos.getX(),
                             pos.getY(),
@@ -1737,8 +1472,8 @@ public class SceneEnhancer implements Runnable {
                             0, 0, 0, sprite);
                     particleBehavior.initParticle(part);
 
-                    part.setMotionX(windForce.xCoord);
-                    part.setMotionZ(windForce.zCoord);
+                    part.setMotionX(windForce.x);
+                    part.setMotionZ(windForce.z);
 
                     part.setFacePlayer(false);
                     part.isTransparent = true;
@@ -1759,8 +1494,6 @@ public class SceneEnhancer implements Runnable {
                     particleBehavior.particles.add(part);
                     ClientTickHandler.weatherManager.addWeatheredParticle(part);
                     part.spawnAsWeatherEffect();
-
-
                 }
             }
 
@@ -1768,13 +1501,12 @@ public class SceneEnhancer implements Runnable {
             for (int i = 0; i < ((float) 1 * adjustAmountSmooth75 * sandstormParticleRateDebris)/*adjustAmountSmooth * 20F * ConfigMisc.Particle_Precipitation_effect_rate*/; i++) {
 
                 BlockPos pos = new BlockPos(
-                        player.posX + rand.nextInt(spawnAreaSize) - (spawnAreaSize / 2),
-                        player.posY - 2 + rand.nextInt(10),
-                        player.posZ + rand.nextInt(spawnAreaSize) - (spawnAreaSize / 2));
-
+                        player.getX() + rand.nextInt(spawnAreaSize) - (spawnAreaSize / 2),
+                        player.getY() - 2 + rand.nextInt(10),
+                        player.getZ() + rand.nextInt(spawnAreaSize) - (spawnAreaSize / 2));
 
                 if (canPrecipitateAt(world, pos)) {
-                    TextureAtlasSprite sprite = ParticleRegistry.tumbleweed;
+                    Sprite sprite = ParticleRegistry.tumbleweed;
 
                     ParticleSandstorm part = new ParticleSandstorm(world, pos.getX(),
                             pos.getY(),
@@ -1782,8 +1514,8 @@ public class SceneEnhancer implements Runnable {
                             0, 0, 0, sprite);
                     particleBehavior.initParticle(part);
 
-                    part.setMotionX(windForce.xCoord);
-                    part.setMotionZ(windForce.zCoord);
+                    part.setMotionX(windForce.x);
+                    part.setMotionZ(windForce.z);
 
                     part.setFacePlayer(true);
                     //part.spinFast = true;
@@ -1809,21 +1541,18 @@ public class SceneEnhancer implements Runnable {
                     particleBehavior.particles.add(part);
                     ClientTickHandler.weatherManager.addWeatheredParticle(part);
                     part.spawnAsWeatherEffect();
-
-
                 }
             }
 
             //debris
             for (int i = 0; i < ((float) 8 * adjustAmountSmooth75 * sandstormParticleRateDebris)/*adjustAmountSmooth * 20F * ConfigMisc.Particle_Precipitation_effect_rate*/; i++) {
                 BlockPos pos = new BlockPos(
-                        player.posX + rand.nextInt(spawnAreaSize) - (spawnAreaSize / 2),
-                        player.posY - 2 + rand.nextInt(10),
-                        player.posZ + rand.nextInt(spawnAreaSize) - (spawnAreaSize / 2));
-
+                        player.getX() + rand.nextInt(spawnAreaSize) - (spawnAreaSize / 2),
+                        player.getY() - 2 + rand.nextInt(10),
+                        player.getZ() + rand.nextInt(spawnAreaSize) - (spawnAreaSize / 2));
 
                 if (canPrecipitateAt(world, pos)) {
-                    TextureAtlasSprite sprite = null;
+                    Sprite sprite = null;
                     int tex = rand.nextInt(3);
                     if (tex == 0) {
                         sprite = ParticleRegistry.debris_1;
@@ -1839,8 +1568,8 @@ public class SceneEnhancer implements Runnable {
                             0, 0, 0, sprite);
                     particleBehavior.initParticle(part);
 
-                    part.setMotionX(windForce.xCoord);
-                    part.setMotionZ(windForce.zCoord);
+                    part.setMotionX(windForce.x);
+                    part.setMotionZ(windForce.z);
 
                     part.setFacePlayer(false);
                     part.spinFast = true;
@@ -1867,32 +1596,26 @@ public class SceneEnhancer implements Runnable {
                     particleBehavior.particles.add(part);
                     ClientTickHandler.weatherManager.addWeatheredParticle(part);
                     part.spawnAsWeatherEffect();
-
-
                 }
             }
         }
 
-
         tickSandstormSound();
     }
 
-    /**
-     *
-     */
     public static void tickSandstormSound() {
-        /**
-         * dist + storm intensity
-         * 0F - 1F
-         *
-         * 0 = low
-         * 0.33 = med
-         * 0.66 = high
-         *
-         * static sound volume, keep at player
+        /*
+          dist + storm intensity
+          0F - 1F
+
+          0 = low
+          0.33 = med
+          0.66 = high
+
+          static sound volume, keep at player
          */
 
-        Minecraft mc = Minecraft.getMinecraft();
+        MinecraftClient mc = MinecraftClient.getInstance();
         if (adjustAmountSmooth > 0) {
             if (adjustAmountSmooth < 0.33F) {
                 tryPlayPlayerLockedSound(WeatherUtilSound.snd_sandstorm_low, 5, mc.player, 1F);
@@ -1908,10 +1631,9 @@ public class SceneEnhancer implements Runnable {
         Random rand = new Random();
 
         if (WeatherUtilSound.soundTimer[arrIndex] <= System.currentTimeMillis()) {
-
             String soundStr = sound[WeatherUtilSound.snd_rand[arrIndex]];
 
-            WeatherUtilSound.playPlayerLockedSound(new Vec3(source.getPositionVector()), new StringBuilder().append("streaming." + soundStr).toString(), vol, 1.0F);
+            WeatherUtilSound.playPlayerLockedSound(source.getPos(), "streaming." + soundStr, vol, 1.0F);
 
             int length = WeatherUtilSound.soundToLength.get(soundStr);
             //-500L, for blending
@@ -1923,27 +1645,22 @@ public class SceneEnhancer implements Runnable {
     }
 
     public static boolean isFogOverridding() {
-        Minecraft mc = Minecraft.getMinecraft();
-        IBlockState iblockstate = ActiveRenderInfo.getBlockStateAtEntityViewpoint(mc.world, mc.getRenderViewEntity(), 1F);
+        MinecraftClient mc = MinecraftClient.getInstance();
+        BlockState iblockstate = ActiveRenderInfo.getBlockStateAtEntityViewpoint(mc.world, mc.getRenderViewEntity(), 1F);
         if (iblockstate.getMaterial().isLiquid()) return false;
         return adjustAmountSmooth > 0;
     }
 
-    public static void renderWorldLast(RenderWorldLastEvent event) {
-
-    }
-
     public static void renderTick(TickEvent.RenderTickEvent event) {
-
         if (ConfigMisc.Client_PotatoPC_Mode) return;
 
         if (event.phase == TickEvent.Phase.START) {
-            Minecraft mc = FMLClientHandler.instance().getClient();
-            EntityPlayer entP = mc.player;
+            MinecraftClient mc = MinecraftClient.getInstance();
+            PlayerEntity entP = mc.player;
             if (entP != null) {
                 float curRainStr = SceneEnhancer.getRainStrengthAndControlVisuals(entP, true);
                 curRainStr = Math.abs(curRainStr);
-                mc.world.setRainStrength(curRainStr);
+                mc.world.setRainGradient(curRainStr);
             }
         }
     }
